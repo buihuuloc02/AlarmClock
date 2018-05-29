@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/imgClock"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imgClock1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_app"
+            android:visibility="gone" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/imgClock2"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:background="@drawable/ic_cloac_alram"
+            android:foregroundGravity="center" />
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imgClock"
+
+            android:gravity="center"
+            android:text="00: 00"
+            android:textSize="15pt"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_below="@+id/tvTime"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Click 'Stop' or shake sharply your phone to stop alarm!"
+            android:fontFamily="@font/simplyfont"/>
+        <TextView
+            android:id="@+id/tvNumberShake"
+            android:layout_below="@+id/tvTime"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_confirm_number_shake"
+            android:fontFamily="@font/simplyfont"/>
+    </LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/btnStop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="STOP" />
+
+</RelativeLayout>

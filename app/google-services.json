@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "978013234238",
+    "firebase_url": "https://alarmclock-4a122.firebaseio.com",
+    "project_id": "alarmclock-4a122",
+    "storage_bucket": "alarmclock-4a122.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:978013234238:android:4eba87fdb2e3d25c",
+        "android_client_info": {
+          "package_name": "com.app.alarmClock"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "978013234238-bal5d8snm8lhcnfcvve91udrrl0ammt7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.alarmClock",
+            "certificate_hash": "42b73488815cd212b82f3935444d5a2a212bd21c"
+          }
+        },
+        {
+          "client_id": "978013234238-907r89646asmkauthnjetr7md8g1v57k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_1NWLL1tvk21Qnfd_4ubEc7d9JtK6z5w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "978013234238-907r89646asmkauthnjetr7md8g1v57k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
