@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     android:id="@+id/layoutMain"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/margin_10"
     android:orientation="vertical">
@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10"
         android:orientation="horizontal"
         android:weightSum="2">
 
@@ -16,7 +17,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.3"
-            android:text="Number shake to stop alarm:"
+            android:text="@string/text_number_shake"
             android:textStyle="bold" />
 
         <Spinner
@@ -25,12 +26,19 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.7"></Spinner>
     </LinearLayout>
-
+    <View
+        android:id="@+id/viewDica"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tvTitle"
+        android:layout_margin="10dp"
+        android:background="@android:color/darker_gray" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_10"
+        android:layout_margin="@dimen/margin_10"
         android:layout_marginBottom="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_10"
         android:orientation="horizontal"
         android:weightSum="2">
 
@@ -38,7 +46,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.3"
-            android:text="Speed shake:"
+            android:text="@string/text_speed_shake"
             android:textStyle="bold" />
 
         <Spinner

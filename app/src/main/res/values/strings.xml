@@ -6,4 +6,7 @@
     <string name="text_confirm_number_shake">You need shake %s times to stop alarm!</string>
     <string name="text_title_setting">Settings</string>
     <string name="text_button_done">Done</string>
+    <string name="text_no_alarm">No alarms</string>
+    <string name="text_number_shake">Number shake to stop alarm:</string>
+    <string name="text_speed_shake">Speed shake:</string>
 </resources>

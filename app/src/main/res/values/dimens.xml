@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="margin_10">10dp</dimen>
+    <dimen name="margin_20">20dp</dimen>
+    <dimen name="margin_30">30dp</dimen>
+    <dimen name="margin_40">40dp</dimen>
+    <dimen name="margin_50">50dp</dimen>
+    <dimen name="size_image_200">200dp</dimen>
+    <dimen name="size_image_300">300dp</dimen>
+    <dimen name="text_size_25_sp">25sp</dimen>
+    <dimen name="width_35_dp">35dp</dimen>
+    <dimen name="height_35_dp">35dp</dimen>
+
 </resources>

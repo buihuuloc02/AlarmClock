@@ -9,57 +9,76 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/margin_10"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="3">
 
-        <ImageView
-            android:id="@+id/imgClock1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_app"
-            android:visibility="gone" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.8"
+            android:gravity="bottom|center_horizontal"
+            android:orientation="vertical">
 
-        <pl.droidsonroids.gif.GifImageView
-            android:id="@+id/imgClock2"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:background="@drawable/ic_cloac_alram"
-            android:foregroundGravity="center" />
-        <TextView
-            android:id="@+id/tvTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/imgClock"
+            <ImageView
+                android:id="@+id/imgClock1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_app"
+                android:visibility="gone" />
 
-            android:gravity="center"
-            android:text="00: 00"
-            android:textSize="15pt"
-            android:textStyle="bold" />
-        <TextView
-            android:layout_below="@+id/tvTime"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:textStyle="bold"
-            android:gravity="center"
+            <pl.droidsonroids.gif.GifImageView
+                android:id="@+id/imgClock2"
+                android:layout_width="@dimen/size_image_200"
+                android:layout_height="@dimen/size_image_200"
+                android:background="@drawable/ic_cloac_alram"
+                android:foregroundGravity="center" />
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imgClock"
+
+                android:gravity="center"
+                android:text="00: 00"
+                android:textSize="@dimen/text_size_25_sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Click 'Stop' or shake sharply your phone to stop alarm!"
-            android:fontFamily="@font/simplyfont"/>
-        <TextView
-            android:id="@+id/tvNumberShake"
-            android:layout_below="@+id/tvTime"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/text_confirm_number_shake"
-            android:fontFamily="@font/simplyfont"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvTime"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+
+                android:fontFamily="@font/simplyfont"
+                android:gravity="center"
+                android:text="Click 'Stop' or shake sharply your phone to stop alarm!"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvNumberShake"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvTime"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:layout_marginRight="@dimen/margin_20"
+                android:fontFamily="@font/simplyfont"
+                android:gravity="center"
+                android:text="@string/text_confirm_number_shake"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
-
 
 
     <Button
