@@ -17,10 +17,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.3"
+            android:textSize="@dimen/text_size_14_sp"
             android:text="@string/text_number_shake"
             android:textStyle="bold" />
 
         <Spinner
+            android:textSize="@dimen/text_size_14_sp"
             android:id="@+id/spinnerNumberShake"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -31,8 +33,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/tvTitle"
-        android:layout_margin="10dp"
-        android:background="@android:color/darker_gray" />
+        android:layout_margin="@dimen/margin_10"
+        android:background="@color/darker_gray" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,6 +46,7 @@
 
         <TextView
             android:layout_width="0dp"
+            android:textSize="@dimen/text_size_14_sp"
             android:layout_height="wrap_content"
             android:layout_weight="1.3"
             android:text="@string/text_speed_shake"
@@ -51,6 +54,7 @@
 
         <Spinner
             android:id="@+id/spinnerSpeekShake"
+            android:textSize="@dimen/text_size_14_sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.7"></Spinner>

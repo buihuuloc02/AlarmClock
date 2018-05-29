@@ -13,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -35,13 +36,17 @@ import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.adapter.AlarmAdapter;
 import alarmclock.app.com.alarmclock.model.ItemAlarm;
 import alarmclock.app.com.alarmclock.util.DatabaseHelper;
+import alarmclock.app.com.alarmclock.util.RecyclerItemTouchHelper;
 import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
+
+    @BindView(R.id.layoutMain)
+    View layoutMain;
 
     @BindView(R.id.fabAdd)
     FloatingActionButton fadAdd;
@@ -66,7 +71,6 @@ public class MainActivity extends BaseActivity {
     private float dX, dY;
     private int lastAction;
     private Handler handler = new Handler();
-
 
 
     @OnClick({R.id.fabAdd})
@@ -158,7 +162,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void OnClickItemAlarm(ItemAlarm itemAlarm, int position) {
                 Intent intent = new Intent(MainActivity.this, AddAlarmActivity.class);
-                intent.putExtra(AddAlarmActivity.EXTRA_ITEM_ALARM,itemAlarm.getId());
+                intent.putExtra(AddAlarmActivity.EXTRA_ITEM_ALARM, itemAlarm.getId());
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
             }
@@ -192,6 +196,8 @@ public class MainActivity extends BaseActivity {
             tvNodata.setVisibility(View.VISIBLE);
             recyclerViewAlarm.setVisibility(View.GONE);
         }
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerViewAlarm);
 
         //addAlarm();
     }
@@ -286,6 +292,7 @@ public class MainActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     boolean startActivity = false;
     Runnable runnable = new Runnable() {
         @Override
@@ -345,5 +352,23 @@ public class MainActivity extends BaseActivity {
             }
         }
         Log.d("alarm", str);
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof AlarmAdapter.AlarmHolder) {
+            // get the removed item name to display it in snack bar
+            String name = itemAlarms.get(viewHolder.getAdapterPosition()).getTitle();
+
+            // backup of removed item for undo purpose
+            final ItemAlarm deletedItem = itemAlarms.get(viewHolder.getAdapterPosition());
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            alarmAdapter.removeItem(viewHolder.getAdapterPosition());
+            databaseHelper.deleteAlarmById(deletedItem.getId());
+            initData();
+            Toast.makeText(this, "Delete success!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

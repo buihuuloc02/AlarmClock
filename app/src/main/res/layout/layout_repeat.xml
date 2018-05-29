@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,6 +16,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:text="Repeat:"
+            android:textSize="@dimen/text_size_14_sp"
             android:textStyle="bold" />
 
         <LinearLayout
@@ -40,21 +42,24 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Mon" />
+                        android:text="Mon"
+                        android:textSize="@dimen/text_size_14_sp" />
 
                     <CheckBox
                         android:id="@+id/cbTu"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Tue" />
+                        android:text="Tue"
+                        android:textSize="@dimen/text_size_14_sp" />
 
                     <CheckBox
                         android:id="@+id/cbWe"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Wed" />
+                        android:text="Wed"
+                        android:textSize="@dimen/text_size_14_sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -68,21 +73,24 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Thu" />
+                        android:text="Thu"
+                        android:textSize="@dimen/text_size_14_sp" />
 
                     <CheckBox
                         android:id="@+id/cbFr"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Fri" />
+                        android:text="Fri"
+                        android:textSize="@dimen/text_size_14_sp" />
 
                     <CheckBox
                         android:id="@+id/cbSa"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Sat" />
+                        android:text="Sat"
+                        android:textSize="@dimen/text_size_14_sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -96,7 +104,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Sun" />
+                        android:text="Sun"
+                        android:textSize="@dimen/text_size_14_sp" />
 
                 </LinearLayout>
 

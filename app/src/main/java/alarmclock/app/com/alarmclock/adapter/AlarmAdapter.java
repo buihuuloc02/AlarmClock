@@ -1,14 +1,13 @@
 package alarmclock.app.com.alarmclock.adapter;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.github.angads25.toggle.LabeledSwitch;
@@ -60,7 +59,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
             holder.tvTitle.setText(itemAlarm.getTitle());
             String result = getStringRepeat(itemAlarm);
             holder.tvRepeat.setText(result);
-            holder.switchOnOff.setOn(itemAlarm.getStatus().equals("0")? true : false);
+            holder.switchOnOff.setOn(itemAlarm.getStatus().equals("0") ? true : false);
             holder.imgDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -89,10 +88,18 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
         return itemAlarms.size();
     }
 
-    class AlarmHolder extends RecyclerView.ViewHolder {
+    public void removeItem(int adapterPosition) {
+        itemAlarms.remove(adapterPosition);
+        notifyDataSetChanged();
+    }
+
+    public void restoreItem(ItemAlarm deletedItem, int deletedIndex) {
+    }
+
+    public class AlarmHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.layoutMain)
-        LinearLayout layoutMain;
+        View layoutMain;
 
         @BindView(R.id.tvTime)
         TextView tvTime;
@@ -101,6 +108,12 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
 
         @BindView(R.id.tvTitle)
         TextView tvTitle;
+
+        @BindView(R.id.viewBackground)
+        public View viewBackground;
+
+        @BindView(R.id.viewForeground)
+        public View viewForeground;
 
         @BindView(R.id.imgDelete)
         ImageView imgDelete;
@@ -122,21 +135,27 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmHolder>
         void OnClickItemSwitchChange(ItemAlarm itemAlarm, int position, boolean checked);
     }
 
-    private String getStringRepeat(ItemAlarm itemAlarm){
+    private String getStringRepeat(ItemAlarm itemAlarm) {
         String result = "";
-        if(itemAlarm.getRepeatMo() == 1){
+        if (itemAlarm.getRepeatMo() == 1) {
             result += "Mon";
-        } if(itemAlarm.getRepeatTu() == 1){
+        }
+        if (itemAlarm.getRepeatTu() == 1) {
             result += " Tue";
-        } if(itemAlarm.getRepeatWe() == 1){
+        }
+        if (itemAlarm.getRepeatWe() == 1) {
             result += " Wed";
-        } if(itemAlarm.getRepeatTh() == 1){
+        }
+        if (itemAlarm.getRepeatTh() == 1) {
             result += " Thu";
-        } if(itemAlarm.getRepeatFr() == 1){
+        }
+        if (itemAlarm.getRepeatFr() == 1) {
             result += " Fri";
-        } if(itemAlarm.getRepeatSa() == 1){
+        }
+        if (itemAlarm.getRepeatSa() == 1) {
             result += " Sat";
-        } if(itemAlarm.getRepeatSu() == 1){
+        }
+        if (itemAlarm.getRepeatSu() == 1) {
             result += " Sun";
         }
         return result.trim();

@@ -375,6 +375,7 @@ public class AddAlarmActivity extends BaseActivity {
      */
     @SuppressLint("ResourceType")
     private void showdialog() {
+
         dialogListSound = new Dialog(this);
         dialogListSound.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogListSound.setTitle("Select Item");
@@ -441,6 +442,7 @@ public class AddAlarmActivity extends BaseActivity {
      * @return array list
      */
     private ArrayList<UriCustom> getListAlarm() {
+
         RingtoneManager ringtoneMgr = new RingtoneManager(this);
         ringtoneMgr.setType(RingtoneManager.TYPE_ALARM);
         Cursor alarmsCursor = ringtoneMgr.getCursor();
@@ -460,7 +462,7 @@ public class AddAlarmActivity extends BaseActivity {
             uriCustom.setName(name);
             alarms.add(uriCustom);
         }
-        alarmsCursor.close();
+        //alarmsCursor.close();
 
         return alarms;
     }
@@ -486,14 +488,15 @@ public class AddAlarmActivity extends BaseActivity {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setDataSource(this, uri);
             mediaPlayer.prepare();
+            mediaPlayer.setLooping(false);
             mediaPlayer.start();
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    stopSound();
-                }
-            }, 3000);
+//            Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    stopSound();
+//                }
+//            }, 3000);
         } catch (IOException e) {
             System.out.println("OOPS");
         }
@@ -524,6 +527,20 @@ public class AddAlarmActivity extends BaseActivity {
             }
         }
         return 0;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(dbHelper != null){
+            dbHelper.close();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dbHelper = new DatabaseHelper(this);
     }
 }
 

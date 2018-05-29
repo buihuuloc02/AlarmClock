@@ -38,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="Time:"
+                android:textSize="@dimen/text_size_14_sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -46,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
                 android:text="12:00"
+                android:textSize="@dimen/text_size_14_sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -62,6 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="Title:"
+                android:textSize="@dimen/text_size_14_sp"
                 android:textStyle="bold" />
 
             <EditText
@@ -71,7 +74,8 @@
                 android:layout_weight="1.5"
                 android:hint="Alarm Clock!"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textSize="@dimen/text_size_14_sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -101,6 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:text="Alarm tone:"
+                android:textSize="@dimen/text_size_14_sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -110,13 +115,15 @@
                 android:layout_weight="1.4"
                 android:hint="Default"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textSize="@dimen/text_size_14_sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=">"
                 android:textColor="@android:color/darker_gray"
+                android:textSize="@dimen/text_size_14_sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
