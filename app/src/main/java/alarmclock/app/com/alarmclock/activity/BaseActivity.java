@@ -50,11 +50,11 @@ public class BaseActivity extends AppCompatActivity {
     public interface CallBackDismiss {
         void callBackDismiss();
     }
-    public void vibaration() {
+    public void initVibration() {
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+            vibrator.vibrate(VibrationEffect.createOneShot(60000, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {
             vibrator.vibrate(60000);
         }

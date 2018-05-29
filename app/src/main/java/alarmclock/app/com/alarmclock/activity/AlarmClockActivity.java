@@ -40,8 +40,12 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
 
     @BindView(R.id.btnStop)
     Button btnStop;
+
     @BindView(R.id.tvNumberShake)
     TextView tvNumberShake;
+
+    @BindView(R.id.tvNameAlarm)
+    TextView tvNameAlarm;
 
     @BindView(R.id.imgClock1)
     View imgClock1;
@@ -132,11 +136,18 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         mSpeekShake = 1000 + (mSpeekShake * 100);
         sensorMgr.registerListener(this,
                 SensorManager.SENSOR_ACCELEROMETER,
-                SensorManager.SENSOR_DELAY_GAME);
+                SensorManager.SENSOR_DELAY_NORMAL);
 
         handler.postDelayed(runnable, 60000);
-        vibaration();
+        initVibration();
         playSound(this, getAlarmUri());
+    }
+
+    private void setTextTitleAlarm() {
+        if (itemAlarm != null) {
+            String str = itemAlarm.getTitle();
+            tvNameAlarm.setText(str);
+        }
     }
 
     private void playSound(Context context, Uri alert) {
@@ -145,6 +156,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
             mMediaPlayer = new MediaPlayer();
             mMediaPlayer.setDataSource(this, alert);
             mMediaPlayer.prepare();
+            mMediaPlayer.setLooping(true);
             mMediaPlayer.start();
         } catch (IOException e) {
             System.out.println("OOPS");
@@ -210,11 +222,10 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        String str = String.format(getResources().getString(R.string.text_confirm_number_shake), (mNumberShake - countShake)+"");
+                        String str = String.format(getResources().getString(R.string.text_confirm_number_shake), (mNumberShake - countShake) + "");
 
                         tvNumberShake.setText(str);
-                    }
-                    else{
+                    } else {
                         stopVibration();
                         btnStop.setVisibility(View.GONE);
                         mMediaPlayer.stop();

@@ -21,6 +21,17 @@
             android:gravity="bottom|center_horizontal"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/tvNameAlarm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="@dimen/text_size_25_sp"
+                android:textStyle="bold" />
+
             <ImageView
                 android:id="@+id/imgClock1"
                 android:layout_width="wrap_content"
