@@ -11,7 +11,7 @@
     <string name="text_button_done">Done</string>
     <string name="text_button_delete">Delete</string>
 
-    Text message
+    <!--Text message-->
 
     <string name="text_no_alarm">No alarms</string>
     <string name="text_number_shake">Number shake to stop alarm:</string>

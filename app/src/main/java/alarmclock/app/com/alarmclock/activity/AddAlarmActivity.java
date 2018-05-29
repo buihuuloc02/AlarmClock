@@ -539,7 +539,7 @@ public class AddAlarmActivity extends BaseActivity {
      * @return: int : index string in list
      */
     private int indexToneInList(String nameFile) {
-        for (int i = 0; i < mUriCustoms.size(); i++) {
+        for (int i = 0;mUriCustoms != null && i < mUriCustoms.size(); i++) {
             UriCustom uriCustom = mUriCustoms.get(i);
             if (uriCustom.getName().equals(nameFile)) {
                 return i;
