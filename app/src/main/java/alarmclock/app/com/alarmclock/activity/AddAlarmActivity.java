@@ -165,9 +165,9 @@ public class AddAlarmActivity extends BaseActivity {
             int idAlarm = getIntent().getIntExtra(EXTRA_ITEM_ALARM, 0);
             mItemAlarm = dbHelper.getAlarmById(idAlarm);
         }
-        setTitle(R.string.tittle_add_alarm);
+        setTitle(R.string.text_title_add_alarm);
         if (mItemAlarm != null) {
-            setTitle("Update Alarm");
+            setTitle(R.string.text_title_update_alarm);
         }
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
