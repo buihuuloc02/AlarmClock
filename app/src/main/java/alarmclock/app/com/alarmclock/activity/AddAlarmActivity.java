@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -98,7 +98,7 @@ public class AddAlarmActivity extends BaseActivity {
     private ItemAlarm mItemAlarm;
     private ArrayList<UriCustom> mUriCustoms;
     private ArrayList<String> mNameUris;
-    private Dialog listDialog;
+    private Dialog dialogListSound;
     private MediaPlayer mediaPlayer;
     private int indexSoundSelected = 0;
     private UriCustom uriCustomSelected;
@@ -131,12 +131,12 @@ public class AddAlarmActivity extends BaseActivity {
         int month = calendar.get(Calendar.MONTH);
         itemAlarm.setDayCreate(day);
         itemAlarm.setMonthCreate(month);
-        if(uriCustomSelected == null){
+        if (uriCustomSelected == null) {
             Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
             if (alarmUri == null) {
                 alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             }
-            uriCustomSelected =new UriCustom();
+            uriCustomSelected = new UriCustom();
             uriCustomSelected.setName("Default System");
             uriCustomSelected.setUri(alarmUri);
         }
@@ -163,7 +163,7 @@ public class AddAlarmActivity extends BaseActivity {
 
         if (getIntent().hasExtra(EXTRA_ITEM_ALARM)) {
             int idAlarm = getIntent().getIntExtra(EXTRA_ITEM_ALARM, 0);
-            mItemAlarm = dbHelper.getAlarmById(idAlarm );
+            mItemAlarm = dbHelper.getAlarmById(idAlarm);
         }
         setTitle(R.string.tittle_add_alarm);
         if (mItemAlarm != null) {
@@ -192,7 +192,6 @@ public class AddAlarmActivity extends BaseActivity {
                 showdialog();
             }
         });
-
 
 
     }
@@ -282,6 +281,9 @@ public class AddAlarmActivity extends BaseActivity {
         sharedPreferences.put(SharePreferenceHelper.Key.ALARMCLOCK, times);
     }
 
+    /**
+     * Function clear data
+     */
     private void clearData() {
         int hour = timePicker.getCurrentHour();
         int min = timePicker.getCurrentMinute();
@@ -295,6 +297,9 @@ public class AddAlarmActivity extends BaseActivity {
         setUncheckAll();
     }
 
+    /**
+     * Function set uncheck all checkbox
+     */
     private void setUncheckAll() {
         cbMo.setChecked(false);
         cbTu.setChecked(false);
@@ -305,6 +310,9 @@ public class AddAlarmActivity extends BaseActivity {
         cbSu.setChecked(false);
     }
 
+    /**
+     * Function set check all checkbox
+     */
     private void setCheckAll() {
         cbMo.setChecked(true);
         cbTu.setChecked(true);
@@ -336,6 +344,9 @@ public class AddAlarmActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * progress excute when click button in actionbar
+     */
     private void progressDone() {
         initItemAlarm();
         saveToDatabase(itemAlarm);
@@ -354,37 +365,39 @@ public class AddAlarmActivity extends BaseActivity {
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
 
-
         clearData();
-        finish();
+        onBackPressed();
 
     }
 
+    /**
+     * Function show dialog select tone alarm
+     */
     @SuppressLint("ResourceType")
     private void showdialog() {
-        listDialog = new Dialog(this);
-        listDialog.setTitle("Select Item");
+        dialogListSound = new Dialog(this);
+        dialogListSound.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogListSound.setTitle("Select Item");
         LayoutInflater li = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = li.inflate(R.layout.view_dialog_add, null, false);
-        listDialog.setContentView(v);
-        listDialog.setCancelable(true);
+        dialogListSound.setContentView(v);
+        dialogListSound.setCancelable(true);
         //there are a lot of settings, for dialog, check them all out!
 
-        ListView list1 = (ListView) listDialog.findViewById(R.id.listview);
-        //list1.setOnItemClickListener(this);
+        ListView listViewSound = (ListView) dialogListSound.findViewById(R.id.listview);
         ArrayList<String> val = new ArrayList<String>();
-        val.addAll(mNameUris);
-        list1.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        list1.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, val));
-        list1.setClickable(true);
+        val.addAll(mNameUris != null ? mNameUris : new ArrayList<>());
+        listViewSound.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listViewSound.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, val));
+        listViewSound.setClickable(true);
 
         int indexSelected = 0;
-        if(uriCustomSelected != null){
+        if (uriCustomSelected != null) {
             indexSelected = indexToneInList(uriCustomSelected.getName());
         }
-        list1.setItemChecked(indexSelected, true);
-        list1.smoothScrollToPosition(indexSelected);
-        list1.setSelection(indexSelected);
+        listViewSound.setItemChecked(indexSelected, true);
+        listViewSound.smoothScrollToPosition(indexSelected);
+        listViewSound.setSelection(indexSelected);
         //now that the dialog is set up, it's time to show it
         TextView btnCancel = (TextView) v.findViewById(R.id.btnCancel);
         TextView btnOk = (TextView) v.findViewById(R.id.btnOk);
@@ -396,7 +409,7 @@ public class AddAlarmActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 stopSound();
-                listDialog.dismiss();
+                dialogListSound.dismiss();
             }
         });
 
@@ -404,11 +417,11 @@ public class AddAlarmActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 stopSound();
-                listDialog.dismiss();
+                dialogListSound.dismiss();
                 updateNameSound(uriCustomSelected);
             }
         });
-        list1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listViewSound.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 indexSoundSelected = i;
@@ -419,9 +432,14 @@ public class AddAlarmActivity extends BaseActivity {
 
             }
         });
-        listDialog.show();
+        dialogListSound.show();
     }
 
+    /**
+     * get list tone alarm of system
+     *
+     * @return array list
+     */
     private ArrayList<UriCustom> getListAlarm() {
         RingtoneManager ringtoneMgr = new RingtoneManager(this);
         ringtoneMgr.setType(RingtoneManager.TYPE_ALARM);
@@ -447,6 +465,9 @@ public class AddAlarmActivity extends BaseActivity {
         return alarms;
     }
 
+    /**
+     * Stop sound playing
+     */
     private void stopSound() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -454,6 +475,11 @@ public class AddAlarmActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Play sound by uri
+     *
+     * @param uri: Uri
+     */
     private void playSound(Uri uri) {
         try {
             stopSound();
@@ -461,28 +487,39 @@ public class AddAlarmActivity extends BaseActivity {
             mediaPlayer.setDataSource(this, uri);
             mediaPlayer.prepare();
             mediaPlayer.start();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        stopSound();
-                    }
-                }, 3000);
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    stopSound();
+                }
+            }, 3000);
         } catch (IOException e) {
             System.out.println("OOPS");
         }
     }
 
-    private void updateNameSound(UriCustom uriCustom){
-        if(uriCustom != null) {
+    /**
+     * update text for edittext sound
+     *
+     * @param uriCustom: UriCustom
+     */
+    private void updateNameSound(UriCustom uriCustom) {
+        if (uriCustom != null) {
             etAlarmTone.setText(uriCustom.getName());
         }
     }
 
-    private int indexToneInList(String nameFile){
-        for(int i = 0; i< mUriCustoms.size();i++){
+    /**
+     * Find string in list
+     *
+     * @param nameFile: String
+     * @return: int : index string in list
+     */
+    private int indexToneInList(String nameFile) {
+        for (int i = 0; i < mUriCustoms.size(); i++) {
             UriCustom uriCustom = mUriCustoms.get(i);
-            if(uriCustom.getName().equals(nameFile)){
+            if (uriCustom.getName().equals(nameFile)) {
                 return i;
             }
         }

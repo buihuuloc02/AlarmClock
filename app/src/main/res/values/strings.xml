@@ -4,4 +4,6 @@
     <string name="text_settings_actionbar">Settings</string>
     <string name="text_">Add Alarm</string>
     <string name="text_confirm_number_shake">You need shake %s times to stop alarm!</string>
+    <string name="text_title_setting">Settings</string>
+    <string name="text_button_done">Done</string>
 </resources>

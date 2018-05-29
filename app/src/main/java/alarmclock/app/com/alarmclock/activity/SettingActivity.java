@@ -36,6 +36,7 @@ public class SettingActivity extends BaseActivity {
     View layoutMain;
 
     private SharePreferenceHelper sharedPreferences;
+    private boolean isFirstLoad = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,9 +52,10 @@ public class SettingActivity extends BaseActivity {
 
         sharedPreferences = getSharePreferences();
 
-        setTitle("Settings");
+        setTitle(getResources().getString(R.string.text_title_setting));
+
         initDataNumberShake();
-        initDataSpeekShake();
+        initDataSpeedShake();
     }
 
     @Override
@@ -67,6 +69,9 @@ public class SettingActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Init spinner number shake
+     */
     private void initDataNumberShake() {
         List<Integer> numbers = new ArrayList<Integer>();
         for (int i = 0; i < 10; i++) {
@@ -86,8 +91,10 @@ public class SettingActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int number = i;
                 sharedPreferences.put(SharePreferenceHelper.Key.NUMBERSHAKE, number);
-                Snackbar snackbar = Snackbar.make(layoutMain, "Updated!", Snackbar.LENGTH_LONG);
-                snackbar.show();
+                if (!isFirstLoad) {
+                    Snackbar snackbar = Snackbar.make(layoutMain, "Updated!", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
             }
 
             @Override
@@ -100,7 +107,10 @@ public class SettingActivity extends BaseActivity {
         spinnerNumberShake.setSelection(selected);
     }
 
-    private void initDataSpeekShake() {
+    /**
+     * Init data speed shake
+     */
+    private void initDataSpeedShake() {
         List<Integer> numbers = new ArrayList<Integer>();
         for (int i = 0; i < 10; i++) {
             numbers.add(1000 + (i * 100));
@@ -119,8 +129,11 @@ public class SettingActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int number = i;
                 sharedPreferences.put(SharePreferenceHelper.Key.SPEEKSHAKE, number);
-                Snackbar snackbar = Snackbar.make(layoutMain, "Updated!", Snackbar.LENGTH_LONG);
-                snackbar.show();
+                if (!isFirstLoad) {
+                    Snackbar snackbar = Snackbar.make(layoutMain, "Updated!", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+                isFirstLoad = false;
             }
 
             @Override
