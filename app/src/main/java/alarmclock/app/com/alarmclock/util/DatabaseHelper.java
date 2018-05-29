@@ -250,8 +250,14 @@ public class DatabaseHelper  extends SQLiteOpenHelper {
 
             values.put(KEY_DAY_CREATE ,alarm.getDayCreate());
             values.put(KEY_MONTH_CREATE ,alarm.getMonthCreate());
-            values.put(KEY_URI_TONE ,alarm.getUriCustom().toString());
-            values.put(KEY_NAME_TONE ,alarm.getNameTone());
+
+            String nameTone = alarm.getNameTone();
+            values.put(KEY_NAME_TONE, nameTone);
+            if(!nameTone.toLowerCase().equals("none")) {
+                values.put(KEY_URI_TONE, alarm.getUriCustom().toString());
+            }else{
+                values.put(KEY_URI_TONE, "");
+            }
 
             // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
             db.insertOrThrow(TABLE_ALARM, null, values);
@@ -323,8 +329,14 @@ public class DatabaseHelper  extends SQLiteOpenHelper {
             values.put(KEY_DAY_CREATE ,alarm.getDayCreate());
             values.put(KEY_MONTH_CREATE ,alarm.getMonthCreate());
 
-            values.put(KEY_URI_TONE ,alarm.getUriCustom().toString());
-            values.put(KEY_NAME_TONE ,alarm.getNameTone());
+            String nameTone = alarm.getNameTone();
+            values.put(KEY_NAME_TONE, nameTone);
+            if(!nameTone.toLowerCase().equals("none")) {
+                values.put(KEY_URI_TONE, alarm.getUriCustom().toString());
+            }else{
+                values.put(KEY_URI_TONE, "");
+            }
+
 
 
             // First try to update the island in case the island already exists in the database

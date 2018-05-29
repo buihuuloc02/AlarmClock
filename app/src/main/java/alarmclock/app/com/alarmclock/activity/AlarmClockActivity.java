@@ -73,7 +73,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
             case R.id.btnStop:
                 stopVibration();
                 btnStop.setVisibility(View.GONE);
-                mMediaPlayer.stop();
+                stopSound();
                 imgClock1.setVisibility(View.VISIBLE);
                 imgClock2.setVisibility(View.GONE);
 //                Intent intent = new Intent(this, MainActivity.class);
@@ -132,6 +132,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
 
         String str = String.format(getResources().getString(R.string.text_confirm_number_shake), mNumberShake + "");
         tvNumberShake.setText(str);
+        setTextTitleAlarm();
 
         mSpeekShake = 1000 + (mSpeekShake * 100);
         sensorMgr.registerListener(this,
@@ -153,11 +154,13 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
     private void playSound(Context context, Uri alert) {
         try {
             stopSound();
-            mMediaPlayer = new MediaPlayer();
-            mMediaPlayer.setDataSource(this, alert);
-            mMediaPlayer.prepare();
-            mMediaPlayer.setLooping(true);
-            mMediaPlayer.start();
+            if(alert != null) {
+                mMediaPlayer = new MediaPlayer();
+                mMediaPlayer.setDataSource(this, alert);
+                mMediaPlayer.prepare();
+                mMediaPlayer.setLooping(true);
+                mMediaPlayer.start();
+            }
         } catch (IOException e) {
             System.out.println("OOPS");
         }

@@ -7,6 +7,9 @@ import android.view.View;
 
 import alarmclock.app.com.alarmclock.adapter.AlarmAdapter;
 
+import static android.support.v7.widget.helper.ItemTouchHelper.LEFT;
+import static android.support.v7.widget.helper.ItemTouchHelper.RIGHT;
+
 /**
  * Created by Administrator on 5/29/2018.
  */
@@ -20,7 +23,7 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     }
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        return true;
+        return false;
     }
 
     @Override
@@ -30,6 +33,11 @@ public class RecyclerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
 
             getDefaultUIUtil().onSelected(foregroundView);
         }
+    }
+
+    @Override
+    public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        return makeMovementFlags(0, LEFT | RIGHT);
     }
 
     @Override

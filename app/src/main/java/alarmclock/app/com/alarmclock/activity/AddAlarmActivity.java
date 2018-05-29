@@ -102,6 +102,7 @@ public class AddAlarmActivity extends BaseActivity {
     private MediaPlayer mediaPlayer;
     private int indexSoundSelected = 0;
     private UriCustom uriCustomSelected;
+    private UriCustom uriCustomSelected_temp;
 
     private void initItemAlarm() {
         itemAlarm = new ItemAlarm();
@@ -137,8 +138,8 @@ public class AddAlarmActivity extends BaseActivity {
                 alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             }
             uriCustomSelected = new UriCustom();
-            uriCustomSelected.setName("Default System");
-            uriCustomSelected.setUri(alarmUri);
+            uriCustomSelected.setName("None");
+            uriCustomSelected.setUri(null);
         }
         itemAlarm.setNameTone(uriCustomSelected.getName());
         itemAlarm.setUriCustom(uriCustomSelected.getUri());
@@ -197,7 +198,7 @@ public class AddAlarmActivity extends BaseActivity {
     }
 
     private void setDataUpdate(ItemAlarm mItemAlarm) {
-        if (mItemAlarm != null) {
+        if (mItemAlarm != null) {// update alarm
             int h = Integer.parseInt(mItemAlarm.getHour());
             int m = Integer.parseInt(mItemAlarm.getMinute());
             showTime(h, m);
@@ -234,6 +235,11 @@ public class AddAlarmActivity extends BaseActivity {
             uriCustomSelected = new UriCustom();
             uriCustomSelected.setUri(mItemAlarm.getUriCustom());
             uriCustomSelected.setName(mItemAlarm.getNameTone());
+            updateNameSound(uriCustomSelected);
+        }else{// new alarm
+            uriCustomSelected = new UriCustom();
+            uriCustomSelected.setUri(null);
+            uriCustomSelected.setName("None");
             updateNameSound(uriCustomSelected);
         }
     }
@@ -419,6 +425,7 @@ public class AddAlarmActivity extends BaseActivity {
             public void onClick(View view) {
                 stopSound();
                 dialogListSound.dismiss();
+                uriCustomSelected = uriCustomSelected_temp;
                 updateNameSound(uriCustomSelected);
             }
         });
@@ -427,9 +434,13 @@ public class AddAlarmActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 indexSoundSelected = i;
                 UriCustom uriCustom = mUriCustoms.get(i);
-                uriCustomSelected = uriCustom;
+                uriCustomSelected_temp = uriCustom;
                 Uri uri = uriCustom.getUri();
-                playSound(uri);
+                if(uri != null) {
+                    playSound(uri);
+                }else{
+                    stopSound();
+                }
 
             }
         });
@@ -451,7 +462,15 @@ public class AddAlarmActivity extends BaseActivity {
             return null;
         }
         mNameUris = new ArrayList<>();
+
+        // add item NONE to list
+        mNameUris.add("None");
         ArrayList<UriCustom> alarms = new ArrayList<UriCustom>();
+        UriCustom uri = new UriCustom();
+        uri.setName("None");
+        uri.setUri(null);
+        alarms.add(uri);
+        // end
         while (!alarmsCursor.isAfterLast() && alarmsCursor.moveToNext()) {
             int currentPosition = alarmsCursor.getPosition();
             UriCustom uriCustom = new UriCustom();
