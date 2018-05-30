@@ -1,6 +1,5 @@
 package alarmclock.app.com.alarmclock.activity;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.KeyguardManager;
@@ -42,6 +41,7 @@ public class AlarmService extends IntentService {
     private int hLast;
     private int mLast;
     private String timeReceive = "";
+
     public AlarmService() {
         super(TAG);
     }
@@ -52,7 +52,7 @@ public class AlarmService extends IntentService {
         doCheckAlarm();
     }
 
-    private void doCheckAlarm(){
+    private void doCheckAlarm() {
         Calendar calendar = Calendar.getInstance();
         SharePreferenceHelper sharePreferenceHelper = SharePreferenceHelper.getInstances(this);
         hLast = sharePreferenceHelper.getInt(HOUR, 0);
@@ -97,44 +97,44 @@ public class AlarmService extends IntentService {
 
             if (itemAlarm != null) {
                 intent1.putExtra("id", itemAlarm.getId());
-                if(checkHasRepeat(itemAlarm)) {
-                    if(checkIsToday(itemAlarm,dayOfWeek) || checkDayCreateToDay(itemAlarm, dayOfMonth)){
+                if (checkHasRepeat(itemAlarm)) {
+                    if (checkIsToday(itemAlarm, dayOfWeek) || checkDayCreateToDay(itemAlarm, dayOfMonth)) {
                         wakeDevice(this);
                         this.startActivity(intent1);
                         startWakefulService(this, intentService);
                         //this.setResultCode(Activity.RESULT_OK);
                     }
-                }else {
+                } else {
                     wakeDevice(this);
                     DatabaseHelper databaseHelper = new DatabaseHelper(this);
                     //databaseHelper.addOrUpdateAlarm(itemAlarm);
                     //databaseHelper.deleteAlarmById(itemAlarm.getId());
                     this.startActivity(intent1);
                     startWakefulService(this, intentService);
-                   // setResultCode(Activity.RESULT_OK);
+                    // setResultCode(Activity.RESULT_OK);
                 }
             }
 
 
         }
-        if(BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Toast.makeText(this, h + " " + m + "", Toast.LENGTH_SHORT).show();
             Log.d(TAG, h + " " + m + "");
         }
 
-        ItemAlarm itemAlarm = findNextAlarmClock(getDataFromDatabase(this),h, m);
-        if(itemAlarm != null){
+        ItemAlarm itemAlarm = findNextAlarmClock(getDataFromDatabase(this), h, m);
+        if (itemAlarm != null) {
             setAlarm(itemAlarm);
             String strTime = getStringTimeMinute(itemAlarm);
-            sendNotification(strTime);
+            sendNotification(this.getResources().getString(R.string.text_next), strTime);
             Log.d(TAG, itemAlarm.getHour() + " : " + itemAlarm.getMinute());
-        }else{
-            sendNotification(timeReceive);
+        } else {
+            sendNotification("", timeReceive);
             Log.d(TAG, "null");
         }
     }
 
-    private void setAlarm(ItemAlarm alarm){
+    private void setAlarm(ItemAlarm alarm) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(alarm.getHour()));
         calendar.set(Calendar.MINUTE, Integer.parseInt(alarm.getMinute()));
@@ -151,7 +151,8 @@ public class AlarmService extends IntentService {
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
     }
-    private void sendNotification(String msg) {
+
+    private void sendNotification(String title, String msg) {
         Log.d(TAG, "Preparing to send notification...: " + msg);
         alarmNotificationManager = (NotificationManager) this
                 .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -159,10 +160,11 @@ public class AlarmService extends IntentService {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, AlarmClockActivity.class), 0);
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        String strTitle = title + " " + getResources().getString(R.string.text_alarm_clock);
         Notification n = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_noti)
                 //.setContentIntent(contentIntent)
-                .setContentTitle(getResources().getString(R.string.text_alarm_clock))
+                .setContentTitle(strTitle.trim())
                 .setContentText(msg)
                 .setAutoCancel(true)
                 .setSound(alarmSound)
@@ -175,8 +177,9 @@ public class AlarmService extends IntentService {
         alarmNotificationManager.notify(1, n);
         Log.d(TAG, "Notification sent.");
     }
+
     private boolean checkDayCreateToDay(ItemAlarm itemAlarm, int dayOfMonth) {
-        if(itemAlarm.getDayCreate() == dayOfMonth){
+        if (itemAlarm.getDayCreate() == dayOfMonth) {
             return true;
         }
         return false;
@@ -188,7 +191,6 @@ public class AlarmService extends IntentService {
         itemAlarms.addAll(databaseHelper.getAllAlarms());
         return itemAlarms;
     }
-
 
 
     private ItemAlarm check(ArrayList<ItemAlarm> itemAlarms, String h, String m) {
@@ -263,6 +265,7 @@ public class AlarmService extends IntentService {
         }
         return false;
     }
+
     public void wakeDevice(Context context) {
 
         KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
@@ -270,23 +273,22 @@ public class AlarmService extends IntentService {
         keyguardLock.disableKeyguard();
     }
 
-    private ItemAlarm findNextAlarmClock(ArrayList<ItemAlarm> itemAlarms, int hour, int minute){
+    private ItemAlarm findNextAlarmClock(ArrayList<ItemAlarm> itemAlarms, int hour, int minute) {
         Collections.sort(itemAlarms, new TimeAlarmComparator());
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
         long timcurrent = calendar.getTimeInMillis();
-        for(ItemAlarm itemAlarm : itemAlarms){
-            if(itemAlarm.getMilisecod() >= timcurrent){
+        for (ItemAlarm itemAlarm : itemAlarms) {
+            if (itemAlarm.getMilisecod() >= timcurrent) {
                 return itemAlarm;
             }
         }
         return null;
     }
 
-    public class TimeAlarmComparator implements Comparator<ItemAlarm>
-    {
+    public class TimeAlarmComparator implements Comparator<ItemAlarm> {
         public int compare(ItemAlarm left, ItemAlarm right) {
             Long t1 = left.getMilisecod();
             Long t2 = right.getMilisecod();

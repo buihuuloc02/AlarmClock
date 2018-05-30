@@ -38,5 +38,6 @@
     <string name="text_update_success">Update success!</string>
     <string name="text_updated">Updated!</string>
     <string name="text_delete_success">Delete success!</string>
+    <string name="text_next">Next</string>
 
 </resources>

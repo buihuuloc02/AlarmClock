@@ -38,4 +38,5 @@
     <string name="text_update_success">アップデート成功！</string>
     <string name="text_updated">更新しました！</string>
     <string name="text_delete_success">成功を削除！</string>
+    <string name="text_next">次</string>
 </resources>

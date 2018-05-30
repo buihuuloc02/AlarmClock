@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +33,8 @@ import android.widget.TimePicker;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 
 import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.model.ItemAlarm;
@@ -48,6 +51,7 @@ import butterknife.ButterKnife;
 public class AddAlarmActivity extends BaseActivity {
 
     public static final String EXTRA_ITEM_ALARM = "EXTRA_ITEM_ALARM";
+    public static final String TAG = AddAlarmActivity.class.getSimpleName();
     @BindView(R.id.tvTime)
     TextView tvTime;
 
@@ -364,9 +368,18 @@ public class AddAlarmActivity extends BaseActivity {
         initItemAlarm();
         saveToDatabase(itemAlarm);
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hour));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(minute));
-        calendar.set(Calendar.SECOND, 0);
+        ArrayList itemAlarms = new ArrayList<>();
+        itemAlarms.addAll(dbHelper.getAllAlarms());
+        ItemAlarm itemAlarmSmall = findTimeAlarmClockSmallest(itemAlarms);
+        if(itemAlarmSmall != null){
+            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(itemAlarmSmall.getHour()));
+            calendar.set(Calendar.MINUTE, Integer.parseInt(itemAlarmSmall.getMinute()));
+            calendar.set(Calendar.SECOND, 0);
+        }else {
+            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hour));
+            calendar.set(Calendar.MINUTE, Integer.parseInt(minute));
+            calendar.set(Calendar.SECOND, 0);
+        }
 
         Intent myIntent = new Intent(this, AlarmReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
@@ -375,7 +388,9 @@ public class AddAlarmActivity extends BaseActivity {
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            Log.d(TAG, "setExact");
         } else {
+            Log.d(TAG, "set");
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         }
 
@@ -548,6 +563,22 @@ public class AddAlarmActivity extends BaseActivity {
             }
         }
         return 0;
+    }
+
+    private ItemAlarm findTimeAlarmClockSmallest(ArrayList<ItemAlarm> itemAlarms) {
+        Collections.sort(itemAlarms, new TimeAlarmComparator());
+        if(itemAlarms != null &&  itemAlarms.size() > 0){
+            return itemAlarms.get(0);
+        }
+        return null;
+    }
+
+    public class TimeAlarmComparator implements Comparator<ItemAlarm> {
+        public int compare(ItemAlarm left, ItemAlarm right) {
+            Long t1 = left.getMilisecod();
+            Long t2 = right.getMilisecod();
+            return t1.compareTo(t2);
+        }
     }
 
     @Override
