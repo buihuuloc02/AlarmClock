@@ -14,7 +14,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,6 +43,7 @@ import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
+    private final static String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.layoutMain)
     View layoutMain;
@@ -71,6 +71,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     private float dX, dY;
     private int lastAction;
     private Handler handler = new Handler();
+    boolean startActivity = false;
 
 
     @OnClick({R.id.fabAdd})
@@ -202,61 +203,11 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
         //addAlarm();
     }
 
-    public void getDataFromShareReference() {
-        String str = sharePreferenceHelper.getString(SharePreferenceHelper.Key.ALARMCLOCK, "");
-        if (!TextUtils.isEmpty(str)) {
-            String[] arr = str.split("##");
-            if (arr.length > 0) {
-                for (int i = 0; i < arr.length; i++) {
-                    String alarm = arr[i];
-                    String[] temp = alarm.split("#");
-                    if (temp.length >= 3) {
-                        ItemAlarm itemAlarm = new ItemAlarm();
-                        itemAlarm.setHour(temp[0]);
-                        itemAlarm.setMinute(temp[1]);
-                        itemAlarm.setTitle(temp[2]);
-                        itemAlarms.add(itemAlarm);
-                    }
-                }
-            }
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //clearAlarm();
-        initData();
-        //handler.post(runnable);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-    }
-
     public void getDataFromDatabase() {
         itemAlarms = new ArrayList<>();
         itemAlarms.addAll(databaseHelper.getAllAlarms());
     }
 
-    private void update() {
-        if (itemAlarms != null && itemAlarms.size() > 0) {
-            ItemAlarm itemAlarm = itemAlarms.get(0);
-            itemAlarm.setStatus("2");
-            databaseHelper.addOrUpdateAlarm(itemAlarm);
-            itemAlarms = new ArrayList<>();
-            itemAlarms.addAll(databaseHelper.getAllAlarms());
-        }
-    }
 
     public boolean checkHasAlarm() {
 
@@ -293,7 +244,6 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
         return super.onOptionsItemSelected(item);
     }
 
-    boolean startActivity = false;
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -310,20 +260,6 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
             handler.postDelayed(this, 1000);
         }
     };
-
-    public void clearAlarm() {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        Intent updateServiceIntent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingUpdateIntent = PendingIntent.getService(this, 0, updateServiceIntent, 0);
-
-        // Cancel alarms
-        try {
-            alarmManager.cancel(pendingUpdateIntent);
-        } catch (Exception e) {
-            Log.e("MainActivity", "AlarmManager update was not canceled. " + e.toString());
-        }
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void addAlarm() {
@@ -351,9 +287,10 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
 
             }
         }
-        Log.d("alarm", str);
+        Log.d(TAG, str);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof AlarmAdapter.AlarmHolder) {
@@ -368,7 +305,28 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
             alarmAdapter.removeItem(viewHolder.getAdapterPosition());
             databaseHelper.deleteAlarmById(deletedItem.getId());
             initData();
-            Toast.makeText(this, "Delete success!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.text_delete_success), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //clearAlarm();
+        initData();
+        //handler.post(runnable);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }

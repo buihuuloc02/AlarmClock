@@ -32,6 +32,7 @@ import static alarmclock.app.com.alarmclock.util.Constant.MINUTE;
 
 public class AlarmReceiver extends WakefulBroadcastReceiver {
 
+    private final static String TAG = AlarmReceiver.class.getSimpleName();
     private int hLast;
     private int mLast;
 
@@ -133,7 +134,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         try {
             alarmManager.cancel(pendingUpdateIntent);
         } catch (Exception e) {
-            Log.e("MainActivity", "AlarmManager update was not canceled. " + e.toString());
+            Log.e(TAG, "AlarmManager update was not canceled. " + e.toString());
         }
     }
 

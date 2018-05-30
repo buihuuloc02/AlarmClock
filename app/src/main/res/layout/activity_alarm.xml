@@ -74,7 +74,7 @@
 
                 android:fontFamily="@font/simplyfont"
                 android:gravity="center"
-                android:text="Click 'Stop' or shake sharply your phone to stop alarm!"
+                android:text="@string/help"
                 android:textStyle="bold" />
 
             <TextView
@@ -97,6 +97,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="STOP" />
+        android:text="@string/text_button_stop" />
 
 </RelativeLayout>

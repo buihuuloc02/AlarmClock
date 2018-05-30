@@ -15,10 +15,11 @@ import alarmclock.app.com.alarmclock.R;
  */
 
 public class AlarmService extends IntentService {
-    private NotificationManager alarmNotificationManager;
 
+    private final static String TAG = AlarmService.class.getSimpleName();
+    private NotificationManager alarmNotificationManager;
     public AlarmService() {
-        super("AlarmService");
+        super(TAG);
     }
 
     @Override
@@ -28,7 +29,7 @@ public class AlarmService extends IntentService {
     }
 
     private void sendNotification(String msg) {
-        Log.d("AlarmService", "Preparing to send notification...: " + msg);
+        Log.d(TAG, "Preparing to send notification...: " + msg);
         alarmNotificationManager = (NotificationManager) this
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -47,8 +48,7 @@ public class AlarmService extends IntentService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-
         alarmNotificationManager.notify(1, n);
-        Log.d("AlarmService", "Notification sent.");
+        Log.d(TAG, "Notification sent.");
     }
 }

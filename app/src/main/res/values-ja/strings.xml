@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AlarmClock</string>
+    <string name="app_name">目覚まし時計</string>
     <string name="text_settings_actionbar">設定</string>
 
     <!--Text title screen-->
@@ -10,6 +10,8 @@
     <!--Text button-->
     <string name="text_button_done">完了</string>
     <string name="text_button_delete">削除</string>
+    <string name="text_button_cancel">キャンセル</string>
+    <string name="text_button_stop">停止</string>
 
     <!--Text message-->
 
@@ -17,4 +19,23 @@
     <string name="text_number_shake">アラームを停止する番号を振る：</string>
     <string name="text_speed_shake">スピードシェイク：</string>
     <string name="text_confirm_number_shake">あなたはアラームを止めるために％s回振る必要があります！</string>
+    <string name="text_time">時間：</string>
+    <string name="text_title">タイトル：</string>
+    <string name="text_tone">アラーム音：</string>
+    <string name="help">アラームを停止するには、[停止]をクリックするか、携帯電話を急に振ってください！</string>
+    <string name="text_repaet">繰り返す：</string>
+    <string name="text_mon">月曜日</string>
+    <string name="text_tue">火曜日</string>
+    <string name="text_wed">水曜日</string>
+    <string name="text_thu">木曜日</string>
+    <string name="text_fri">金曜日</string>
+    <string name="text_sat">土曜日</string>
+    <string name="text_sun">日曜日</string>
+    <string name="text_select_alarm">アラーム音を選択！</string>
+    <string name="text_alarm_clock">目覚まし時計！</string>
+    <string name="text_none">なし</string>
+    <string name="text_add_success">成功を追加！</string>
+    <string name="text_update_success">アップデート成功！</string>
+    <string name="text_updated">更新しました！</string>
+    <string name="text_delete_success">成功を削除！</string>
 </resources>

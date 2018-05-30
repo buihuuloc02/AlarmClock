@@ -10,7 +10,7 @@
         android:layout_height="30dp"
         android:layout_margin="20dp"
         android:gravity="center_vertical"
-        android:text="Select alarm tone!"
+        android:text="@string/text_select_alarm"
         android:textColor="#FF00FF"
         android:textSize="20sp"
         android:textStyle="bold" />
@@ -46,7 +46,7 @@
             android:layout_weight="1"
             android:clickable="true"
             android:gravity="center"
-            android:text="Cancel"
+            android:text="@string/text_button_cancel"
             android:textColor="@drawable/selector_button" />
 
         <TextView

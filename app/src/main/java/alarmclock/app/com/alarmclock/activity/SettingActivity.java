@@ -130,7 +130,7 @@ public class SettingActivity extends BaseActivity {
                 int number = i;
                 sharedPreferences.put(SharePreferenceHelper.Key.SPEEKSHAKE, number);
                 if (!isFirstLoad) {
-                    Snackbar snackbar = Snackbar.make(layoutMain, "Updated!", Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(layoutMain, getResources().getString(R.string.text_updated), Snackbar.LENGTH_LONG);
                     snackbar.show();
                 }
                 isFirstLoad = false;

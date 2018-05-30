@@ -10,6 +10,8 @@
     <!--Text button-->
     <string name="text_button_done">Done</string>
     <string name="text_button_delete">Delete</string>
+    <string name="text_button_cancel">Cancel</string>
+    <string name="text_button_stop">STOP</string>
 
     <!--Text message-->
 
@@ -17,4 +19,24 @@
     <string name="text_number_shake">Number shake to stop alarm:</string>
     <string name="text_speed_shake">Speed shake:</string>
     <string name="text_confirm_number_shake">You need shake %s times to stop alarm!</string>
+    <string name="text_time">Time:</string>
+    <string name="text_title">Title:</string>
+    <string name="text_tone">Alarm tone:</string>
+    <string name="help">Click \'Stop\' or shake sharply your phone to stop alarm!</string>
+    <string name="text_repaet">Repeat:</string>
+    <string name="text_mon">Mon</string>
+    <string name="text_tue">Tue</string>
+    <string name="text_wed">Wed</string>
+    <string name="text_thu">Thu</string>
+    <string name="text_fri">Fri</string>
+    <string name="text_sat">Sat</string>
+    <string name="text_sun">Sun</string>
+    <string name="text_select_alarm">Select alarm tone!</string>
+    <string name="text_alarm_clock">Alarm Clock!</string>
+    <string name="text_none">None</string>
+    <string name="text_add_success">Add success!</string>
+    <string name="text_update_success">Update success!</string>
+    <string name="text_updated">Updated!</string>
+    <string name="text_delete_success">Delete success!</string>
+
 </resources>

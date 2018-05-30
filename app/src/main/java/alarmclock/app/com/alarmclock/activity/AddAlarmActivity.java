@@ -11,7 +11,6 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -104,47 +103,6 @@ public class AddAlarmActivity extends BaseActivity {
     private UriCustom uriCustomSelected;
     private UriCustom uriCustomSelected_temp;
 
-    private void initItemAlarm() {
-        itemAlarm = new ItemAlarm();
-        itemAlarm.setHour(hour);
-        itemAlarm.setStatus("0");
-        itemAlarm.setMinute(minute);
-        itemAlarm.setFormat(format);
-        String str = etTitle.getText().toString();
-        if (TextUtils.isEmpty(str)) {
-            str = "Alarm clock!";
-        }
-        itemAlarm.setTitle(str);
-
-        itemAlarm.setStatus("0");
-        if (mItemAlarm != null) {
-            itemAlarm.setStatus(mItemAlarm.getStatus());
-        }
-        itemAlarm.setRepeatMo(cbMo.isChecked() ? 1 : 0);
-        itemAlarm.setRepeatWe(cbWe.isChecked() ? 1 : 0);
-        itemAlarm.setRepeatTu(cbTu.isChecked() ? 1 : 0);
-        itemAlarm.setRepeatTh(cbTh.isChecked() ? 1 : 0);
-        itemAlarm.setRepeatFr(cbFr.isChecked() ? 1 : 0);
-        itemAlarm.setRepeatSa(cbSa.isChecked() ? 1 : 0);
-        itemAlarm.setRepeatSu(cbSu.isChecked() ? 1 : 0);
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
-        itemAlarm.setDayCreate(day);
-        itemAlarm.setMonthCreate(month);
-        if (uriCustomSelected == null) {
-            Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-            if (alarmUri == null) {
-                alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            }
-            uriCustomSelected = new UriCustom();
-            uriCustomSelected.setName("None");
-            uriCustomSelected.setUri(null);
-        }
-        itemAlarm.setNameTone(uriCustomSelected.getName());
-        itemAlarm.setUriCustom(uriCustomSelected.getUri());
-    }
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -197,6 +155,32 @@ public class AddAlarmActivity extends BaseActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_screen_add_alarm, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.actionDone:
+                progressDone();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Set data for these field if action is update alarm
+     *
+     * @param mItemAlarm: Object type Item alarm
+     */
     private void setDataUpdate(ItemAlarm mItemAlarm) {
         if (mItemAlarm != null) {// update alarm
             int h = Integer.parseInt(mItemAlarm.getHour());
@@ -236,10 +220,10 @@ public class AddAlarmActivity extends BaseActivity {
             uriCustomSelected.setUri(mItemAlarm.getUriCustom());
             uriCustomSelected.setName(mItemAlarm.getNameTone());
             updateNameSound(uriCustomSelected);
-        }else{// new alarm
+        } else {// new alarm
             uriCustomSelected = new UriCustom();
             uriCustomSelected.setUri(null);
-            uriCustomSelected.setName("None");
+            uriCustomSelected.setName(getResources().getString(R.string.text_none));
             updateNameSound(uriCustomSelected);
         }
     }
@@ -280,13 +264,6 @@ public class AddAlarmActivity extends BaseActivity {
         }
     }
 
-    private void saveAlarmToSharePreference(ItemAlarm itemAlarm) {
-        String times = sharedPreferences.getString(SharePreferenceHelper.Key.ALARMCLOCK, "");
-        String str = itemAlarm.getHour() + "#" + itemAlarm.getMinute() + "#" + itemAlarm.getTitle();
-        times += "##" + str;
-        sharedPreferences.put(SharePreferenceHelper.Key.ALARMCLOCK, times);
-    }
-
     /**
      * Function clear data
      */
@@ -296,7 +273,7 @@ public class AddAlarmActivity extends BaseActivity {
         showTime(hour, min);
         etTitle.setText("");
 
-        String msg = mItemAlarm == null ? "Add success!" : "Update success!";
+        String msg = mItemAlarm == null ? getResources().getString(R.string.text_add_success) : getResources().getString(R.string.text_update_success);
         Snackbar snackbar = Snackbar.make(layoutMain, msg, Snackbar.LENGTH_LONG);
         snackbar.show();
         showTimeDefault();
@@ -329,25 +306,48 @@ public class AddAlarmActivity extends BaseActivity {
         cbSu.setChecked(true);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_screen_add_alarm, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            case R.id.actionDone:
-                progressDone();
-                return true;
+    /**
+     * Init item alarm
+     */
+    private void initItemAlarm() {
+        itemAlarm = new ItemAlarm();
+        itemAlarm.setHour(hour);
+        itemAlarm.setStatus("0");
+        itemAlarm.setMinute(minute);
+        itemAlarm.setFormat(format);
+        String str = etTitle.getText().toString();
+        if (TextUtils.isEmpty(str)) {
+            str = getResources().getString(R.string.text_alarm_clock);
         }
-        return super.onOptionsItemSelected(item);
+        itemAlarm.setTitle(str);
+
+        itemAlarm.setStatus("0");
+        if (mItemAlarm != null) {
+            itemAlarm.setStatus(mItemAlarm.getStatus());
+        }
+        itemAlarm.setRepeatMo(cbMo.isChecked() ? 1 : 0);
+        itemAlarm.setRepeatWe(cbWe.isChecked() ? 1 : 0);
+        itemAlarm.setRepeatTu(cbTu.isChecked() ? 1 : 0);
+        itemAlarm.setRepeatTh(cbTh.isChecked() ? 1 : 0);
+        itemAlarm.setRepeatFr(cbFr.isChecked() ? 1 : 0);
+        itemAlarm.setRepeatSa(cbSa.isChecked() ? 1 : 0);
+        itemAlarm.setRepeatSu(cbSu.isChecked() ? 1 : 0);
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH);
+        itemAlarm.setDayCreate(day);
+        itemAlarm.setMonthCreate(month);
+        if (uriCustomSelected == null) {
+            Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            if (alarmUri == null) {
+                alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            }
+            uriCustomSelected = new UriCustom();
+            uriCustomSelected.setName(getResources().getString(R.string.text_none));
+            uriCustomSelected.setUri(null);
+        }
+        itemAlarm.setNameTone(uriCustomSelected.getName());
+        itemAlarm.setUriCustom(uriCustomSelected.getUri());
     }
 
     /**
@@ -436,9 +436,9 @@ public class AddAlarmActivity extends BaseActivity {
                 UriCustom uriCustom = mUriCustoms.get(i);
                 uriCustomSelected_temp = uriCustom;
                 Uri uri = uriCustom.getUri();
-                if(uri != null) {
+                if (uri != null) {
                     playSound(uri);
-                }else{
+                } else {
                     stopSound();
                 }
 
@@ -464,13 +464,14 @@ public class AddAlarmActivity extends BaseActivity {
         mNameUris = new ArrayList<>();
 
         // add item NONE to list
-        mNameUris.add("None");
+        mNameUris.add(getResources().getString(R.string.text_none));
         ArrayList<UriCustom> alarms = new ArrayList<UriCustom>();
         UriCustom uri = new UriCustom();
-        uri.setName("None");
+        uri.setName(getResources().getString(R.string.text_none));
         uri.setUri(null);
         alarms.add(uri);
         // end
+
         while (!alarmsCursor.isAfterLast() && alarmsCursor.moveToNext()) {
             int currentPosition = alarmsCursor.getPosition();
             UriCustom uriCustom = new UriCustom();
@@ -509,13 +510,6 @@ public class AddAlarmActivity extends BaseActivity {
             mediaPlayer.prepare();
             mediaPlayer.setLooping(false);
             mediaPlayer.start();
-//            Handler handler = new Handler();
-//            handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    stopSound();
-//                }
-//            }, 3000);
         } catch (IOException e) {
             System.out.println("OOPS");
         }
@@ -539,7 +533,7 @@ public class AddAlarmActivity extends BaseActivity {
      * @return: int : index string in list
      */
     private int indexToneInList(String nameFile) {
-        for (int i = 0;mUriCustoms != null && i < mUriCustoms.size(); i++) {
+        for (int i = 0; mUriCustoms != null && i < mUriCustoms.size(); i++) {
             UriCustom uriCustom = mUriCustoms.get(i);
             if (uriCustom.getName().equals(nameFile)) {
                 return i;
@@ -551,7 +545,7 @@ public class AddAlarmActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if(dbHelper != null){
+        if (dbHelper != null) {
             dbHelper.close();
         }
     }

@@ -15,7 +15,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:text="Repeat:"
+            android:text="@string/text_repaet"
             android:textSize="@dimen/text_size_14_sp"
             android:textStyle="bold" />
 
@@ -42,7 +42,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Mon"
+                        android:text="@string/text_mon"
                         android:textSize="@dimen/text_size_14_sp" />
 
                     <CheckBox
@@ -50,7 +50,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Tue"
+                        android:text="@string/text_tue"
                         android:textSize="@dimen/text_size_14_sp" />
 
                     <CheckBox
@@ -58,7 +58,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Wed"
+                        android:text="@string/text_wed"
                         android:textSize="@dimen/text_size_14_sp" />
                 </LinearLayout>
 
@@ -73,7 +73,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Thu"
+                        android:text="@string/text_thu"
                         android:textSize="@dimen/text_size_14_sp" />
 
                     <CheckBox
@@ -81,7 +81,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Fri"
+                        android:text="@string/text_fri"
                         android:textSize="@dimen/text_size_14_sp" />
 
                     <CheckBox
@@ -89,7 +89,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Sat"
+                        android:text="@string/text_sat"
                         android:textSize="@dimen/text_size_14_sp" />
                 </LinearLayout>
 
@@ -104,7 +104,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Sun"
+                        android:text="@string/text_sun"
                         android:textSize="@dimen/text_size_14_sp" />
 
                 </LinearLayout>

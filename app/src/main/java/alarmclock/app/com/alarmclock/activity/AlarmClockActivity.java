@@ -1,5 +1,6 @@
 package alarmclock.app.com.alarmclock.activity;
 
+import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.hardware.SensorListener;
@@ -64,7 +65,13 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
     private Handler handler = new Handler();
 
     private SensorManager sensorMgr;
-    MediaPlayer mMediaPlayer;
+    private MediaPlayer mMediaPlayer;
+
+    private PowerManager.WakeLock fullWakeLock;
+    private PowerManager.WakeLock partialWakeLock;
+
+    long lastUpdate;
+    float x, y, z, last_x, last_y, last_z;
 
     @OnClick({R.id.btnStop})
     public void OnButtonClick(View v) {
@@ -130,7 +137,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         mNumberShake = getSharePreferences().getInt(SharePreferenceHelper.Key.NUMBERSHAKE, 0) + 1;
         mSpeekShake = getSharePreferences().getInt(SharePreferenceHelper.Key.SPEEKSHAKE, 0) + 1;
 
-        String str = String.format(getResources().getString(R.string.text_confirm_number_shake), mNumberShake + "");
+        @SuppressLint({"StringFormatInvalid", "LocalSuppress"}) String str = String.format(getResources().getString(R.string.text_confirm_number_shake), String.valueOf(mNumberShake));
         tvNumberShake.setText(str);
         setTextTitleAlarm();
 
@@ -154,7 +161,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
     private void playSound(Context context, Uri alert) {
         try {
             stopSound();
-            if(alert != null) {
+            if (alert != null) {
                 mMediaPlayer = new MediaPlayer();
                 mMediaPlayer.setDataSource(this, alert);
                 mMediaPlayer.prepare();
@@ -197,9 +204,6 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         }
         return null;
     }
-
-    long lastUpdate;
-    float x, y, z, last_x, last_y, last_z;
 
     @Override
     public void onSensorChanged(int sensor, float[] values) {
@@ -253,23 +257,15 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        stopVibration();
-        stopSound();
-        partialWakeLock.acquire();
-    }
-
+    /**
+     * Method: skill app
+     */
     private void skillApp() {
         moveTaskToBack(true);
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(1);
         super.onDestroy();
     }
-
-    PowerManager.WakeLock fullWakeLock;
-    PowerManager.WakeLock partialWakeLock;
 
     // Called from onCreate
     protected void createWakeLocks() {
@@ -286,5 +282,14 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         KeyguardManager.KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("TAG");
         keyguardLock.disableKeyguard();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopVibration();
+        stopSound();
+        partialWakeLock.acquire();
     }
 }

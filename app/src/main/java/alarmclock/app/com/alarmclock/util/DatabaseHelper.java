@@ -12,16 +12,17 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.model.ItemAlarm;
 
 /**
  * Created by Administrator on 5/9/2018.
  */
 
-public class DatabaseHelper  extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static DatabaseHelper sInstance;
-
+    private Context mContext;
     // Logcat Tag
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
@@ -65,7 +66,7 @@ public class DatabaseHelper  extends SQLiteOpenHelper {
             + KEY_ID_ALARM + " INTEGER PRIMARY KEY,"
             + KEY_STATUS + " TEXT,"
             + KEY_HOUR + " TEXT,"
-            + KEY_MINUTE +" TEXT,"
+            + KEY_MINUTE + " TEXT,"
             + KEY_TITLE + " TEXT,"
             + KEY_FORMAT + " TEXT,"
             + KEY_REPEAT_MO + " INTEGER,"
@@ -80,7 +81,6 @@ public class DatabaseHelper  extends SQLiteOpenHelper {
             + KEY_URI_TONE + " TEXT,"
             + KEY_NAME_TONE + " TEXT,"
             + KEY_CREATED_AT + " DATETIME DEFAULT CURRENT_TIMESTAMP" + ")";
-
 
 
     public static synchronized DatabaseHelper getInstance(Context context) {
@@ -103,6 +103,7 @@ public class DatabaseHelper  extends SQLiteOpenHelper {
      */
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.mContext = context;
     }
 
     @Override
@@ -153,7 +154,7 @@ public class DatabaseHelper  extends SQLiteOpenHelper {
                     alarm.setNameTone(cursor.getString(cursor.getColumnIndex(KEY_NAME_TONE)));
 
                     String uri = cursor.getString(cursor.getColumnIndex(KEY_URI_TONE));
-                    if(!TextUtils.isEmpty(uri)) {
+                    if (!TextUtils.isEmpty(uri)) {
                         alarm.setUriCustom(Uri.parse(uri));
                     }
 
@@ -204,7 +205,7 @@ public class DatabaseHelper  extends SQLiteOpenHelper {
                     alarm.setNameTone(cursor.getString(cursor.getColumnIndex(KEY_NAME_TONE)));
 
                     String uri = cursor.getString(cursor.getColumnIndex(KEY_URI_TONE));
-                    if(!TextUtils.isEmpty(uri)) {
+                    if (!TextUtils.isEmpty(uri)) {
                         alarm.setUriCustom(Uri.parse(uri));
                     }
 
@@ -240,22 +241,22 @@ public class DatabaseHelper  extends SQLiteOpenHelper {
             values.put(KEY_TITLE, alarm.getTitle());
             values.put(KEY_FORMAT, alarm.getFormat());
 
-            values.put(KEY_REPEAT_MO ,alarm.getRepeatMo());
-            values.put(KEY_REPEAT_TU ,alarm.getRepeatTu());
+            values.put(KEY_REPEAT_MO, alarm.getRepeatMo());
+            values.put(KEY_REPEAT_TU, alarm.getRepeatTu());
             values.put(KEY_REPEAT_WE, alarm.getRepeatWe());
-            values.put(KEY_REPEAT_TH ,alarm.getRepeatTh());
-            values.put(KEY_REPEAT_FR ,alarm.getRepeatFr());
+            values.put(KEY_REPEAT_TH, alarm.getRepeatTh());
+            values.put(KEY_REPEAT_FR, alarm.getRepeatFr());
             values.put(KEY_REPEAT_SA, alarm.getRepeatSa());
-            values.put(KEY_REPEAT_SU ,alarm.getRepeatSu());
+            values.put(KEY_REPEAT_SU, alarm.getRepeatSu());
 
-            values.put(KEY_DAY_CREATE ,alarm.getDayCreate());
-            values.put(KEY_MONTH_CREATE ,alarm.getMonthCreate());
+            values.put(KEY_DAY_CREATE, alarm.getDayCreate());
+            values.put(KEY_MONTH_CREATE, alarm.getMonthCreate());
 
             String nameTone = alarm.getNameTone();
             values.put(KEY_NAME_TONE, nameTone);
-            if(!nameTone.toLowerCase().equals("none")) {
+            if (!nameTone.toLowerCase().equals(mContext.getResources().getString(R.string.text_none))) {
                 values.put(KEY_URI_TONE, alarm.getUriCustom().toString());
-            }else{
+            } else {
                 values.put(KEY_URI_TONE, "");
             }
 
@@ -268,7 +269,6 @@ public class DatabaseHelper  extends SQLiteOpenHelper {
             db.endTransaction();
         }
     }
-
 
 
     public void addListAlarm(List<ItemAlarm> itemAlarms) {
@@ -318,30 +318,29 @@ public class DatabaseHelper  extends SQLiteOpenHelper {
             values.put(KEY_TITLE, alarm.getTitle());
             values.put(KEY_FORMAT, alarm.getFormat());
 
-            values.put(KEY_REPEAT_MO ,alarm.getRepeatMo());
-            values.put(KEY_REPEAT_TU ,alarm.getRepeatTu());
+            values.put(KEY_REPEAT_MO, alarm.getRepeatMo());
+            values.put(KEY_REPEAT_TU, alarm.getRepeatTu());
             values.put(KEY_REPEAT_WE, alarm.getRepeatWe());
-            values.put(KEY_REPEAT_TH ,alarm.getRepeatTh());
-            values.put(KEY_REPEAT_FR ,alarm.getRepeatFr());
+            values.put(KEY_REPEAT_TH, alarm.getRepeatTh());
+            values.put(KEY_REPEAT_FR, alarm.getRepeatFr());
             values.put(KEY_REPEAT_SA, alarm.getRepeatSa());
-            values.put(KEY_REPEAT_SU ,alarm.getRepeatSu());
+            values.put(KEY_REPEAT_SU, alarm.getRepeatSu());
 
-            values.put(KEY_DAY_CREATE ,alarm.getDayCreate());
-            values.put(KEY_MONTH_CREATE ,alarm.getMonthCreate());
+            values.put(KEY_DAY_CREATE, alarm.getDayCreate());
+            values.put(KEY_MONTH_CREATE, alarm.getMonthCreate());
 
             String nameTone = alarm.getNameTone();
             values.put(KEY_NAME_TONE, nameTone);
-            if(!nameTone.toLowerCase().equals("none")) {
+            if (!nameTone.toLowerCase().equals(mContext.getResources().getString(R.string.text_none))) {
                 values.put(KEY_URI_TONE, alarm.getUriCustom().toString());
-            }else{
+            } else {
                 values.put(KEY_URI_TONE, "");
             }
 
 
-
             // First try to update the island in case the island already exists in the database
             // This assumes islandNames are unique
-            islandId = db.update(TABLE_ALARM, values, KEY_ID_ALARM + "=" + alarm.getId() ,null);
+            islandId = db.update(TABLE_ALARM, values, KEY_ID_ALARM + "=" + alarm.getId(), null);
             db.setTransactionSuccessful();
             // Check if update succeeded
 
@@ -367,6 +366,7 @@ public class DatabaseHelper  extends SQLiteOpenHelper {
             db.endTransaction();
         }
     }
+
     public Integer deleteAlarmById(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(TABLE_ALARM,
