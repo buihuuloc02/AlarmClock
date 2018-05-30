@@ -16,7 +16,6 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -40,7 +39,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
     TextView tvTime;
 
     @BindView(R.id.btnStop)
-    Button btnStop;
+    TextView btnStop;
 
     @BindView(R.id.tvNumberShake)
     TextView tvNumberShake;
@@ -94,6 +93,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         }
     }
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +122,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
 
 
         sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
-
+        btnStop.setTextColor(getResources().getColorStateList(R.drawable.selector_button_text_black));
     }
 
     @Override

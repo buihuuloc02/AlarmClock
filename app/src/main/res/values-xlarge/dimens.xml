@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="margin_5">10dp</dimen>
     <dimen name="margin_10">20dp</dimen>
     <dimen name="margin_20">40dp</dimen>
     <dimen name="margin_30">60dp</dimen>
@@ -8,8 +9,10 @@
     <dimen name="size_image_200">300dp</dimen>
     <dimen name="size_image_300">400dp</dimen>
     <dimen name="text_size_25_sp">35sp</dimen>
+    <dimen name="width_20_dp">35dp</dimen>
     <dimen name="width_35_dp">50dp</dimen>
     <dimen name="height_35_dp">55dp</dimen>
     <dimen name="text_size_14_sp">20sp</dimen>
     <dimen name="height_15_dp">22dp</dimen>
+
 </resources>

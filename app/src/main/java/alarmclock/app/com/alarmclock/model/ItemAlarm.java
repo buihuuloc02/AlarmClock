@@ -14,6 +14,15 @@ public class ItemAlarm implements Serializable {
     private String second;
     private String title;
     private String format;
+    private long milisecod;
+
+    public long getMilisecod() {
+        return milisecod;
+    }
+
+    public void setMilisecod(long milisecod) {
+        this.milisecod = milisecod;
+    }
 
     public String getNameTone() {
         return nameTone;

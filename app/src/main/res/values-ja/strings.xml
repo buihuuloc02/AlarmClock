@@ -18,7 +18,7 @@
     <string name="text_no_alarm">アラームなし</string>
     <string name="text_number_shake">アラームを停止する番号を振る：</string>
     <string name="text_speed_shake">スピードシェイク：</string>
-    <string name="text_confirm_number_shake">あなたはアラームを止めるために％s回振る必要があります！</string>
+    <string name="text_confirm_number_shake">あなたはアラームを止めるために %s 回振る必要があります！</string>
     <string name="text_time">時間：</string>
     <string name="text_title">タイトル：</string>
     <string name="text_tone">アラーム音：</string>

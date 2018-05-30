@@ -348,6 +348,13 @@ public class AddAlarmActivity extends BaseActivity {
         }
         itemAlarm.setNameTone(uriCustomSelected.getName());
         itemAlarm.setUriCustom(uriCustomSelected.getUri());
+
+
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hour));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(minute));
+        calendar.set(Calendar.SECOND, 0);
+
+        itemAlarm.setMilisecod(calendar.getTimeInMillis());
     }
 
     /**
@@ -365,6 +372,7 @@ public class AddAlarmActivity extends BaseActivity {
         pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
         //alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
         //      24*60*60*1000 , pendingIntent);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         } else {

@@ -27,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
     // Database Version
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
 
     // Database Name
     private static final String DATABASE_NAME = "AlarmClock";
@@ -60,6 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_MONTH_CREATE = "KEY_MONTH_CREATE";
     private static final String KEY_URI_TONE = "KEY_URI_TONE";
     private static final String KEY_NAME_TONE = "KEY_NAME_TONE";
+    private static final String KEY_MINISECOND = "KEY_MINISECOND";
 
     // Island table create statement
     private static final String CREATE_island_TABLE = "CREATE TABLE " + TABLE_ALARM + "("
@@ -80,6 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_MONTH_CREATE + " INTEGER,"
             + KEY_URI_TONE + " TEXT,"
             + KEY_NAME_TONE + " TEXT,"
+            + KEY_MINISECOND + " TEXT,"
             + KEY_CREATED_AT + " DATETIME DEFAULT CURRENT_TIMESTAMP" + ")";
 
 
@@ -153,6 +155,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     alarm.setRepeatSu(cursor.getInt(cursor.getColumnIndex(KEY_REPEAT_SU)));
                     alarm.setNameTone(cursor.getString(cursor.getColumnIndex(KEY_NAME_TONE)));
 
+                    String miliseconds  = (cursor.getString(cursor.getColumnIndex(KEY_MINISECOND)));
+                    alarm.setMilisecod(Long.parseLong(miliseconds));
+
                     String uri = cursor.getString(cursor.getColumnIndex(KEY_URI_TONE));
                     if (!TextUtils.isEmpty(uri)) {
                         alarm.setUriCustom(Uri.parse(uri));
@@ -204,6 +209,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     alarm.setRepeatSu(cursor.getInt(cursor.getColumnIndex(KEY_REPEAT_SU)));
                     alarm.setNameTone(cursor.getString(cursor.getColumnIndex(KEY_NAME_TONE)));
 
+                    String miliseconds  = (cursor.getString(cursor.getColumnIndex(KEY_MINISECOND)));
+                    alarm.setMilisecod(Long.parseLong(miliseconds));
+
                     String uri = cursor.getString(cursor.getColumnIndex(KEY_URI_TONE));
                     if (!TextUtils.isEmpty(uri)) {
                         alarm.setUriCustom(Uri.parse(uri));
@@ -248,13 +256,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_REPEAT_FR, alarm.getRepeatFr());
             values.put(KEY_REPEAT_SA, alarm.getRepeatSa());
             values.put(KEY_REPEAT_SU, alarm.getRepeatSu());
+            values.put(KEY_MINISECOND, String.valueOf(alarm.getMilisecod()));
 
             values.put(KEY_DAY_CREATE, alarm.getDayCreate());
             values.put(KEY_MONTH_CREATE, alarm.getMonthCreate());
 
             String nameTone = alarm.getNameTone();
             values.put(KEY_NAME_TONE, nameTone);
-            if (!nameTone.toLowerCase().equals(mContext.getResources().getString(R.string.text_none))) {
+            if (!nameTone.toLowerCase().equals(mContext.getResources().getString(R.string.text_none).toLowerCase())) {
                 values.put(KEY_URI_TONE, alarm.getUriCustom().toString());
             } else {
                 values.put(KEY_URI_TONE, "");
@@ -328,10 +337,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             values.put(KEY_DAY_CREATE, alarm.getDayCreate());
             values.put(KEY_MONTH_CREATE, alarm.getMonthCreate());
+            values.put(KEY_MINISECOND, String.valueOf(alarm.getMilisecod()));
 
             String nameTone = alarm.getNameTone();
             values.put(KEY_NAME_TONE, nameTone);
-            if (!nameTone.toLowerCase().equals(mContext.getResources().getString(R.string.text_none))) {
+            if (!nameTone.toLowerCase().equals(mContext.getResources().getString(R.string.text_none).toLowerCase())) {
                 values.put(KEY_URI_TONE, alarm.getUriCustom().toString());
             } else {
                 values.put(KEY_URI_TONE, "");
