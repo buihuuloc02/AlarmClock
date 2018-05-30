@@ -41,6 +41,7 @@ public class AlarmService extends IntentService {
     private int hLast;
     private int mLast;
     private String timeReceive = "";
+    private boolean isSended = false;
 
     public AlarmService() {
         super(TAG);
@@ -66,6 +67,7 @@ public class AlarmService extends IntentService {
         if (h != hLast || m != mLast) {
             hLast = h;
             mLast = m;
+            isSended = false;
             sharePreferenceHelper.put(HOUR, hLast);
             sharePreferenceHelper.put(MINUTE, mLast);
             Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
@@ -126,10 +128,10 @@ public class AlarmService extends IntentService {
         if (itemAlarm != null) {
             setAlarm(itemAlarm);
             String strTime = getStringTimeMinute(itemAlarm);
-            sendNotification(this.getResources().getString(R.string.text_next), strTime);
+            //sendNotification(this.getResources().getString(R.string.text_next), strTime);
             Log.d(TAG, itemAlarm.getHour() + " : " + itemAlarm.getMinute());
         } else {
-            sendNotification("", timeReceive);
+            //sendNotification("", timeReceive);
             Log.d(TAG, "null");
         }
     }
@@ -153,6 +155,10 @@ public class AlarmService extends IntentService {
     }
 
     private void sendNotification(String title, String msg) {
+        if (isSended) {
+            return;
+        }
+        isSended = true;
         Log.d(TAG, "Preparing to send notification...: " + msg);
         alarmNotificationManager = (NotificationManager) this
                 .getSystemService(Context.NOTIFICATION_SERVICE);
@@ -279,7 +285,7 @@ public class AlarmService extends IntentService {
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
-        long timcurrent = calendar.getTimeInMillis();
+        long timcurrent = hour * 60 + minute;
         for (ItemAlarm itemAlarm : itemAlarms) {
             if (itemAlarm.getMilisecod() >= timcurrent) {
                 return itemAlarm;

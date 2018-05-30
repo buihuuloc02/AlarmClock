@@ -11,6 +11,7 @@
     <string name="text_button_done">完了</string>
     <string name="text_button_delete">削除</string>
     <string name="text_button_cancel">キャンセル</string>
+    <string name="text_button_add">追加</string>
     <string name="text_button_stop">停止</string>
 
     <!--Text message-->
@@ -39,4 +40,6 @@
     <string name="text_updated">更新しました！</string>
     <string name="text_delete_success">成功を削除！</string>
     <string name="text_next">次</string>
+    <string name="text_title_screen_select_sound">音を選択</string>
+    <string name="text_no_data">データなし</string>
 </resources>

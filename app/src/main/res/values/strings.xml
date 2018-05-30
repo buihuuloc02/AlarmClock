@@ -11,6 +11,7 @@
     <string name="text_button_done">Done</string>
     <string name="text_button_delete">Delete</string>
     <string name="text_button_cancel">Cancel</string>
+    <string name="text_button_add">Add</string>
     <string name="text_button_stop">STOP</string>
 
     <!--Text message-->
@@ -39,5 +40,7 @@
     <string name="text_updated">Updated!</string>
     <string name="text_delete_success">Delete success!</string>
     <string name="text_next">Next</string>
+    <string name="text_title_screen_select_sound">Select sound</string>
+    <string name="text_no_data">No data</string>
 
 </resources>

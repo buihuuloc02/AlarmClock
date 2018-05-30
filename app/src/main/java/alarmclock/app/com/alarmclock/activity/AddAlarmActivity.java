@@ -1,6 +1,7 @@
 package alarmclock.app.com.alarmclock.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -50,6 +51,9 @@ import butterknife.ButterKnife;
 
 public class AddAlarmActivity extends BaseActivity {
 
+    public static final int REQUEST_CODE_SELECT_SOUND = 1;
+    public static final String EXTRA_NAME_SOUND_SELECT = "EXTRA_NAME_SOUND_SELECT";
+    public static final String EXTRA_PATH_SOUND_SELECT = "EXTRA_PATH_SOUND_SELECT";
     public static final String EXTRA_ITEM_ALARM = "EXTRA_ITEM_ALARM";
     public static final String TAG = AddAlarmActivity.class.getSimpleName();
     @BindView(R.id.tvTime)
@@ -354,11 +358,7 @@ public class AddAlarmActivity extends BaseActivity {
         itemAlarm.setUriCustom(uriCustomSelected.getUri());
 
 
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hour));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(minute));
-        calendar.set(Calendar.SECOND, 0);
-
-        itemAlarm.setMilisecod(calendar.getTimeInMillis());
+        itemAlarm.setMilisecod((Integer.parseInt(hour) * 60) + Integer.parseInt(minute));
     }
 
     /**
@@ -414,6 +414,20 @@ public class AddAlarmActivity extends BaseActivity {
         dialogListSound.setCancelable(true);
         //there are a lot of settings, for dialog, check them all out!
 
+
+
+        int indexSelected = 0;
+        if (uriCustomSelected != null) {
+            indexSelected = indexToneInList(uriCustomSelected.getName());
+        }
+        if(indexSelected == 0 && uriCustomSelected != null){
+            if(!uriCustomSelected.getName().toLowerCase().equals(getResources().getString(R.string.text_none).toLowerCase())){
+                mNameUris.add(uriCustomSelected.getName());
+                mUriCustoms.add(uriCustomSelected);
+                indexSelected = mNameUris.size() - 1;
+            }
+        }
+
         ListView listViewSound = (ListView) dialogListSound.findViewById(R.id.listview);
         ArrayList<String> val = new ArrayList<String>();
         val.addAll(mNameUris != null ? mNameUris : new ArrayList<>());
@@ -421,19 +435,18 @@ public class AddAlarmActivity extends BaseActivity {
         listViewSound.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, val));
         listViewSound.setClickable(true);
 
-        int indexSelected = 0;
-        if (uriCustomSelected != null) {
-            indexSelected = indexToneInList(uriCustomSelected.getName());
-        }
         listViewSound.setItemChecked(indexSelected, true);
         listViewSound.smoothScrollToPosition(indexSelected);
         listViewSound.setSelection(indexSelected);
+
         //now that the dialog is set up, it's time to show it
         TextView btnCancel = (TextView) v.findViewById(R.id.btnCancel);
         TextView btnOk = (TextView) v.findViewById(R.id.btnOk);
+        TextView btnAdd = (TextView) v.findViewById(R.id.btnAdd);
 
         btnCancel.setTextColor(getResources().getColorStateList(R.drawable.selector_button));
         btnOk.setTextColor(getResources().getColorStateList(R.drawable.selector_button));
+        btnAdd.setTextColor(getResources().getColorStateList(R.drawable.selector_button));
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -452,6 +465,17 @@ public class AddAlarmActivity extends BaseActivity {
                 updateNameSound(uriCustomSelected);
             }
         });
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddAlarmActivity.this, GetListMp3Activity.class);
+                startActivityForResult(intent, REQUEST_CODE_SELECT_SOUND);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+            }
+        });
+
+
         listViewSound.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -582,6 +606,23 @@ public class AddAlarmActivity extends BaseActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_SELECT_SOUND) {
+            if(resultCode == Activity.RESULT_OK){
+                String name = data.getStringExtra(EXTRA_NAME_SOUND_SELECT);
+                String path = data.getStringExtra(EXTRA_PATH_SOUND_SELECT);
+                UriCustom uriCustom = new UriCustom();
+                uriCustom.setUri(Uri.parse(path));
+                uriCustom.setName(name);
+                stopSound();
+                dialogListSound.dismiss();
+                uriCustomSelected = uriCustom;
+                updateNameSound(uriCustomSelected);
+            }
+        }
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         if (dbHelper != null) {
@@ -594,5 +635,7 @@ public class AddAlarmActivity extends BaseActivity {
         super.onResume();
         dbHelper = new DatabaseHelper(this);
     }
+
+
 }
 
