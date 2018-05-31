@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -276,5 +277,10 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         stopVibration();
         stopSound();
         partialWakeLock.acquire();
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
     }
 }
