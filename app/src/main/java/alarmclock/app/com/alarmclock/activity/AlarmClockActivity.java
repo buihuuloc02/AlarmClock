@@ -11,6 +11,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -33,6 +34,10 @@ import butterknife.OnClick;
  */
 
 public class AlarmClockActivity extends BaseActivity implements SensorListener {
+
+    private final static int TIME_VIBRATION = 1000 * 60;
+    private final static int SET_TIME_VIBRATION_MINUTE = 1;
+    public final static long TIME_VIBRATION_IN_MINUTE = TIME_VIBRATION * SET_TIME_VIBRATION_MINUTE;
 
     private static final int SHAKE_THRESHOLD = 1000;
     @BindView(R.id.tvTime)
@@ -61,7 +66,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
     private int mSpeekShake = SHAKE_THRESHOLD;
 
 
-    private Handler handler = new Handler();
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     private SensorManager sensorMgr;
     private MediaPlayer mMediaPlayer;
@@ -77,18 +82,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         int id = v.getId();
         switch (id) {
             case R.id.btnStop:
-                stopVibration();
-                btnStop.setVisibility(View.GONE);
-                stopSound();
-                imgClock1.setVisibility(View.VISIBLE);
-                imgClock2.setVisibility(View.GONE);
-//                Intent intent = new Intent(this, MainActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(intent);
-                skillApp();
-                finish();
-                // Ringtone ringtone = RingtoneManager.getRingtone(getActivity());
-                //ringtone.stop();
+                handler.post(runnable);
                 break;
         }
     }
@@ -146,7 +140,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
                 SensorManager.SENSOR_ACCELEROMETER,
                 SensorManager.SENSOR_DELAY_NORMAL);
 
-        handler.postDelayed(runnable, 60000);
+        handler.postDelayed(runnable, TIME_VIBRATION_IN_MINUTE);
         initVibration();
         playSound(this, getAlarmUri());
     }
@@ -233,16 +227,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
 
                         tvNumberShake.setText(str);
                     } else {
-                        stopVibration();
-                        btnStop.setVisibility(View.GONE);
-                        mMediaPlayer.stop();
-                        imgClock1.setVisibility(View.VISIBLE);
-                        imgClock2.setVisibility(View.GONE);
-                        skillApp();
-//                    Intent intent = new Intent(this, MainActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    startActivity(intent);
-                        finish();
+                        handler.post(runnable);
                     }
                 }
                 last_x = x;

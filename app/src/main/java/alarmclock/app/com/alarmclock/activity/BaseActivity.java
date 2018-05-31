@@ -12,6 +12,8 @@ import android.text.TextUtils;
 import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
 
+import static alarmclock.app.com.alarmclock.activity.AlarmClockActivity.TIME_VIBRATION_IN_MINUTE;
+
 /**
  * Created by Administrator on 5/9/2018.
  */
@@ -54,9 +56,9 @@ public class BaseActivity extends AppCompatActivity {
 
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(60000, VibrationEffect.DEFAULT_AMPLITUDE));
+            vibrator.vibrate(VibrationEffect.createOneShot(TIME_VIBRATION_IN_MINUTE, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {
-            vibrator.vibrate(60000);
+            vibrator.vibrate(TIME_VIBRATION_IN_MINUTE);
         }
     }
 
