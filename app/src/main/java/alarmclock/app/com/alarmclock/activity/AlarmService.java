@@ -1,7 +1,6 @@
 package alarmclock.app.com.alarmclock.activity;
 
 import android.app.AlarmManager;
-import android.app.IntentService;
 import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -12,6 +11,10 @@ import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.NonNull;
+import android.support.v4.app.JobIntentService;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -34,24 +37,37 @@ import static android.support.v4.content.WakefulBroadcastReceiver.startWakefulSe
  * Created by Administrator on 5/10/2018.
  */
 
-public class AlarmService extends IntentService {
+public class AlarmService extends JobIntentService {
 
+    public final static String EXTRA_TIME = "EXTRA_TIME";
     private final static String TAG = AlarmService.class.getSimpleName();
     private NotificationManager alarmNotificationManager;
     private int hLast;
     private int mLast;
     private String timeReceive = "";
     private boolean isSended = false;
-
-    public AlarmService() {
-        super(TAG);
-    }
+    private Context mContext;
+//
+//    public AlarmService() {
+//        super(TAG);
+//    }
 
     @Override
-    public void onHandleIntent(Intent intent) {
-        timeReceive = intent.getStringExtra("TEXT");
+    protected void onHandleWork(@NonNull Intent intent) {
+        if (intent.hasExtra(EXTRA_TIME)) {
+            timeReceive = intent.getStringExtra(EXTRA_TIME);
+        }
+        mContext = getApplicationContext();
         doCheckAlarm();
     }
+
+//    @Override
+//    public void onHandleIntent(Intent intent) {
+//        if(intent.hasExtra(EXTRA_TIME)) {
+//            timeReceive = intent.getStringExtra(EXTRA_TIME);
+//        }
+//        doCheckAlarm();
+//    }
 
     private void doCheckAlarm() {
         Calendar calendar = Calendar.getInstance();
@@ -120,8 +136,14 @@ public class AlarmService extends IntentService {
 
         }
         if (BuildConfig.DEBUG) {
-            Toast.makeText(this, h + " " + m + "", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, h + " " + m + "");
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(mContext, h + " " + m + "", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, h + " " + m + "");
+                }
+            });
         }
 
         ItemAlarm itemAlarm = findNextAlarmClock(getDataFromDatabase(this), h, m);

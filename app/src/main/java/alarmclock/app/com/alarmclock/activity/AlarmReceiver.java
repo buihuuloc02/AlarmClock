@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.PowerManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
@@ -23,6 +24,7 @@ import alarmclock.app.com.alarmclock.model.ItemAlarm;
 import alarmclock.app.com.alarmclock.util.DatabaseHelper;
 import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
 
+import static alarmclock.app.com.alarmclock.util.Constant.ACTION_ALARM_CLOCK;
 import static alarmclock.app.com.alarmclock.util.Constant.HOUR;
 import static alarmclock.app.com.alarmclock.util.Constant.MINUTE;
 
@@ -58,8 +60,15 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 //        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 //        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         Intent intentService = new Intent(context, AlarmService.class);
-           intentService.putExtra("TEXT", strH + " : " + strM);
-        startWakefulService(context, intentService);
+//           intentService.putExtra(EXTRA_TIME, strH + " : " + strM);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            context.startForegroundService(intentService);
+//        } else {
+//            //startService(myService);
+//
+//        }
+        //startWakefulService(context, intentService);
+        AlarmService.enqueueWork(context, AlarmService.class,1, intent);
         if (h != hLast || m != mLast) {
 //            hLast = h;
 //            mLast = m;

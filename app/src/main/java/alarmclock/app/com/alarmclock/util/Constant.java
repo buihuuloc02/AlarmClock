@@ -7,4 +7,5 @@ package alarmclock.app.com.alarmclock.util;
 public interface Constant {
     public static final String HOUR = "HOUR";
     public static final String MINUTE = "MINUTE";
+    public static final String ACTION_ALARM_CLOCK = "ACTION_ALARM_CLOCK";
 }

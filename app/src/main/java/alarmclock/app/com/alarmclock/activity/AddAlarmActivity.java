@@ -45,6 +45,8 @@ import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static alarmclock.app.com.alarmclock.util.Constant.ACTION_ALARM_CLOCK;
+
 /**
  * Created by Administrator on 5/9/2018.
  */
@@ -382,7 +384,9 @@ public class AddAlarmActivity extends BaseActivity {
         }
 
         Intent myIntent = new Intent(this, AlarmReceiver.class);
+        myIntent.setAction(ACTION_ALARM_CLOCK);
         pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0);
+
         //alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
         //      24*60*60*1000 , pendingIntent);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);

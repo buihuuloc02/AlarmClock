@@ -10,8 +10,8 @@
     <!--Text button-->
     <string name="text_button_done">Done</string>
     <string name="text_button_delete">Delete</string>
-    <string name="text_button_cancel">Cancel</string>
-    <string name="text_button_add">Add</string>
+    <string name="text_button_cancel">CANCEL</string>
+    <string name="text_button_add">ADD</string>
     <string name="text_button_stop">STOP</string>
 
     <!--Text message-->
