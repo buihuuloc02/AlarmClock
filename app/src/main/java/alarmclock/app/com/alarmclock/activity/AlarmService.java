@@ -140,7 +140,7 @@ public class AlarmService extends JobIntentService {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(mContext, h + " " + m + "", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(mContext, h + " " + m + "", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, h + " " + m + "");
                 }
             });

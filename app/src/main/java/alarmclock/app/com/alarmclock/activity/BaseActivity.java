@@ -3,6 +3,7 @@ package alarmclock.app.com.alarmclock.activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -68,6 +69,11 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public boolean isNetworkEnabled() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        assert cm != null;
+        return cm.getActiveNetworkInfo() != null;
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();

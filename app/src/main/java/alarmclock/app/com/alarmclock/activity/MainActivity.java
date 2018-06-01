@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,9 +21,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
@@ -61,6 +64,14 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     TextView tvNodata;
 
 
+    @BindView(R.id.adView)
+    AdView mAdView;
+
+
+    @BindView(R.id.imgDefault)
+    ImageView imgDefault;
+
+
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<ItemAlarm> itemAlarms;
     private AlarmAdapter alarmAdapter;
@@ -72,7 +83,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     private int lastAction;
     private Handler handler = new Handler();
     boolean startActivity = false;
-
+    NetworkChangeReceiver receiver;
 
     @OnClick({R.id.fabAdd})
     public void OnButtonClick(View v) {
@@ -100,12 +111,26 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
             }
         });
         databaseHelper = new DatabaseHelper(this);
-
+        imgDefault.setVisibility(View.GONE);
+        mAdView.setVisibility(View.GONE);
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
-        AdView mAdView = (AdView) findViewById(R.id.adView);
+        mAdView = (AdView) findViewById(R.id.adView);
         //mAdView.setAdUnitId(getString(R.string.app_ad_unit_id));
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                super.onAdLoaded();
+                mAdView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+                imgDefault.setVisibility(View.VISIBLE);
+            }
+        });
         fadAdd.setOnTouchListener((View view, MotionEvent event) -> {
             //Toast.makeText(MainActivity.this, event.getActionMasked() +"", Toast.LENGTH_SHORT).show();
 
@@ -144,8 +169,16 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
             return true;
         });
 
+        receiver = new NetworkChangeReceiver();
+        final IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        registerReceiver(receiver, filter);
     }
 
+
+    public void setAdmobDefault(boolean hasInternet) {
+        imgDefault.setVisibility(hasInternet ? View.GONE : View.VISIBLE);
+        mAdView.setVisibility(hasInternet ? View.VISIBLE : View.GONE);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void initData() {
@@ -328,5 +361,11 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     protected void onDestroy() {
         super.onDestroy();
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(receiver);
     }
 }

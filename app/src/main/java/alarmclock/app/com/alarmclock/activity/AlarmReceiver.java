@@ -124,7 +124,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
         }
         if(BuildConfig.DEBUG) {
-            Toast.makeText(context, h + " " + m + "", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(context, h + " " + m + "", Toast.LENGTH_SHORT).show();
             Log.d(TAG, h + " " + m + "");
         }
     }
