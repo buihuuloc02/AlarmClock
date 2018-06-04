@@ -6,6 +6,7 @@ import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
@@ -373,11 +374,11 @@ public class AddAlarmActivity extends BaseActivity {
         ArrayList itemAlarms = new ArrayList<>();
         itemAlarms.addAll(dbHelper.getAllAlarms());
         ItemAlarm itemAlarmSmall = findTimeAlarmClockSmallest(itemAlarms);
-        if(itemAlarmSmall != null){
+        if (itemAlarmSmall != null) {
             calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(itemAlarmSmall.getHour()));
             calendar.set(Calendar.MINUTE, Integer.parseInt(itemAlarmSmall.getMinute()));
             calendar.set(Calendar.SECOND, 0);
-        }else {
+        } else {
             calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hour));
             calendar.set(Calendar.MINUTE, Integer.parseInt(minute));
             calendar.set(Calendar.SECOND, 0);
@@ -419,13 +420,12 @@ public class AddAlarmActivity extends BaseActivity {
         //there are a lot of settings, for dialog, check them all out!
 
 
-
         int indexSelected = 0;
         if (uriCustomSelected != null) {
             indexSelected = indexToneInList(uriCustomSelected.getName());
         }
-        if(indexSelected == 0 && uriCustomSelected != null){
-            if(!uriCustomSelected.getName().toLowerCase().equals(getResources().getString(R.string.text_none).toLowerCase())){
+        if (indexSelected == 0 && uriCustomSelected != null) {
+            if (!uriCustomSelected.getName().toLowerCase().equals(getResources().getString(R.string.text_none).toLowerCase())) {
                 mNameUris.add(uriCustomSelected.getName());
                 mUriCustoms.add(uriCustomSelected);
                 indexSelected = mNameUris.size() - 1;
@@ -455,7 +455,6 @@ public class AddAlarmActivity extends BaseActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stopSound();
                 dialogListSound.dismiss();
             }
         });
@@ -463,7 +462,6 @@ public class AddAlarmActivity extends BaseActivity {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                stopSound();
                 dialogListSound.dismiss();
                 uriCustomSelected = uriCustomSelected_temp;
                 updateNameSound(uriCustomSelected);
@@ -473,6 +471,7 @@ public class AddAlarmActivity extends BaseActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                stopSound();
                 Intent intent = new Intent(AddAlarmActivity.this, GetListMp3Activity.class);
                 startActivityForResult(intent, REQUEST_CODE_SELECT_SOUND);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
@@ -493,6 +492,12 @@ public class AddAlarmActivity extends BaseActivity {
                     stopSound();
                 }
 
+            }
+        });
+        dialogListSound.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                stopSound();
             }
         });
         dialogListSound.show();
@@ -595,7 +600,7 @@ public class AddAlarmActivity extends BaseActivity {
 
     private ItemAlarm findTimeAlarmClockSmallest(ArrayList<ItemAlarm> itemAlarms) {
         Collections.sort(itemAlarms, new TimeAlarmComparator());
-        if(itemAlarms != null &&  itemAlarms.size() > 0){
+        if (itemAlarms != null && itemAlarms.size() > 0) {
             return itemAlarms.get(0);
         }
         return null;
@@ -612,7 +617,7 @@ public class AddAlarmActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_SELECT_SOUND) {
-            if(resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
                 String name = data.getStringExtra(EXTRA_NAME_SOUND_SELECT);
                 String path = data.getStringExtra(EXTRA_PATH_SOUND_SELECT);
                 UriCustom uriCustom = new UriCustom();
@@ -624,6 +629,12 @@ public class AddAlarmActivity extends BaseActivity {
                 updateNameSound(uriCustomSelected);
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopSound();
     }
 
     @Override

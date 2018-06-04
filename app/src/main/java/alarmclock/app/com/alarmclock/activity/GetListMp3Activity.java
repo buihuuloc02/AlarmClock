@@ -166,6 +166,7 @@ public class GetListMp3Activity extends BaseActivity {
     }
 
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
+
     public void showDialog(final String msg, final Context context,
                            final String permission) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
@@ -176,13 +177,14 @@ public class GetListMp3Activity extends BaseActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         ActivityCompat.requestPermissions((Activity) context,
-                                new String[] { permission },
+                                new String[]{permission},
                                 MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
                     }
                 });
         AlertDialog alert = alertBuilder.create();
         alert.show();
     }
+
     public boolean checkPermissionREAD_EXTERNAL_STORAGE(final Context context) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
         if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
@@ -198,7 +200,7 @@ public class GetListMp3Activity extends BaseActivity {
                     ActivityCompat
                             .requestPermissions(
                                     (Activity) context,
-                                    new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
+                                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
                 }
                 return false;
@@ -210,6 +212,7 @@ public class GetListMp3Activity extends BaseActivity {
             return true;
         }
     }
+
     public void GetAllMediaMp3Files() {
         listNames = new ArrayList<>();
         paths = new ArrayList<>();
@@ -265,5 +268,17 @@ public class GetListMp3Activity extends BaseActivity {
                 super.onRequestPermissionsResult(requestCode, permissions,
                         grantResults);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        stopSound();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopSound();
     }
 }
