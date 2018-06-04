@@ -42,4 +42,11 @@
     <string name="text_next">次</string>
     <string name="text_title_screen_select_sound">音を選択</string>
     <string name="text_no_data">データなし</string>
+    <string name="text_purchase_success">購入が成功しました！</string>
+    <string name="text_purchase_faild">購入に失敗しました！</string>
+    <string name="text_purchase_app">アプリを購入する</string>
+    <string name="text_you_need_login_gmail">You need login account Gmail.!</string>
+    <string name="text_status_purchased">購入した</string>
+    <string name="text_status_do_not_purchased">購入していない</string>
+    <string name="text_remove_admob">を支援して広告を外す</string>
 </resources>

@@ -27,7 +27,8 @@ public class SharePreferenceHelper {
         public static final String SPEEKSHAKE = "SPEEKSHAKE";
 
 
-
+        public static final String KEY_TOKEN = "KEY_TOKEN";
+        public static final String KEY_PURCHASE = "KEY_PURCHASE";
     }
 
     public SharePreferenceHelper(Context context) {

@@ -8,7 +8,10 @@ import android.support.multidex.MultiDex;
  * Created by Administrator on 5/16/2018.
  */
 
-public class AlarmClockApplication  extends Application {
+public class AlarmClockApplication extends Application {
+
+    Context context;
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);

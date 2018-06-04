@@ -42,5 +42,12 @@
     <string name="text_next">Next</string>
     <string name="text_title_screen_select_sound">Select sound</string>
     <string name="text_no_data">No data</string>
+    <string name="text_purchase_success">Purchase successful!</string>
+    <string name="text_purchase_faild">Purchase failed!</string>
+    <string name="text_purchase_app">Purchase app</string>
+    <string name="text_status_purchased">Purchased</string>
+    <string name="text_you_need_login_gmail">You need login account Gmail.!</string>
+    <string name="text_status_do_not_purchased">Do not purchased</string>
+    <string name="text_remove_admob">Support and remove advertisements</string>
 
 </resources>

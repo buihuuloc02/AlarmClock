@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * Created by Administrator on 6/1/2018.
  */
@@ -21,8 +23,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
             } else if (networkInfo != null && networkInfo.getDetailedState() == NetworkInfo.DetailedState.DISCONNECTED) {
                hasInternet = false;
             }
-            MainActivity mainActivity = (MainActivity) context;
-            mainActivity.setAdmobDefault(hasInternet);
+            EventBus.getDefault().post("internet_change");
         }
 
     }

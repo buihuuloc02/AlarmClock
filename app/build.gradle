@@ -14,19 +14,29 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
     defaultConfig {
-        applicationId "com.app.alarmClock"
+        applicationId "com.app.alarmclock.bhloc"
         minSdkVersion 18
         targetSdkVersion 26
-        versionCode 1
+        versionCode 3
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
+    }
+
+    signingConfigs {
+        release{
+            storeFile rootProject.file('keystore/keystore_alarm.jks')
+            storePassword "12345678"
+            keyAlias "com.app.alarmclock.bhloc"
+            keyPassword "12345678"
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig getSigningConfig()
+//            signingConfig getSigningConfig()
+            signingConfig signingConfigs.release
             applicationVariants.all {
                 variant ->
                     variant.outputs.all {
@@ -37,6 +47,7 @@ android {
             }
         }
     }
+
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
@@ -94,8 +105,8 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     implementation 'com.github.angads25:toggle:1.0.0'
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
-
-
+    compile 'com.anjlab.android.iab.v3:library:1.0.44'
+    compile 'org.greenrobot:eventbus:3.0.0'
 
 }
 

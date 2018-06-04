@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,9 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,6 +41,7 @@ import java.util.Calendar;
 import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.adapter.AlarmAdapter;
 import alarmclock.app.com.alarmclock.model.ItemAlarm;
+import alarmclock.app.com.alarmclock.util.Constant;
 import alarmclock.app.com.alarmclock.util.DatabaseHelper;
 import alarmclock.app.com.alarmclock.util.RecyclerItemTouchHelper;
 import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
@@ -50,6 +55,9 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
 
     @BindView(R.id.layoutMain)
     View layoutMain;
+
+    @BindView(R.id.layoutAdmob)
+    View layoutAdmob;
 
     @BindView(R.id.fabAdd)
     FloatingActionButton fadAdd;
@@ -168,12 +176,22 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
             }
             return true;
         });
+        EventBus.getDefault().register(this);
 
-        receiver = new NetworkChangeReceiver();
-        final IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
-        registerReceiver(receiver, filter);
     }
 
+    @Subscribe
+    public void getMessage(String msg) {
+        if (msg == "internet_change") {
+            boolean hasNetwork = false;
+            if (isNetworkEnabled()) {
+                hasNetwork = true;
+            }
+            setAdmobDefault(hasNetwork);
+            //setLayoutRecycler();
+            //setLayoutButtonAddAlarm();
+        }
+    }
 
     public void setAdmobDefault(boolean hasInternet) {
         imgDefault.setVisibility(hasInternet ? View.GONE : View.VISIBLE);
@@ -348,7 +366,51 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
         super.onResume();
         //clearAlarm();
         initData();
-        //handler.post(runnable);
+        receiver = new NetworkChangeReceiver();
+        final IntentFilter filter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        registerReceiver(receiver, filter);
+        //setLayoutRecycler();
+        //setLayoutButtonAddAlarm();
+        setDisplayAdmob();
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private void setLayoutButtonAddAlarm() {
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) fadAdd.getLayoutParams();
+        fadAdd.setVisibility(View.VISIBLE);
+        int result = sharePreferenceHelper.getInt(SharePreferenceHelper.Key.KEY_PURCHASE, Constant.DO_NOT_PURCHASE);
+        if (result == Constant.PURCHASED) {
+            lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            //lp.removeRule(RelativeLayout.ABOVE, layoutAdmob.getId());
+            lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            int margin = R.dimen.margin_10;
+            lp.setMargins(margin, margin, margin, margin);
+            layoutAdmob.setVisibility(View.GONE);
+        } else {
+            lp.addRule(RelativeLayout.ABOVE, layoutAdmob.getId());
+            lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, layoutAdmob.getId());
+        }
+        fadAdd.setLayoutParams(lp);
+    }
+    @SuppressLint("ResourceAsColor")
+    private void setDisplayAdmob() {
+        layoutAdmob.setVisibility(View.VISIBLE);
+        int result = sharePreferenceHelper.getInt(SharePreferenceHelper.Key.KEY_PURCHASE, Constant.DO_NOT_PURCHASE);
+        if (result == Constant.PURCHASED) {
+            layoutAdmob.setVisibility(View.GONE);
+        }
+    }
+    @SuppressLint("ResourceAsColor")
+    private void setLayoutRecycler() {
+        RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) fadAdd.getLayoutParams();
+
+        int result = sharePreferenceHelper.getInt(SharePreferenceHelper.Key.KEY_PURCHASE, Constant.DO_NOT_PURCHASE);
+        if (result == Constant.PURCHASED) {
+        } else {
+            lp.addRule(RelativeLayout.ABOVE, layoutAdmob.getId());
+        }
+        recyclerViewAlarm.setLayoutParams(lp);
     }
 
     @Override
@@ -360,6 +422,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
 
     }
 

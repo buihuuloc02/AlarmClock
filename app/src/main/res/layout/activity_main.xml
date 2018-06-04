@@ -23,7 +23,7 @@
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/adView"
+        android:layout_alignBottom="@+id/swipeRefeshLayout"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add" />
@@ -38,6 +38,7 @@
         android:visibility="gone" />
 
     <LinearLayout
+
         android:id="@+id/layoutAdmob"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

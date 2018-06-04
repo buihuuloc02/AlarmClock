@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:978013234238:android:4eba87fdb2e3d25c",
         "android_client_info": {
-          "package_name": "com.app.alarmClock"
+          "package_name": "com.app.alarmclock.bhloc"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "978013234238-bal5d8snm8lhcnfcvve91udrrl0ammt7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.app.alarmClock",
+            "package_name": "com.app.alarmclock.bhloc",
             "certificate_hash": "42b73488815cd212b82f3935444d5a2a212bd21c"
           }
         },
