@@ -9,10 +9,17 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -28,9 +35,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import com.bumptech.glide.Glide;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,7 +57,10 @@ import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static alarmclock.app.com.alarmclock.activity.GetListImageActivity.EXTRA_NAME_IMAGE;
+import static alarmclock.app.com.alarmclock.activity.GetListImageActivity.EXTRA_PATH_IMAGE;
 import static alarmclock.app.com.alarmclock.util.Constant.ACTION_ALARM_CLOCK;
+import static alarmclock.app.com.alarmclock.util.Constant.REQUEST_CODE_ADD_IMAGE_PAPER;
 
 /**
  * Created by Administrator on 5/9/2018.
@@ -68,6 +82,9 @@ public class AddAlarmActivity extends BaseActivity {
 
     @BindView(R.id.timePicker)
     TimePicker timePicker;
+
+    @BindView(R.id.layoutWallPaper)
+    View layoutWallPaper;
 
     @BindView(R.id.cbMo)
     CheckBox cbMo;
@@ -96,6 +113,17 @@ public class AddAlarmActivity extends BaseActivity {
     @BindView(R.id.etAlarmTone)
     TextView etAlarmTone;
 
+    @BindView(R.id.etAlarmWallPaper)
+    TextView etAlarmWallPaper;
+
+
+    @BindView(R.id.imageWallPaper)
+    ImageView imageWallPaper;
+
+
+    @BindView(R.id.seekbarVolume)
+    SeekBar seekbarVolume;
+
 
     private String hour;
     private String minute;
@@ -113,7 +141,10 @@ public class AddAlarmActivity extends BaseActivity {
     private int indexSoundSelected = 0;
     private UriCustom uriCustomSelected;
     private UriCustom uriCustomSelected_temp;
-
+    private String pathImageSelected;
+    private String nameImageSelected;
+    private Bitmap theBitmap = null;
+    private int volumeSeekbar = 50;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -160,6 +191,34 @@ public class AddAlarmActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 showdialog();
+            }
+        });
+
+
+        etAlarmWallPaper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddAlarmActivity.this, GetListImageActivity.class);
+                startActivityForResult(intent, REQUEST_CODE_ADD_IMAGE_PAPER);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+
+            }
+        });
+
+        seekbarVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                volumeSeekbar = i;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
 
@@ -227,15 +286,44 @@ public class AddAlarmActivity extends BaseActivity {
             if (mItemAlarm.getRepeatSu() == 1) {
                 cbSu.setChecked(true);
             }
+
             uriCustomSelected = new UriCustom();
             uriCustomSelected.setUri(mItemAlarm.getUriCustom());
             uriCustomSelected.setName(mItemAlarm.getNameTone());
+
+            pathImageSelected = mItemAlarm.getPathImageWallPaper();
+            nameImageSelected = mItemAlarm.getNameImageWallPaper();
             updateNameSound(uriCustomSelected);
+            updateNameImage(nameImageSelected);
+            imageWallPaper.setImageResource(0);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Looper.prepare();
+                    setDisplayImageWallPapper(pathImageSelected);
+                }
+            }).start();
+            volumeSeekbar = mItemAlarm.getVolume();
+            seekbarVolume.setProgress(volumeSeekbar);
         } else {// new alarm
             uriCustomSelected = new UriCustom();
             uriCustomSelected.setUri(null);
             uriCustomSelected.setName(getResources().getString(R.string.text_none));
+
+            pathImageSelected = "";
+            nameImageSelected = getResources().getString(R.string.text_none);
+
             updateNameSound(uriCustomSelected);
+            updateNameImage(nameImageSelected);
+            imageWallPaper.setImageResource(0);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Looper.prepare();
+                    setDisplayImageWallPapper(pathImageSelected);
+                }
+            }).start();
+            seekbarVolume.setProgress(volumeSeekbar);
         }
     }
 
@@ -362,6 +450,10 @@ public class AddAlarmActivity extends BaseActivity {
 
 
         itemAlarm.setMilisecod((Integer.parseInt(hour) * 60) + Integer.parseInt(minute));
+
+        itemAlarm.setPathImageWallPaper(pathImageSelected);
+        itemAlarm.setNameImageWallPaper(nameImageSelected);
+        itemAlarm.setVolume(volumeSeekbar);
     }
 
     /**
@@ -582,6 +674,18 @@ public class AddAlarmActivity extends BaseActivity {
         }
     }
 
+    private void updateNameImage(String str) {
+        if (str != null) {
+            etAlarmWallPaper.setText(str);
+        }
+    }
+
+    private void setDisplayImageWallPapper(String path) {
+        if (!TextUtils.isEmpty(path)) {
+           new AsyncTaskLoadImage().execute(path);
+        }
+    }
+
     /**
      * Find string in list
      *
@@ -614,6 +718,42 @@ public class AddAlarmActivity extends BaseActivity {
         }
     }
 
+    class AsyncTaskLoadImage extends AsyncTask<String, Void, Bitmap>{
+
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            String path = strings[0];
+            if (!TextUtils.isEmpty(path)) {
+                Handler mainHandler = new Handler(Looper.getMainLooper());
+                Runnable myRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.
+                                with(getApplicationContext())
+                                .load(path)
+                                .into(imageWallPaper);
+                    }
+                };
+                mainHandler.post(myRunnable);
+            }
+            return theBitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            if (bitmap != null) {
+                layoutMain.setBackground(null);
+                layoutMain.setBackgroundColor(Color.TRANSPARENT);
+                BitmapDrawable bd = new BitmapDrawable(layoutMain.getContext().getResources(), bitmap);
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//                    layoutMain.setBackground(bd);
+//                } else {
+//                    layoutMain.setBackgroundDrawable(bd);
+//                }
+            }
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_SELECT_SOUND) {
@@ -627,6 +767,25 @@ public class AddAlarmActivity extends BaseActivity {
                 dialogListSound.dismiss();
                 uriCustomSelected = uriCustom;
                 updateNameSound(uriCustomSelected);
+            }
+        } else if (requestCode == REQUEST_CODE_ADD_IMAGE_PAPER) {
+            if (resultCode == Activity.RESULT_OK) {
+                String name = data.getStringExtra(EXTRA_NAME_IMAGE);
+                String path = data.getStringExtra(EXTRA_PATH_IMAGE);
+                updateNameImage(name);
+                pathImageSelected = path;
+                nameImageSelected = name;
+                imageWallPaper.setImageResource(0);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Looper.prepare();
+                        theBitmap = null;
+
+                        setDisplayImageWallPapper(pathImageSelected);
+                    }
+                }).start();
+
             }
         }
     }

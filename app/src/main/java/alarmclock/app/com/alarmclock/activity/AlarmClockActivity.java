@@ -3,22 +3,31 @@ package alarmclock.app.com.alarmclock.activity;
 import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
-import android.view.KeyEvent;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import java.io.IOException;
 
@@ -53,11 +62,20 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
     @BindView(R.id.tvNameAlarm)
     TextView tvNameAlarm;
 
+    @BindView(R.id.tvHelp)
+    TextView tvHelp;
+
     @BindView(R.id.imgClock1)
     View imgClock1;
 
     @BindView(R.id.imgClock2)
     View imgClock2;
+
+    @BindView(R.id.layoutMain)
+    View layoutMain;
+
+    @BindView(R.id.imageWallPaper)
+    ImageView imageWallPaper;
 
     private int id;
     private DatabaseHelper dbHelper;
@@ -77,6 +95,8 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
 
     long lastUpdate;
     float x, y, z, last_x, last_y, last_z;
+
+    Bitmap theBitmap = null;
 
     @OnClick({R.id.btnStop})
     public void OnButtonClick(View v) {
@@ -144,6 +164,72 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         handler.postDelayed(runnable, TIME_VIBRATION_IN_MINUTE);
         initVibration();
         playSound(this, getAlarmUri());
+        if (itemAlarm != null && itemAlarm.getPathImageWallPaper() != null) {
+            {
+                setTextColorForTextView();
+                new AsyncTaskLoadImage().execute(itemAlarm.getPathImageWallPaper());
+            }
+        }
+    }
+
+    class AsyncTaskLoadImage extends AsyncTask<String, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+
+            String path = strings[0];
+            if (!TextUtils.isEmpty(path)) {
+                Handler mainHandler = new Handler(Looper.getMainLooper());
+                Runnable myRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Glide.
+                                with(getApplicationContext()).
+                                load(path).
+                                into(imageWallPaper);
+
+                    }
+                };
+                mainHandler.post(myRunnable);
+            }
+            return theBitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            if (bitmap != null) {
+                layoutMain.setBackground(null);
+                layoutMain.setBackgroundColor(Color.TRANSPARENT);
+                BitmapDrawable bd = new BitmapDrawable(layoutMain.getContext().getResources(), bitmap);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    layoutMain.setBackground(bd);
+                } else {
+                    layoutMain.setBackgroundDrawable(bd);
+                }
+            }
+        }
+    }
+
+    @SuppressLint("ResourceType")
+    private void setTextColorForTextView() {
+        tvNameAlarm.setTextColor(Color.BLACK);
+        tvTime.setTextColor(Color.BLACK);
+        tvHelp.setTextColor(Color.BLACK);
+        tvNumberShake.setTextColor(Color.BLACK);
+        btnStop.setBackgroundResource(R.drawable.shape_background_border);
+        btnStop.setTextColor(getResources().getColorStateList(R.drawable.selector_button_text_black));
+        if (itemAlarm != null) {
+            if (!TextUtils.isEmpty(itemAlarm.getPathImageWallPaper())) {
+                tvNameAlarm.setTextColor(Color.WHITE);
+                tvTime.setTextColor(Color.WHITE);
+                tvHelp.setTextColor(Color.WHITE);
+                tvNumberShake.setTextColor(Color.WHITE);
+                btnStop.setBackgroundResource(R.drawable.shape_background_border_white);
+                btnStop.setTextColor(getResources().getColorStateList(R.drawable.selector_button_text_white));
+            }
+        }
     }
 
     private void setTextTitleAlarm() {
@@ -154,11 +240,17 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
     }
 
     private void playSound(Context context, Uri alert) {
+        int maxVolume = 100;
+        int currVolume = itemAlarm.getVolume();
+        float log1 = (float) (Math.log(maxVolume - currVolume) / Math.log(maxVolume));
         try {
             stopSound();
             if (alert != null) {
                 mMediaPlayer = new MediaPlayer();
                 mMediaPlayer.setDataSource(this, alert);
+                float volume = 1 - log1;
+                Log.d("volume", volume + "");
+                mMediaPlayer.setVolume(volume, volume);
                 mMediaPlayer.prepare();
                 mMediaPlayer.setLooping(true);
                 mMediaPlayer.start();

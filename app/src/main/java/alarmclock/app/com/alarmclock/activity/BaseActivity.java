@@ -21,8 +21,9 @@ import static alarmclock.app.com.alarmclock.activity.AlarmClockActivity.TIME_VIB
 
 public class BaseActivity extends AppCompatActivity {
 
-    private AlertDialog dialog;
+
     Vibrator vibrator;
+    private AlertDialog dialog;
     public SharePreferenceHelper getSharePreferences() {
         return SharePreferenceHelper.getInstances(getApplicationContext());
     }
@@ -62,7 +63,6 @@ public class BaseActivity extends AppCompatActivity {
             vibrator.vibrate(TIME_VIBRATION_IN_MINUTE);
         }
     }
-
     public void stopVibration(){
         if(vibrator != null){
             vibrator.cancel();

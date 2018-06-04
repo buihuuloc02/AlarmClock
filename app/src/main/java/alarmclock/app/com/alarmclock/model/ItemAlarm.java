@@ -15,6 +15,21 @@ public class ItemAlarm implements Serializable {
     private String title;
     private String format;
     private long milisecod;
+    private int id;
+    private int repeatMo;
+    private int repeatTu;
+    private int repeatWe;
+    private int repeatTh;
+    private int repeatFr;
+    private int repeatSa;
+    private int repeatSu;
+    private String nameTone;
+    private String status;
+    private int dayCreate;
+    private int monthCreate;
+    private String pathImageWallPaper;
+    private String nameImageWallPaper;
+    private int volume;
 
     public long getMilisecod() {
         return milisecod;
@@ -32,10 +47,7 @@ public class ItemAlarm implements Serializable {
         this.nameTone = nameTone;
     }
 
-    private String nameTone;
-    private String status;
-    private int dayCreate;
-    private int monthCreate;
+
 
     public Uri getUriCustom() {
         return uri;
@@ -62,14 +74,6 @@ public class ItemAlarm implements Serializable {
     public void setMonthCreate(int monthCreate) {
         this.monthCreate = monthCreate;
     }
-
-    private int repeatMo;
-    private int repeatTu;
-    private int repeatWe;
-    private int repeatTh;
-    private int repeatFr;
-    private int repeatSa;
-    private int repeatSu;
 
     public int getRepeatMo() {
         return repeatMo;
@@ -127,7 +131,6 @@ public class ItemAlarm implements Serializable {
         this.repeatSu = repeatSu;
     }
 
-    private int id;
 
     public ItemAlarm() {
     }
@@ -187,4 +190,29 @@ public class ItemAlarm implements Serializable {
     public void setFormat(String format) {
         this.format = format;
     }
+
+    public String getPathImageWallPaper() {
+        return pathImageWallPaper;
+    }
+
+    public void setPathImageWallPaper(String pathImageWallPaper) {
+        this.pathImageWallPaper = pathImageWallPaper;
+    }
+
+    public String getNameImageWallPaper() {
+        return nameImageWallPaper;
+    }
+
+    public void setNameImageWallPaper(String nameImageWallPaper) {
+        this.nameImageWallPaper = nameImageWallPaper;
+    }
+
+    public int getVolume() {
+        return volume;
+    }
+
+    public void setVolume(int volume) {
+        this.volume = volume;
+    }
 }
+

@@ -49,5 +49,12 @@
     <string name="text_you_need_login_gmail">You need login account Gmail.!</string>
     <string name="text_status_do_not_purchased">Do not purchased</string>
     <string name="text_remove_admob">Support and remove advertisements</string>
+    <string name="text_alarm_wall_paper">Alarm wallpaper:</string>
+    <string name="text_select_image">Select image</string>
+    <string name="text_select_from_folder">Select from folder</string>
+    <string name="text_image_from_system">Image from system</string>
+    <string name="text_get_image_error">Get image error!</string>
+    <string name="text_confirm_do_not_select_image">Are you sure you do not select the alarm wallpaper?</string>
+    <string name="text_button_ok">OK</string>
 
 </resources>

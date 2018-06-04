@@ -1,115 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layoutMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_weight="1.1"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/imgClock"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="@dimen/margin_10"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:weightSum="3">
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageWallPaper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <LinearLayout
+            android:id="@+id/imgClock"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.8"
-            android:gravity="bottom|center_horizontal"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_10"
+            android:background="@android:color/transparent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:weightSum="3">
 
-            <TextView
-                android:id="@+id/tvNameAlarm"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.8"
+                android:gravity="bottom|center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvNameAlarm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_size_25_sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imgClock1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_app"
+                    android:visibility="gone" />
+
+                <pl.droidsonroids.gif.GifImageView
+                    android:id="@+id/imgClock2"
+                    android:layout_width="@dimen/size_image_200"
+                    android:layout_height="@dimen/size_image_200"
+                    android:background="@drawable/ic_cloac_alram"
+                    android:foregroundGravity="center" />
+
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imgClock"
+
+                    android:gravity="center"
+                    android:text="00: 00"
+                    android:textSize="@dimen/text_size_25_sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvHelp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvTime"
+                    android:layout_marginLeft="@dimen/margin_20"
+                    android:layout_marginRight="@dimen/margin_20"
+                    android:fontFamily="@font/simplyfont"
+                    android:gravity="center"
+                    android:text="@string/help"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvNumberShake"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvTime"
+                    android:layout_marginLeft="@dimen/margin_20"
+                    android:layout_marginRight="@dimen/margin_20"
+                    android:fontFamily="@font/simplyfont"
+                    android:gravity="center"
+                    android:text="@string/text_confirm_number_shake"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
+
+                android:layout_margin="@dimen/margin_5"
                 android:gravity="center"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textSize="@dimen/text_size_25_sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/imgClock1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_app"
-                android:visibility="gone" />
-
-            <pl.droidsonroids.gif.GifImageView
-                android:id="@+id/imgClock2"
-                android:layout_width="@dimen/size_image_200"
-                android:layout_height="@dimen/size_image_200"
-                android:background="@drawable/ic_cloac_alram"
-                android:foregroundGravity="center" />
-
-            <TextView
-                android:id="@+id/tvTime"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/imgClock"
-
-                android:gravity="center"
-                android:text="00: 00"
-                android:textSize="@dimen/text_size_25_sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/btnStop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/width_35_dp"
+                    android:background="@drawable/shape_background_border"
+                    android:clickable="true"
+                    android:fontFamily="@font/simplyfont"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/margin_30"
+                    android:paddingRight="@dimen/margin_30"
+                    android:text="@string/text_button_stop"
+                    android:textSize="@dimen/text_size_14_sp" />
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvTime"
-                android:layout_marginLeft="@dimen/margin_20"
-                android:layout_marginRight="@dimen/margin_20"
+    </FrameLayout>
 
-                android:fontFamily="@font/simplyfont"
-                android:gravity="center"
-                android:text="@string/help"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvNumberShake"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvTime"
-                android:layout_marginLeft="@dimen/margin_20"
-                android:layout_marginRight="@dimen/margin_20"
-                android:fontFamily="@font/simplyfont"
-                android:gravity="center"
-                android:text="@string/text_confirm_number_shake"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/margin_5"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/btnStop"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/width_35_dp"
-            android:background="@drawable/shape_background_border"
-            android:clickable="true"
-            android:fontFamily="@font/simplyfont"
-            android:gravity="center"
-            android:paddingLeft="@dimen/margin_30"
-            android:paddingRight="@dimen/margin_30"
-            android:text="@string/text_button_stop"
-            android:textSize="@dimen/text_size_14_sp" />
-    </LinearLayout>
 </RelativeLayout>

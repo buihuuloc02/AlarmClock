@@ -8,4 +8,5 @@
     <color name="background_gray">#E1E1E1</color>
     <color name="color_hyberlink">#0000FF</color>
     <color name="darker_gray">#E1E1E1</color>
+    <color name="color_orange">#FF7F00</color>
 </resources>

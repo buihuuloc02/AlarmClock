@@ -49,4 +49,11 @@
     <string name="text_status_purchased">購入した</string>
     <string name="text_status_do_not_purchased">購入していない</string>
     <string name="text_remove_admob">を支援して広告を外す</string>
+    <string name="text_alarm_wall_paper">アラームの壁紙：</string>
+    <string name="text_select_image">選択した画像</string>
+    <string name="text_select_from_folder">フォルダから選択</string>
+    <string name="text_image_from_system">システムからの画像</string>
+    <string name="text_get_image_error">イメージエラーを取得！</string>
+    <string name="text_confirm_do_not_select_image">アラームの壁紙を選択していませんか？</string>
+    <string name="text_button_ok">OK</string>
 </resources>

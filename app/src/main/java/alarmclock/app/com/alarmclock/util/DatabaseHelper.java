@@ -27,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
     // Database Version
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 13;
 
     // Database Name
     private static final String DATABASE_NAME = "AlarmClock";
@@ -61,6 +61,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_URI_TONE = "KEY_URI_TONE";
     private static final String KEY_NAME_TONE = "KEY_NAME_TONE";
     private static final String KEY_MINISECOND = "KEY_MINISECOND";
+    private static final String KEY_PATH_IMAGE = "KEY_PATH_IMAGE";
+    private static final String KEY_NAME_IMAGE = "KEY_NAME_IMAGE";
+    private static final String KEY_VOLUME = "KEY_VOLUME";
 
     // Island table create statement
     private static final String CREATE_island_TABLE = "CREATE TABLE " + TABLE_ALARM + "("
@@ -76,12 +79,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_REPEAT_TH + " INTEGER,"
             + KEY_REPEAT_FR + " INTEGER,"
             + KEY_REPEAT_SA + " INTEGER,"
+            + KEY_VOLUME + " INTEGER,"
             + KEY_REPEAT_SU + " INTEGER,"
             + KEY_DAY_CREATE + " INTEGER,"
             + KEY_MONTH_CREATE + " INTEGER,"
             + KEY_URI_TONE + " TEXT,"
             + KEY_NAME_TONE + " TEXT,"
             + KEY_MINISECOND + " TEXT,"
+            + KEY_PATH_IMAGE + " TEXT,"
+            + KEY_NAME_IMAGE + " TEXT,"
             + KEY_CREATED_AT + " DATETIME DEFAULT CURRENT_TIMESTAMP" + ")";
 
 
@@ -154,6 +160,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     alarm.setRepeatSa(cursor.getInt(cursor.getColumnIndex(KEY_REPEAT_SA)));
                     alarm.setRepeatSu(cursor.getInt(cursor.getColumnIndex(KEY_REPEAT_SU)));
                     alarm.setNameTone(cursor.getString(cursor.getColumnIndex(KEY_NAME_TONE)));
+                    alarm.setPathImageWallPaper(cursor.getString(cursor.getColumnIndex(KEY_PATH_IMAGE)));
+                    alarm.setNameImageWallPaper(cursor.getString(cursor.getColumnIndex(KEY_NAME_IMAGE)));
+                    alarm.setVolume(cursor.getInt(cursor.getColumnIndex(KEY_VOLUME)));
 
                     String miliseconds  = (cursor.getString(cursor.getColumnIndex(KEY_MINISECOND)));
                     alarm.setMilisecod(Long.parseLong(miliseconds));
@@ -208,7 +217,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     alarm.setRepeatSa(cursor.getInt(cursor.getColumnIndex(KEY_REPEAT_SA)));
                     alarm.setRepeatSu(cursor.getInt(cursor.getColumnIndex(KEY_REPEAT_SU)));
                     alarm.setNameTone(cursor.getString(cursor.getColumnIndex(KEY_NAME_TONE)));
-
+                    alarm.setPathImageWallPaper(cursor.getString(cursor.getColumnIndex(KEY_PATH_IMAGE)));
+                    alarm.setVolume(cursor.getInt(cursor.getColumnIndex(KEY_VOLUME)));
+                    alarm.setNameImageWallPaper(cursor.getString(cursor.getColumnIndex(KEY_NAME_IMAGE)));
                     String miliseconds  = (cursor.getString(cursor.getColumnIndex(KEY_MINISECOND)));
                     alarm.setMilisecod(Long.parseLong(miliseconds));
 
@@ -260,6 +271,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             values.put(KEY_DAY_CREATE, alarm.getDayCreate());
             values.put(KEY_MONTH_CREATE, alarm.getMonthCreate());
+
+            values.put(KEY_NAME_IMAGE, alarm.getNameImageWallPaper());
+            values.put(KEY_PATH_IMAGE, alarm.getPathImageWallPaper());
+            values.put(KEY_VOLUME, alarm.getVolume());
 
             String nameTone = alarm.getNameTone();
             values.put(KEY_NAME_TONE, nameTone);
@@ -338,6 +353,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_DAY_CREATE, alarm.getDayCreate());
             values.put(KEY_MONTH_CREATE, alarm.getMonthCreate());
             values.put(KEY_MINISECOND, String.valueOf(alarm.getMilisecod()));
+            values.put(KEY_VOLUME, alarm.getVolume());
+            values.put(KEY_NAME_IMAGE, alarm.getNameImageWallPaper());
+            values.put(KEY_PATH_IMAGE, alarm.getPathImageWallPaper());
 
             String nameTone = alarm.getNameTone();
             values.put(KEY_NAME_TONE, nameTone);
