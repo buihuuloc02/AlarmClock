@@ -42,7 +42,7 @@
         android:id="@+id/layoutAdmob"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:gravity="center|center_horizontal"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 

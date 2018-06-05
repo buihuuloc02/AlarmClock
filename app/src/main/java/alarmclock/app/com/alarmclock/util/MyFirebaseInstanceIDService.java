@@ -1,35 +1,41 @@
 package alarmclock.app.com.alarmclock.util;
 
+import android.app.IntentService;
+import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.util.Log;
-
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
-
-import alarmclock.app.com.alarmclock.AlarmClockApplication;
 
 /**
  * Created by Administrator on 6/1/2018.
  */
 
-public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
+public class MyFirebaseInstanceIDService extends IntentService {
     private final static String TAG = MyFirebaseInstanceIDService.class.getSimpleName();
-    @Override
-    public void onTokenRefresh() {
-        // Get updated InstanceID token.
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG, "Refreshed token: " + refreshedToken);
+    public final static String EXTRA_TOKEN = "EXTRA_TOKEN";
 
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
-        saveToken(refreshedToken);
+    public MyFirebaseInstanceIDService(String name) {
+        super(name);
     }
+
+    public MyFirebaseInstanceIDService() {
+        super("");
+    }
+
     public SharePreferenceHelper getSharePreferences() {
         return SharePreferenceHelper.getInstances(getApplicationContext());
     }
 
     private void saveToken(String refreshedToken) {
-        SharePreferenceHelper  sharePreferenceHelper = getSharePreferences();
-        sharePreferenceHelper.put(SharePreferenceHelper.Key.KEY_TOKEN,refreshedToken);
+        SharePreferenceHelper sharePreferenceHelper = getSharePreferences();
+        sharePreferenceHelper.put(SharePreferenceHelper.Key.KEY_TOKEN, refreshedToken);
+    }
+
+    @Override
+    protected void onHandleIntent(@Nullable Intent intent) {
+        if(intent.hasExtra(EXTRA_TOKEN)) {
+            String token = intent.getStringExtra(EXTRA_TOKEN);
+            saveToken(token);
+            Log.d("android_id", token);
+        }
     }
 }

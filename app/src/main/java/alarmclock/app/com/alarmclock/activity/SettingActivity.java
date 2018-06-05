@@ -99,7 +99,7 @@ public class SettingActivity extends BaseActivity {
     private IInAppBillingService mService;
     private final static int VERSION_IAB = 3;
     private String deviceToken = "";
-    private final String productID = "android.test.purchased";
+    private final String productID = "com.app.alarmclock.bhloc";
 
 
     private ServiceConnection mServiceConn = new ServiceConnection() {
