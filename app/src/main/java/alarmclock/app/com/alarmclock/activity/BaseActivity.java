@@ -55,12 +55,13 @@ public class BaseActivity extends AppCompatActivity {
         void callBackDismiss();
     }
     public void initVibration() {
-
+        long[] mVibratePattern = new long[]{0, 400, 400, 400};
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(TIME_VIBRATION_IN_MINUTE, VibrationEffect.DEFAULT_AMPLITUDE));
+            VibrationEffect effect = VibrationEffect.createWaveform(mVibratePattern, 0); // '0' to repeat
+            vibrator.vibrate(effect);
         } else {
-            vibrator.vibrate(TIME_VIBRATION_IN_MINUTE);
+            vibrator.vibrate(mVibratePattern, 0);/// '0' to repeat
         }
     }
     public void stopVibration(){

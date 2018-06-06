@@ -46,7 +46,7 @@ import butterknife.OnClick;
 public class AlarmClockActivity extends BaseActivity implements SensorListener {
 
     private final static int TIME_VIBRATION = 1000 * 60;
-    private final static int SET_TIME_VIBRATION_MINUTE = 1;
+    private final static int SET_TIME_VIBRATION_MINUTE = 3;// 3 minute
     public final static long TIME_VIBRATION_IN_MINUTE = TIME_VIBRATION * SET_TIME_VIBRATION_MINUTE;
 
     private static final int SHAKE_THRESHOLD = 1000;
