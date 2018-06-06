@@ -17,7 +17,7 @@ android {
         applicationId "com.app.alarmclock.bhloc"
         minSdkVersion 18
         targetSdkVersion 26
-        versionCode 5
+        versionCode 6
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
@@ -109,6 +109,7 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.google.android.gms:play-services-location:11.0.4'
     compile 'com.google.android.gms:play-services-places:11.0.4'
+    compile 'com.github.hotchemi:android-rate:1.0.1'
 
 }
 

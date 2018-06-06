@@ -1,11 +1,14 @@
 package alarmclock.app.com.alarmclock.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,6 +51,8 @@ import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import hotchemi.android.rate.AppRate;
+import hotchemi.android.rate.OnClickButtonListener;
 
 public class MainActivity extends BaseActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
@@ -372,8 +377,30 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
         //setLayoutRecycler();
         //setLayoutButtonAddAlarm();
         setDisplayAdmob();
-    }
 
+        //showRateApp();
+    }
+    private void showRateApp() {
+
+        AppRate.with(getApplicationContext())
+                .setInstallDays(0)
+                .setLaunchTimes(0)
+                .setRemindInterval(0)
+                .setDebug(true)
+                .setShowNeverButton(false)
+                .setOnClickButtonListener(new OnClickButtonListener() {
+                    @Override
+                    public void onClickButton(int which) {
+
+                        AppRate.with(getApplicationContext()).clearSettingsParam();
+                        if (which == -1) {//Rate
+                            AppRate.with(getApplicationContext()).setAgreeShowDialog(false); //not show again
+                        }
+                    }
+                })
+                .monitor();
+        AppRate.showRateDialogIfMeetsConditions(this);
+    }
     @SuppressLint("ResourceAsColor")
     private void setLayoutButtonAddAlarm() {
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) fadAdd.getLayoutParams();
