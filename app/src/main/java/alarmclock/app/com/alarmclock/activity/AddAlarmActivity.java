@@ -110,6 +110,9 @@ public class AddAlarmActivity extends BaseActivity {
     @BindView(R.id.layoutMain)
     View layoutMain;
 
+    @BindView(R.id.layoutVolume)
+    View layoutVolume;
+
     @BindView(R.id.etAlarmTone)
     TextView etAlarmTone;
 
@@ -294,6 +297,7 @@ public class AddAlarmActivity extends BaseActivity {
             pathImageSelected = mItemAlarm.getPathImageWallPaper();
             nameImageSelected = mItemAlarm.getNameImageWallPaper();
             updateNameSound(uriCustomSelected);
+            setDisplayLayoutVolume(uriCustomSelected);
             updateNameImage(nameImageSelected);
             imageWallPaper.setImageResource(0);
             new Thread(new Runnable() {
@@ -314,6 +318,7 @@ public class AddAlarmActivity extends BaseActivity {
             nameImageSelected = getResources().getString(R.string.text_none);
 
             updateNameSound(uriCustomSelected);
+            setDisplayLayoutVolume(uriCustomSelected);
             updateNameImage(nameImageSelected);
             imageWallPaper.setImageResource(0);
             new Thread(new Runnable() {
@@ -324,6 +329,16 @@ public class AddAlarmActivity extends BaseActivity {
                 }
             }).start();
             seekbarVolume.setProgress(volumeSeekbar);
+        }
+    }
+
+    private void setDisplayLayoutVolume(UriCustom uriCustomSelected) {
+        if(uriCustomSelected != null){
+            if(uriCustomSelected.getUri() == null){
+                layoutVolume.setVisibility(View.GONE);
+            }else{
+                layoutVolume.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -557,6 +572,7 @@ public class AddAlarmActivity extends BaseActivity {
                 dialogListSound.dismiss();
                 uriCustomSelected = uriCustomSelected_temp;
                 updateNameSound(uriCustomSelected);
+                setDisplayLayoutVolume(uriCustomSelected);
             }
         });
 
@@ -767,6 +783,7 @@ public class AddAlarmActivity extends BaseActivity {
                 dialogListSound.dismiss();
                 uriCustomSelected = uriCustom;
                 updateNameSound(uriCustomSelected);
+                setDisplayLayoutVolume(uriCustomSelected);
             }
         } else if (requestCode == REQUEST_CODE_ADD_IMAGE_PAPER) {
             if (resultCode == Activity.RESULT_OK) {
