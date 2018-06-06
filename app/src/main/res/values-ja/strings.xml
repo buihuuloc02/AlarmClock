@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">目覚まし時計</string>
+    <string name="app_name">アラームシェイク</string>
     <string name="text_settings_actionbar">設定</string>
 
     <!--Text title screen-->
