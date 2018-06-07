@@ -1,14 +1,11 @@
 package alarmclock.app.com.alarmclock.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +37,8 @@ import org.greenrobot.eventbus.Subscribe;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 
 import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.adapter.AlarmAdapter;
@@ -199,7 +198,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     }
 
     public void setAdmobDefault(boolean hasInternet) {
-        imgDefault.setVisibility(hasInternet ? View.GONE : View.VISIBLE);
+        //imgDefault.setVisibility(hasInternet ? View.GONE : View.VISIBLE);
         mAdView.setVisibility(hasInternet ? View.VISIBLE : View.GONE);
     }
 
@@ -262,6 +261,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     public void getDataFromDatabase() {
         itemAlarms = new ArrayList<>();
         itemAlarms.addAll(databaseHelper.getAllAlarms());
+        Collections.sort(itemAlarms, new TimeAlarmComparator());
     }
 
 
@@ -290,9 +290,15 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        Intent intent = null;
         switch (id) {
             case R.id.actionSetting:
-                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                intent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                return true;
+            case R.id.actionAbout:
+                intent = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 return true;
@@ -380,6 +386,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
 
         //showRateApp();
     }
+
     private void showRateApp() {
 
         AppRate.with(getApplicationContext())
@@ -401,6 +408,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
                 .monitor();
         AppRate.showRateDialogIfMeetsConditions(this);
     }
+
     @SuppressLint("ResourceAsColor")
     private void setLayoutButtonAddAlarm() {
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) fadAdd.getLayoutParams();
@@ -420,6 +428,15 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
         }
         fadAdd.setLayoutParams(lp);
     }
+
+    public class TimeAlarmComparator implements Comparator<ItemAlarm> {
+        public int compare(ItemAlarm left, ItemAlarm right) {
+            Long t1 = left.getMilisecod();
+            Long t2 = right.getMilisecod();
+            return t1.compareTo(t2);
+        }
+    }
+
     @SuppressLint("ResourceAsColor")
     private void setDisplayAdmob() {
         layoutAdmob.setVisibility(View.VISIBLE);
@@ -428,6 +445,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
             layoutAdmob.setVisibility(View.GONE);
         }
     }
+
     @SuppressLint("ResourceAsColor")
     private void setLayoutRecycler() {
         RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) fadAdd.getLayoutParams();

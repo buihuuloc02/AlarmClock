@@ -62,8 +62,12 @@ public class SettingActivity extends BaseActivity {
 
     @BindView(R.id.tvPurchaseApp)
     TextView tvPurchaseApp;
+
     @BindView(R.id.tvRemovePurchase)
     TextView tvRemovePurchase;
+
+    @BindView(R.id.tvCurrentVersion)
+    TextView tvCurrentVersion;
 
     @BindView(R.id.imgStatusPurchaseApp)
     ImageView imgStatusPurchaseApp;
@@ -80,7 +84,7 @@ public class SettingActivity extends BaseActivity {
                         Snackbar snackbar = Snackbar.make(layoutMain, getResources().getString(R.string.text_status_purchased), Snackbar.LENGTH_LONG);
                         snackbar.show();
                     }
-                }else{
+                } else {
                     Snackbar snackbar = Snackbar.make(layoutMain, getResources().getString(R.string.text_you_need_login_gmail), Snackbar.LENGTH_LONG);
                     snackbar.show();
                 }
@@ -134,6 +138,11 @@ public class SettingActivity extends BaseActivity {
         initDataNumberShake();
         initDataSpeedShake();
         initActionTextViewPurchase();
+        setDataCurrentVersion();
+    }
+
+    private void setDataCurrentVersion() {
+        tvCurrentVersion.setText(getVersionName());
     }
 
     @SuppressLint("ResourceType")
@@ -376,7 +385,7 @@ public class SettingActivity extends BaseActivity {
         //  if (response != 0) return;
         ArrayList<String> purchaseDataList =
                 ownedItems.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
-        if(purchaseDataList == null){
+        if (purchaseDataList == null) {
             return;
         }
         for (String purchaseData : purchaseDataList) {

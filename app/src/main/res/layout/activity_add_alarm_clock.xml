@@ -173,11 +173,12 @@
                 android:id="@+id/layoutVolume"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_20"
                 android:layout_marginLeft="@dimen/margin_10"
                 android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_20"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="1">
 
 
                 <ImageView
@@ -187,11 +188,19 @@
 
                 <SeekBar
                     android:id="@+id/seekbarVolume"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.9"
                     android:indeterminate="false"
                     android:max="100"
                     android:progress="50" />
+
+                <ImageView
+                    android:id="@+id/imgPlayStopSound"
+                    android:layout_width="@dimen/width_20_dp"
+                    android:layout_height="@dimen/width_20_dp"
+                    android:layout_marginLeft="@dimen/margin_10"
+                    android:background="@drawable/ic_play" />
             </LinearLayout>
 
             <View
@@ -247,6 +256,13 @@
                     android:textColor="@color/color_hyberlink"
                     android:textSize="@dimen/text_size_14_sp"
                     android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/imgDeleteWallPaper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginLeft="@dimen/margin_20"
+                    android:background="@drawable/ic_delete_black"/>
             </LinearLayout>
 
             <View

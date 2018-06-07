@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layoutImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_40"
+        android:layout_marginTop="@dimen/margin_40"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/width_50_dp"
+            android:layout_height="@dimen/height_50_dp"
+            android:background="@drawable/ic_app_main" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_20"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textSize="@dimen/text_size_20_sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvVersionName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layoutImage"
+        android:layout_margin="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_30"
+        android:orientation="horizontal"
+        android:weightSum="1.1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/width_20_dp"
+                android:layout_height="@dimen/width_20_dp"
+                android:background="@drawable/ic_update" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/text_update_title" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/layoutUpdate"
+        android:layout_margin="@dimen/margin_10"
+        android:background="@android:color/darker_gray" />
+
+    <LinearLayout
+        android:id="@+id/layoutShare"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view1"
+        android:layout_margin="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_30"
+        android:orientation="horizontal"
+        android:weightSum="1.1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/width_20_dp"
+                android:layout_height="@dimen/width_20_dp"
+                android:background="@drawable/ic_share" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/text_share_with_friend" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/layoutShare"
+        android:layout_margin="@dimen/margin_10"
+        android:background="@android:color/darker_gray" />
+
+    <LinearLayout
+        android:id="@+id/layoutAbout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view2"
+        android:layout_margin="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_30"
+        android:orientation="horizontal"
+        android:weightSum="1.1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/width_20_dp"
+                android:layout_height="@dimen/width_20_dp"
+                android:background="@drawable/ic_info" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/text_about_us" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/text_website" />
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+        <TextView
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_14_sp"
+            android:layout_height="wrap_content"
+            android:text="@string/text_name_company"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:textSize="10sp"
+            android:layout_height="wrap_content"
+            android:text="@string/text_privacy_legal"/>
+    </LinearLayout>
+</RelativeLayout>

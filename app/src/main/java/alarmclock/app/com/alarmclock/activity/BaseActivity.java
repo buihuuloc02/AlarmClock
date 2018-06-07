@@ -3,6 +3,8 @@ package alarmclock.app.com.alarmclock.activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.VibrationEffect;
@@ -13,8 +15,6 @@ import android.text.TextUtils;
 import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
 
-import static alarmclock.app.com.alarmclock.activity.AlarmClockActivity.TIME_VIBRATION_IN_MINUTE;
-
 /**
  * Created by Administrator on 5/9/2018.
  */
@@ -24,6 +24,7 @@ public class BaseActivity extends AppCompatActivity {
 
     Vibrator vibrator;
     private AlertDialog dialog;
+
     public SharePreferenceHelper getSharePreferences() {
         return SharePreferenceHelper.getInstances(getApplicationContext());
     }
@@ -51,9 +52,11 @@ public class BaseActivity extends AppCompatActivity {
         }
         dialog.show();
     }
+
     public interface CallBackDismiss {
         void callBackDismiss();
     }
+
     public void initVibration() {
         long[] mVibratePattern = new long[]{0, 400, 400, 400};
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -64,8 +67,9 @@ public class BaseActivity extends AppCompatActivity {
             vibrator.vibrate(mVibratePattern, 0);/// '0' to repeat
         }
     }
-    public void stopVibration(){
-        if(vibrator != null){
+
+    public void stopVibration() {
+        if (vibrator != null) {
             vibrator.cancel();
         }
     }
@@ -75,9 +79,33 @@ public class BaseActivity extends AppCompatActivity {
         assert cm != null;
         return cm.getActiveNetworkInfo() != null;
     }
+
+    public String getVersionName(){
+        PackageInfo pinfo = null;
+        try {
+            pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        int versionNumber = pinfo.versionCode;
+        String versionName = pinfo.versionName;
+        return versionName;
+    }
+
+    public int getVersionCode(){
+        PackageInfo pinfo = null;
+        try {
+            pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return pinfo.versionCode;
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
+
     }
 }

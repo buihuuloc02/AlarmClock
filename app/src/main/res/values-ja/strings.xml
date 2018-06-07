@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">アラームシェイク</string>
     <string name="text_settings_actionbar">設定</string>
+    <string name="text_about_actionbar">約</string>
 
     <!--Text title screen-->
     <string name="text_title_add_alarm">アラームを追加</string>
@@ -56,4 +57,12 @@
     <string name="text_get_image_error">イメージエラーを取得！</string>
     <string name="text_confirm_do_not_select_image">アラームの壁紙を選択していませんか？</string>
     <string name="text_button_ok">OK</string>
+    <string name="text_version_current">現行版：</string>
+    <string name="text_update_title">更新</string>
+    <string name="text_share_with_friend">友人たちと分ける</string>
+    <string name="text_about_us">私たちについて</string>
+    <string name="text_website"><u>http://mor.vn/</u></string>
+    <string name="text_name_company">MOR Corporation</string>
+    <string name="text_privacy_legal"><u>Privacy and Legal</u></string>
+    <string name="text_check_version">バージョンを確認する....</string>
 </resources>

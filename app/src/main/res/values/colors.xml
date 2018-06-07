@@ -5,8 +5,10 @@
     <color name="colorAccent">#FF4081</color>
     <color name="actionBarRed">#F76323</color>
     <color name="actionBarDarkgray">#455A64</color>
+    <color name="actionBarDarkGrayLight">#373932</color>
     <color name="background_gray">#E1E1E1</color>
     <color name="color_hyberlink">#0000FF</color>
     <color name="darker_gray">#E1E1E1</color>
     <color name="color_orange">#FF7F00</color>
+    <color name="color_bg_splash">#282F3C</color>
 </resources>

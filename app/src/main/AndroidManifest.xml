@@ -25,6 +25,11 @@
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".activity.SplashActivity"
+            android:theme="@style/AppFullScreenTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -45,6 +50,9 @@
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity
             android:name=".activity.SettingActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity><activity
+            android:name=".activity.AboutActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity

@@ -16,7 +16,6 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -56,6 +55,7 @@ import alarmclock.app.com.alarmclock.util.DatabaseHelper;
 import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static alarmclock.app.com.alarmclock.activity.GetListImageActivity.EXTRA_NAME_IMAGE;
 import static alarmclock.app.com.alarmclock.activity.GetListImageActivity.EXTRA_PATH_IMAGE;
@@ -124,6 +124,14 @@ public class AddAlarmActivity extends BaseActivity {
     ImageView imageWallPaper;
 
 
+    @BindView(R.id.imgDeleteWallPaper)
+    ImageView imgDeleteWallPaper;
+
+
+    @BindView(R.id.imgPlayStopSound)
+    ImageView imgPlayStopSound;
+
+
     @BindView(R.id.seekbarVolume)
     SeekBar seekbarVolume;
 
@@ -148,6 +156,37 @@ public class AddAlarmActivity extends BaseActivity {
     private String nameImageSelected;
     private Bitmap theBitmap = null;
     private int volumeSeekbar = 50;
+    private boolean isPlayingSound = false;
+
+    @OnClick({R.id.imgPlayStopSound, R.id.imgDeleteWallPaper})
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.imgPlayStopSound:
+                setPlayOrStopSound();
+                break;
+            case R.id.imgDeleteWallPaper:
+                pathImageSelected = "";
+                nameImageSelected = getString(R.string.text_none);
+                updateNameImage(nameImageSelected);
+                break;
+        }
+    }
+
+    private void setPlayOrStopSound() {
+        imgPlayStopSound.setImageResource(0);
+        if (isPlayingSound) {
+            stopSound();
+            imgPlayStopSound.setBackgroundResource(R.drawable.ic_play);
+        } else {
+            if (uriCustomSelected != null && uriCustomSelected.getUri() != null) {
+                playSound(uriCustomSelected.getUri(), volumeSeekbar);
+            }
+            imgPlayStopSound.setBackgroundResource(R.drawable.ic_stop);
+        }
+        isPlayingSound = !isPlayingSound;
+
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -212,6 +251,8 @@ public class AddAlarmActivity extends BaseActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 volumeSeekbar = i;
+                stopSound();
+                imgPlayStopSound.setBackgroundResource(R.drawable.ic_play);
             }
 
             @Override
@@ -243,6 +284,7 @@ public class AddAlarmActivity extends BaseActivity {
                 onBackPressed();
                 return true;
             case R.id.actionDone:
+                stopSound();
                 progressDone();
                 return true;
         }
@@ -299,6 +341,7 @@ public class AddAlarmActivity extends BaseActivity {
             updateNameSound(uriCustomSelected);
             setDisplayLayoutVolume(uriCustomSelected);
             updateNameImage(nameImageSelected);
+
             imageWallPaper.setImageResource(0);
             new Thread(new Runnable() {
                 @Override
@@ -333,10 +376,10 @@ public class AddAlarmActivity extends BaseActivity {
     }
 
     private void setDisplayLayoutVolume(UriCustom uriCustomSelected) {
-        if(uriCustomSelected != null){
-            if(uriCustomSelected.getUri() == null){
+        if (uriCustomSelected != null) {
+            if (uriCustomSelected.getUri() == null) {
                 layoutVolume.setVisibility(View.GONE);
-            }else{
+            } else {
                 layoutVolume.setVisibility(View.VISIBLE);
             }
         }
@@ -595,7 +638,7 @@ public class AddAlarmActivity extends BaseActivity {
                 uriCustomSelected_temp = uriCustom;
                 Uri uri = uriCustom.getUri();
                 if (uri != null) {
-                    playSound(uri);
+                    playSound(uri, -1);
                 } else {
                     stopSound();
                 }
@@ -666,13 +709,19 @@ public class AddAlarmActivity extends BaseActivity {
      *
      * @param uri: Uri
      */
-    private void playSound(Uri uri) {
+    private void playSound(Uri uri, int volume) {
         try {
             stopSound();
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setDataSource(this, uri);
             mediaPlayer.prepare();
             mediaPlayer.setLooping(false);
+            if (volume != -1) {
+                int maxVolume = 100;
+                int currVolume = volume;
+                float log1 = 1 - (float) (Math.log(maxVolume - currVolume) / Math.log(maxVolume));
+                mediaPlayer.setVolume(log1, log1);
+            }
             mediaPlayer.start();
         } catch (IOException e) {
             System.out.println("OOPS");
@@ -691,14 +740,18 @@ public class AddAlarmActivity extends BaseActivity {
     }
 
     private void updateNameImage(String str) {
+        imgDeleteWallPaper.setVisibility(View.GONE);
         if (str != null) {
             etAlarmWallPaper.setText(str);
+        }
+        if(!TextUtils.isEmpty(pathImageSelected)){
+            imgDeleteWallPaper.setVisibility(View.VISIBLE);
         }
     }
 
     private void setDisplayImageWallPapper(String path) {
         if (!TextUtils.isEmpty(path)) {
-           new AsyncTaskLoadImage().execute(path);
+            new AsyncTaskLoadImage().execute(path);
         }
     }
 
@@ -734,7 +787,7 @@ public class AddAlarmActivity extends BaseActivity {
         }
     }
 
-    class AsyncTaskLoadImage extends AsyncTask<String, Void, Bitmap>{
+    class AsyncTaskLoadImage extends AsyncTask<String, Void, Bitmap> {
 
         @Override
         protected Bitmap doInBackground(String... strings) {
@@ -770,6 +823,7 @@ public class AddAlarmActivity extends BaseActivity {
             }
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_SELECT_SOUND) {
@@ -789,9 +843,9 @@ public class AddAlarmActivity extends BaseActivity {
             if (resultCode == Activity.RESULT_OK) {
                 String name = data.getStringExtra(EXTRA_NAME_IMAGE);
                 String path = data.getStringExtra(EXTRA_PATH_IMAGE);
-                updateNameImage(name);
                 pathImageSelected = path;
                 nameImageSelected = name;
+                updateNameImage(name);
                 imageWallPaper.setImageResource(0);
                 new Thread(new Runnable() {
                     @Override
@@ -805,6 +859,12 @@ public class AddAlarmActivity extends BaseActivity {
 
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        stopSound();
     }
 
     @Override

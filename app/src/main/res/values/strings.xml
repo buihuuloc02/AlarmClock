@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">AlarmShake</string>
+    <string name="app_name">Alarm Shake</string>
     <string name="text_settings_actionbar">Settings</string>
+    <string name="text_about_actionbar">About</string>
 
     <!--Text title screen-->
     <string name="text_title_add_alarm">Add Alarm</string>
@@ -56,5 +57,13 @@
     <string name="text_get_image_error">Get image error!</string>
     <string name="text_confirm_do_not_select_image">Are you sure you do not select the alarm wallpaper?</string>
     <string name="text_button_ok">OK</string>
+    <string name="text_version_current">Current version:</string>
+    <string name="text_update_title">Update</string>
+    <string name="text_share_with_friend">Share with Friends</string>
+    <string name="text_about_us">About us</string>
+    <string name="text_website"><u>http://mor.vn/</u></string>
+    <string name="text_name_company">MOR Corporation</string>
+    <string name="text_privacy_legal"><u>Privacy and Legal</u></string>
+    <string name="text_check_version">Checking version....</string>
 
 </resources>
