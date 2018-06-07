@@ -2,6 +2,9 @@
     <string name="app_name">Alarm Shake</string>
     <string name="text_settings_actionbar">Settings</string>
     <string name="text_about_actionbar">About</string>
+    <string name="banner_home_footer">ca-app-pub-3784006611687493/1845159867</string>
+    <string name="banner_home_footer_app_id">ca-app-pub-3784006611687493~2697531949</string>
+
 
     <!--Text title screen-->
     <string name="text_title_add_alarm">Add Alarm</string>

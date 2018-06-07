@@ -125,7 +125,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
         databaseHelper = new DatabaseHelper(this);
         imgDefault.setVisibility(View.GONE);
         mAdView.setVisibility(View.GONE);
-        MobileAds.initialize(getApplicationContext(), "ca-app-pub-3940256099942544/6300978111");
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_home_footer_app_id));//
         mAdView = (AdView) findViewById(R.id.adView);
         //mAdView.setAdUnitId(getString(R.string.app_ad_unit_id));
         AdRequest adRequest = new AdRequest.Builder().build();

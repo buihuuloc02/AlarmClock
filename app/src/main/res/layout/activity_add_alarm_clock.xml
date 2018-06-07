@@ -156,6 +156,7 @@
                     android:hint="@string/text_none"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:textColorHint="@color/color_hyberlink"
                     android:textColor="@color/color_hyberlink"
                     android:textSize="@dimen/text_size_14_sp" />
 
@@ -246,6 +247,7 @@
                     android:hint="@string/text_none"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:textColorHint="@color/color_hyberlink"
                     android:textColor="@color/color_hyberlink"
                     android:textSize="@dimen/text_size_14_sp" />
 

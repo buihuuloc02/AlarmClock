@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -21,6 +22,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,13 +73,14 @@ public class GetListImageActivity extends BaseActivity implements CustomGridAdap
         setTitle(R.string.text_select_image);
 
         ButterKnife.bind(this);
+        photos = new ArrayList<>();
         photos = getPhoneAlbums(this);
         Log.d("size", photos.size() + "");
 
-        customGridAdapter = new CustomGridAdapter(GetListImageActivity.this, photos, this);
-        gridViewImage.setAdapter(customGridAdapter);
+
 
     }
+
     public void showDialog(final String msg, final Context context,
                            final String permission) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
@@ -90,10 +93,22 @@ public class GetListImageActivity extends BaseActivity implements CustomGridAdap
                         ActivityCompat.requestPermissions((Activity) context,
                                 new String[]{permission},
                                 MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                        getPhoneAlbums(GetListImageActivity.this);
                     }
                 });
         AlertDialog alert = alertBuilder.create();
         alert.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
+
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getPhoneAlbums(GetListImageActivity.this);
+            }
+        }
     }
 
     public boolean checkPermissionREAD_EXTERNAL_STORAGE(final Context context) {
@@ -123,6 +138,7 @@ public class GetListImageActivity extends BaseActivity implements CustomGridAdap
             return true;
         }
     }
+
     public ArrayList<Photo> getPhoneAlbums(Context context) {
         // Creating vectors t
         // o hold the final albums objects and albums names
@@ -138,7 +154,7 @@ public class GetListImageActivity extends BaseActivity implements CustomGridAdap
         // content: style URI for the "primary" external storage volume
         Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
-        if(!checkPermissionREAD_EXTERNAL_STORAGE(GetListImageActivity.this)){
+        if (!checkPermissionREAD_EXTERNAL_STORAGE(GetListImageActivity.this)) {
             return phoneAlbums;
         }
         // Make the query.
@@ -187,7 +203,18 @@ public class GetListImageActivity extends BaseActivity implements CustomGridAdap
         } else {
             Toast.makeText(context, context.getResources().getString(R.string.text_get_image_error), Toast.LENGTH_SHORT).show();
         }
+        photos = phoneAlbums;
+        if(photos != null) {
+            customGridAdapter = new CustomGridAdapter(GetListImageActivity.this, photos, this);
+            gridViewImage.setAdapter(customGridAdapter);
+            setDisplayTextViewNoData();
+        }
         return phoneAlbums;
+    }
+
+    private void setDisplayTextViewNoData() {
+        tvNoData.setVisibility(photos.size() > 0 ? View.GONE : View.VISIBLE);
+        gridViewImage.setVisibility(photos.size() > 0 ? View.VISIBLE : View.GONE);
     }
 
 
@@ -219,17 +246,17 @@ public class GetListImageActivity extends BaseActivity implements CustomGridAdap
     @Override
     public void OnClickCheckBox(final Photo photo, int position) {
         if (photos != null) {
-            for (int i = 0;i < photos.size();i++) {
+            for (int i = 0; i < photos.size(); i++) {
                 Photo pt = photos.get(i);
-                if(i != position) {
+                if (i != position) {
                     pt.setSelected(false);
                 }
             }
             photos.get(position).setSelected(photo.isSelected());
-            if(photo.isSelected()) {
+            if (photo.isSelected()) {
                 pathImageSelected = photo.getPhotoUri();
                 nameImageSelected = photo.getAlbumName();
-            }else{
+            } else {
                 pathImageSelected = "";
                 nameImageSelected = "";
             }
@@ -248,7 +275,7 @@ public class GetListImageActivity extends BaseActivity implements CustomGridAdap
         if (checkHasSelectImage(text)) {
             Intent intent = new Intent();
             intent.putExtra(EXTRA_PATH_IMAGE, pathImageSelected);
-            intent.putExtra(EXTRA_NAME_IMAGE,nameImageSelected);
+            intent.putExtra(EXTRA_NAME_IMAGE, nameImageSelected);
             setResult(Activity.RESULT_OK, intent);
             onBackPressed();
         } else {
@@ -260,7 +287,7 @@ public class GetListImageActivity extends BaseActivity implements CustomGridAdap
                         public void callBackDismiss() {
                             Intent intent = new Intent();
                             intent.putExtra(EXTRA_PATH_IMAGE, pathImageSelected);
-                            intent.putExtra(EXTRA_NAME_IMAGE,nameImageSelected);
+                            intent.putExtra(EXTRA_NAME_IMAGE, nameImageSelected);
                             setResult(Activity.RESULT_OK, intent);
                             onBackPressed();
                         }
