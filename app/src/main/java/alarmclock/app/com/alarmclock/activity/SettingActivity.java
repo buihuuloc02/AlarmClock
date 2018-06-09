@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import alarmclock.app.com.alarmclock.R;
+import alarmclock.app.com.alarmclock.model.UserSetting;
 import alarmclock.app.com.alarmclock.util.Constant;
 import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
 import butterknife.BindView;
@@ -72,6 +75,9 @@ public class SettingActivity extends BaseActivity {
     @BindView(R.id.imgStatusPurchaseApp)
     ImageView imgStatusPurchaseApp;
 
+    @BindView(R.id.cbShowButtonStop)
+    CheckBox cbShowButtonStop;
+
     @OnClick({R.id.tvPurchaseApp, R.id.tvRemovePurchase})
     public void OnButtonClick(View v) {
         int id = v.getId();
@@ -104,6 +110,7 @@ public class SettingActivity extends BaseActivity {
     private final static int VERSION_IAB = 3;
     private String deviceToken = "";
     private final String productID = "com.app.alarmclock.bhloc";
+    private UserSetting mUserSetting;
 
 
     private ServiceConnection mServiceConn = new ServiceConnection() {
@@ -135,8 +142,10 @@ public class SettingActivity extends BaseActivity {
         setTitle(getResources().getString(R.string.text_title_setting));
 
         deviceToken = getSharePreferences().getString(SharePreferenceHelper.Key.KEY_TOKEN, "");
+        mUserSetting = (UserSetting) getSharePreferences().getObject(SharePreferenceHelper.Key.KEY_USER_SETTING, UserSetting.class);
         initDataNumberShake();
         initDataSpeedShake();
+        initDataCheckBoxShowButtonStop();
         initActionTextViewPurchase();
         setDataCurrentVersion();
     }
@@ -182,7 +191,11 @@ public class SettingActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int number = i;
-                sharedPreferences.put(SharePreferenceHelper.Key.NUMBERSHAKE, number);
+                if (mUserSetting == null) {
+                    mUserSetting = new UserSetting();
+                }
+                mUserSetting.setNumberShake(number);
+                sharedPreferences.putObject(SharePreferenceHelper.Key.KEY_USER_SETTING, mUserSetting);
                 if (!isFirstLoad) {
                     Snackbar snackbar = Snackbar.make(layoutMain, getResources().getString(R.string.text_updated), Snackbar.LENGTH_LONG);
                     snackbar.show();
@@ -195,7 +208,8 @@ public class SettingActivity extends BaseActivity {
             }
         });
 
-        int selected = sharedPreferences.getInt(SharePreferenceHelper.Key.NUMBERSHAKE, 0);
+        // int selected = sharedPreferences.getInt(SharePreferenceHelper.Key.NUMBERSHAKE, 0);
+        int selected = mUserSetting != null ? mUserSetting.getNumberShake() : 0;
         spinnerNumberShake.setSelection(selected);
     }
 
@@ -220,7 +234,11 @@ public class SettingActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 int number = i;
-                sharedPreferences.put(SharePreferenceHelper.Key.SPEEKSHAKE, number);
+                if (mUserSetting == null) {
+                    mUserSetting = new UserSetting();
+                }
+                mUserSetting.setSpeedShake(number);
+                sharedPreferences.putObject(SharePreferenceHelper.Key.KEY_USER_SETTING, mUserSetting);
                 if (!isFirstLoad) {
                     Snackbar snackbar = Snackbar.make(layoutMain, getResources().getString(R.string.text_updated), Snackbar.LENGTH_LONG);
                     snackbar.show();
@@ -233,8 +251,33 @@ public class SettingActivity extends BaseActivity {
 
             }
         });
-        int selected = sharedPreferences.getInt(SharePreferenceHelper.Key.SPEEKSHAKE, 0);
+        int selected = mUserSetting != null ? mUserSetting.getSpeedShake() : 0;
         spinnerSpeekShake.setSelection(selected);
+    }
+
+    /**
+     * Function set show button 'Stop' at screen Alarm
+     */
+    private void initDataCheckBoxShowButtonStop() {
+        int selected = mUserSetting != null ? mUserSetting.getShowButtonStop() : 1;// default 'SHOW'
+        cbShowButtonStop.setChecked(selected == 1 ? true : false);
+        cbShowButtonStop.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                int number = b ? 1 : 0;
+                if (mUserSetting == null) {
+                    mUserSetting = new UserSetting();
+                }
+                mUserSetting.setShowButtonStop(number);
+                sharedPreferences.putObject(SharePreferenceHelper.Key.KEY_USER_SETTING, mUserSetting);
+                if (!isFirstLoad) {
+                    Snackbar snackbar = Snackbar.make(layoutMain, getResources().getString(R.string.text_updated), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+                isFirstLoad = false;
+            }
+        });
+
     }
 
     /**

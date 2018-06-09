@@ -33,6 +33,7 @@ import java.io.IOException;
 
 import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.model.ItemAlarm;
+import alarmclock.app.com.alarmclock.model.UserSetting;
 import alarmclock.app.com.alarmclock.util.DatabaseHelper;
 import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
 import butterknife.BindView;
@@ -96,7 +97,8 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
     long lastUpdate;
     float x, y, z, last_x, last_y, last_z;
 
-    Bitmap theBitmap = null;
+    private Bitmap theBitmap = null;
+    private UserSetting mUserSetting;
 
     @OnClick({R.id.btnStop})
     public void OnButtonClick(View v) {
@@ -135,42 +137,13 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         itemAlarm = dbHelper.getAlarmById(id);
         tvTime.setText(s);
 
+        mUserSetting = (UserSetting) getSharePreferences().getObject(SharePreferenceHelper.Key.KEY_USER_SETTING, UserSetting.class);
 
         sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
         btnStop.setTextColor(getResources().getColorStateList(R.drawable.selector_button_text_black));
+        setDisplayButtonStop();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (fullWakeLock.isHeld()) {
-            fullWakeLock.release();
-        }
-        if (partialWakeLock.isHeld()) {
-            partialWakeLock.release();
-        }
-        mNumberShake = getSharePreferences().getInt(SharePreferenceHelper.Key.NUMBERSHAKE, 0) + 1;
-        mSpeekShake = getSharePreferences().getInt(SharePreferenceHelper.Key.SPEEKSHAKE, 0) + 1;
-
-        @SuppressLint({"StringFormatInvalid", "LocalSuppress"}) String str = String.format(getResources().getString(R.string.text_confirm_number_shake), String.valueOf(mNumberShake));
-        tvNumberShake.setText(str);
-        setTextTitleAlarm();
-
-        mSpeekShake = 1000 + (mSpeekShake * 100);
-        sensorMgr.registerListener(this,
-                SensorManager.SENSOR_ACCELEROMETER,
-                SensorManager.SENSOR_DELAY_NORMAL);
-
-        handler.postDelayed(runnable, TIME_VIBRATION_IN_MINUTE);
-        initVibration();
-        playSound(this, getAlarmUri());
-        if (itemAlarm != null && itemAlarm.getPathImageWallPaper() != null) {
-            {
-                setTextColorForTextView();
-                new AsyncTaskLoadImage().execute(itemAlarm.getPathImageWallPaper());
-            }
-        }
-    }
 
     class AsyncTaskLoadImage extends AsyncTask<String, Void, Bitmap> {
 
@@ -228,6 +201,15 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
                 tvNumberShake.setTextColor(Color.WHITE);
                 btnStop.setBackgroundResource(R.drawable.shape_background_border_white);
                 btnStop.setTextColor(getResources().getColorStateList(R.drawable.selector_button_text_white));
+            }
+        }
+    }
+
+    private void setDisplayButtonStop() {
+        if (mUserSetting != null) {
+            btnStop.setVisibility(View.VISIBLE);
+            if (mUserSetting.getShowButtonStop() == 0) {
+                btnStop.setVisibility(View.GONE);
             }
         }
     }
@@ -369,6 +351,44 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         stopVibration();
         stopSound();
         partialWakeLock.acquire();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (fullWakeLock.isHeld()) {
+            fullWakeLock.release();
+        }
+        if (partialWakeLock.isHeld()) {
+            partialWakeLock.release();
+        }
+        if (mUserSetting != null) {
+            mNumberShake = mUserSetting.getNumberShake() + 1;
+            mSpeekShake = mUserSetting.getSpeedShake() + 1;
+        } else {
+            mNumberShake = 1;
+            mSpeekShake = 1;
+        }
+
+        @SuppressLint({"StringFormatInvalid", "LocalSuppress"}) String str = String.format(getResources().getString(R.string.text_confirm_number_shake), String.valueOf(mNumberShake));
+        tvNumberShake.setText(str);
+        setTextTitleAlarm();
+
+        mSpeekShake = 1000 + (mSpeekShake * 100);
+        sensorMgr.registerListener(this,
+                SensorManager.SENSOR_ACCELEROMETER,
+                SensorManager.SENSOR_DELAY_NORMAL);
+
+        handler.postDelayed(runnable, TIME_VIBRATION_IN_MINUTE);
+        initVibration();
+        playSound(this, getAlarmUri());
+        if (itemAlarm != null && itemAlarm.getPathImageWallPaper() != null) {
+            {
+                setTextColorForTextView();
+                new AsyncTaskLoadImage().execute(itemAlarm.getPathImageWallPaper());
+            }
+        }
     }
 
     @Override
