@@ -17,7 +17,7 @@ android {
         applicationId "com.app.alarmclock.bhloc"
         minSdkVersion 18
         targetSdkVersion 26
-        versionCode 8
+        versionCode 9
         versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true

@@ -140,7 +140,8 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
             @Override
             public void onAdFailedToLoad(int i) {
                 super.onAdFailedToLoad(i);
-                imgDefault.setVisibility(View.VISIBLE);
+                imgDefault.setVisibility(View.GONE);
+                mAdView.setVisibility(View.GONE);
             }
         });
         fadAdd.setOnTouchListener((View view, MotionEvent event) -> {
@@ -198,7 +199,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     }
 
     public void setAdmobDefault(boolean hasInternet) {
-        //imgDefault.setVisibility(hasInternet ? View.GONE : View.VISIBLE);
+        imgDefault.setVisibility(hasInternet ? View.GONE : View.GONE);
         mAdView.setVisibility(hasInternet ? View.VISIBLE : View.GONE);
     }
 

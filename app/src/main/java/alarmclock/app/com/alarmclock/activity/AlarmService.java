@@ -313,6 +313,9 @@ public class AlarmService extends JobIntentService {
                 return itemAlarm;
             }
         }
+        if(itemAlarms != null && itemAlarms.size() > 0){
+            return itemAlarms.get(0);
+        }
         return null;
     }
 
