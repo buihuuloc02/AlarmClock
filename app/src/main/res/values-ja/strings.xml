@@ -69,4 +69,6 @@
     <string name="text_check_version">バージョンを確認する....</string>
     <string name="text_show_button_stop_at_screen_alarm">画面に「停止」ボタンを表示するアラーム：</string>
     <string name="text_show_notification">通知を表示する：</string>
+    <string name="text_user_receive_msm">メッセージ受信者：</string>
+    <string name="text_contact_no_number">連絡先には電話番号がありません！</string>
 </resources>

@@ -27,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
     // Database Version
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
 
     // Database Name
     private static final String DATABASE_NAME = "AlarmClock";
@@ -64,6 +64,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_PATH_IMAGE = "KEY_PATH_IMAGE";
     private static final String KEY_NAME_IMAGE = "KEY_NAME_IMAGE";
     private static final String KEY_VOLUME = "KEY_VOLUME";
+    private static final String KEY_NAME_CONTACT = "KEY_NAME_CONTACT";
+    private static final String KEY_NUMBER_CONTACT = "KEY_NUMBER_CONTACT";
 
     // Island table create statement
     private static final String CREATE_island_TABLE = "CREATE TABLE " + TABLE_ALARM + "("
@@ -88,6 +90,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_MINISECOND + " TEXT,"
             + KEY_PATH_IMAGE + " TEXT,"
             + KEY_NAME_IMAGE + " TEXT,"
+            + KEY_NAME_CONTACT + " TEXT,"
+            + KEY_NUMBER_CONTACT + " TEXT,"
             + KEY_CREATED_AT + " DATETIME DEFAULT CURRENT_TIMESTAMP" + ")";
 
 
@@ -161,10 +165,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     alarm.setRepeatSu(cursor.getInt(cursor.getColumnIndex(KEY_REPEAT_SU)));
                     alarm.setNameTone(cursor.getString(cursor.getColumnIndex(KEY_NAME_TONE)));
                     alarm.setPathImageWallPaper(cursor.getString(cursor.getColumnIndex(KEY_PATH_IMAGE)));
+
+                    alarm.setNameContact(cursor.getString(cursor.getColumnIndex(KEY_NAME_CONTACT)));
+                    alarm.setNumberContact(cursor.getString(cursor.getColumnIndex(KEY_NUMBER_CONTACT)));
+
                     alarm.setNameImageWallPaper(cursor.getString(cursor.getColumnIndex(KEY_NAME_IMAGE)));
                     alarm.setVolume(cursor.getInt(cursor.getColumnIndex(KEY_VOLUME)));
 
-                    String miliseconds  = (cursor.getString(cursor.getColumnIndex(KEY_MINISECOND)));
+                    String miliseconds = (cursor.getString(cursor.getColumnIndex(KEY_MINISECOND)));
                     alarm.setMilisecod(Long.parseLong(miliseconds));
 
                     String uri = cursor.getString(cursor.getColumnIndex(KEY_URI_TONE));
@@ -218,9 +226,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     alarm.setRepeatSu(cursor.getInt(cursor.getColumnIndex(KEY_REPEAT_SU)));
                     alarm.setNameTone(cursor.getString(cursor.getColumnIndex(KEY_NAME_TONE)));
                     alarm.setPathImageWallPaper(cursor.getString(cursor.getColumnIndex(KEY_PATH_IMAGE)));
+
+
+                    alarm.setNameContact(cursor.getString(cursor.getColumnIndex(KEY_NAME_CONTACT)));
+                    alarm.setNumberContact(cursor.getString(cursor.getColumnIndex(KEY_NUMBER_CONTACT)));
+
                     alarm.setVolume(cursor.getInt(cursor.getColumnIndex(KEY_VOLUME)));
                     alarm.setNameImageWallPaper(cursor.getString(cursor.getColumnIndex(KEY_NAME_IMAGE)));
-                    String miliseconds  = (cursor.getString(cursor.getColumnIndex(KEY_MINISECOND)));
+                    String miliseconds = (cursor.getString(cursor.getColumnIndex(KEY_MINISECOND)));
                     alarm.setMilisecod(Long.parseLong(miliseconds));
 
                     String uri = cursor.getString(cursor.getColumnIndex(KEY_URI_TONE));
@@ -268,6 +281,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_REPEAT_SA, alarm.getRepeatSa());
             values.put(KEY_REPEAT_SU, alarm.getRepeatSu());
             values.put(KEY_MINISECOND, String.valueOf(alarm.getMilisecod()));
+
+            values.put(KEY_NAME_CONTACT, alarm.getNameContact());
+            values.put(KEY_NUMBER_CONTACT, alarm.getNumberContact());
 
             values.put(KEY_DAY_CREATE, alarm.getDayCreate());
             values.put(KEY_MONTH_CREATE, alarm.getMonthCreate());
@@ -349,6 +365,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_REPEAT_FR, alarm.getRepeatFr());
             values.put(KEY_REPEAT_SA, alarm.getRepeatSa());
             values.put(KEY_REPEAT_SU, alarm.getRepeatSu());
+
+
+            values.put(KEY_NAME_CONTACT, alarm.getNameContact());
+            values.put(KEY_NUMBER_CONTACT, alarm.getNumberContact());
 
             values.put(KEY_DAY_CREATE, alarm.getDayCreate());
             values.put(KEY_MONTH_CREATE, alarm.getMonthCreate());

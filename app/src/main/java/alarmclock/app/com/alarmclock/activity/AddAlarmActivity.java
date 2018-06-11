@@ -1,13 +1,17 @@
 package alarmclock.app.com.alarmclock.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -17,11 +21,15 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -40,6 +48,7 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -51,6 +60,7 @@ import java.util.Comparator;
 
 import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.model.ItemAlarm;
+import alarmclock.app.com.alarmclock.model.PhoneCustom;
 import alarmclock.app.com.alarmclock.model.UriCustom;
 import alarmclock.app.com.alarmclock.util.DatabaseHelper;
 import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
@@ -62,6 +72,8 @@ import static alarmclock.app.com.alarmclock.activity.GetListImageActivity.EXTRA_
 import static alarmclock.app.com.alarmclock.activity.GetListImageActivity.EXTRA_PATH_IMAGE;
 import static alarmclock.app.com.alarmclock.util.Constant.ACTION_ALARM_CLOCK;
 import static alarmclock.app.com.alarmclock.util.Constant.REQUEST_CODE_ADD_IMAGE_PAPER;
+import static alarmclock.app.com.alarmclock.util.Constant.REQUEST_CODE_SELECT_CONTACT;
+import static alarmclock.app.com.alarmclock.util.Constant.REQUEST_CODE_SELECT_SOUND;
 
 /**
  * Created by Administrator on 5/9/2018.
@@ -69,11 +81,11 @@ import static alarmclock.app.com.alarmclock.util.Constant.REQUEST_CODE_ADD_IMAGE
 
 public class AddAlarmActivity extends BaseActivity {
 
-    public static final int REQUEST_CODE_SELECT_SOUND = 1;
     public static final String EXTRA_NAME_SOUND_SELECT = "EXTRA_NAME_SOUND_SELECT";
     public static final String EXTRA_PATH_SOUND_SELECT = "EXTRA_PATH_SOUND_SELECT";
     public static final String EXTRA_ITEM_ALARM = "EXTRA_ITEM_ALARM";
     public static final String TAG = AddAlarmActivity.class.getSimpleName();
+    public static final int PERMISSION_REQUEST_CONTACT = 11231;
     @BindView(R.id.tvTime)
     TextView tvTime;
 
@@ -86,6 +98,15 @@ public class AddAlarmActivity extends BaseActivity {
 
     @BindView(R.id.layoutWallPaper)
     View layoutWallPaper;
+
+    @BindView(R.id.layoutContact)
+    View layoutContact;
+
+    @BindView(R.id.layoutImageWallPaper)
+    View layoutImageWallPaper;
+
+    @BindView(R.id.layoutAlarmTone)
+    View layoutAlarmTone;
 
     @BindView(R.id.cbMo)
     CheckBox cbMo;
@@ -120,6 +141,9 @@ public class AddAlarmActivity extends BaseActivity {
     @BindView(R.id.etAlarmWallPaper)
     TextView etAlarmWallPaper;
 
+    @BindView(R.id.etSendSMS)
+    TextView etSendSMS;
+
 
     @BindView(R.id.imageWallPaper)
     ImageView imageWallPaper;
@@ -127,6 +151,10 @@ public class AddAlarmActivity extends BaseActivity {
 
     @BindView(R.id.imgDeleteWallPaper)
     ImageView imgDeleteWallPaper;
+
+
+    @BindView(R.id.imgDeleteSMS)
+    ImageView imgDeleteSMS;
 
 
     @BindView(R.id.imgPlayStopSound)
@@ -155,11 +183,13 @@ public class AddAlarmActivity extends BaseActivity {
     private UriCustom uriCustomSelected_temp;
     private String pathImageSelected;
     private String nameImageSelected;
+    private PhoneCustom mPhoneCustom;
     private Bitmap theBitmap = null;
     private int volumeSeekbar = 50;
     private boolean isPlayingSound = false;
     AudioManager audioManager;
-    @OnClick({R.id.imgPlayStopSound, R.id.imgDeleteWallPaper})
+
+    @OnClick({R.id.imgPlayStopSound, R.id.imgDeleteWallPaper, R.id.imgDeleteSMS})
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
@@ -170,6 +200,11 @@ public class AddAlarmActivity extends BaseActivity {
                 pathImageSelected = "";
                 nameImageSelected = getString(R.string.text_none);
                 updateNameImage(nameImageSelected);
+                break;
+                case R.id.imgDeleteSMS:
+                    mPhoneCustom = new PhoneCustom();
+                    mPhoneCustom.setName(getString(R.string.text_none));
+                updateNameContact(mPhoneCustom);
                 break;
         }
     }
@@ -231,7 +266,7 @@ public class AddAlarmActivity extends BaseActivity {
 
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-        etAlarmTone.setOnClickListener(new View.OnClickListener() {
+        layoutAlarmTone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showdialog();
@@ -240,13 +275,22 @@ public class AddAlarmActivity extends BaseActivity {
         });
 
 
-        etAlarmWallPaper.setOnClickListener(new View.OnClickListener() {
+        layoutImageWallPaper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 stopSound();
                 Intent intent = new Intent(AddAlarmActivity.this, GetListImageActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_ADD_IMAGE_PAPER);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
+
+            }
+        });
+
+        layoutContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                stopSound();
+                askForContactPermission();
 
             }
         });
@@ -357,6 +401,11 @@ public class AddAlarmActivity extends BaseActivity {
             }).start();
             volumeSeekbar = mItemAlarm.getVolume();
 
+            mPhoneCustom = new PhoneCustom();
+            mPhoneCustom.setName(mItemAlarm.getNameContact());
+            mPhoneCustom.setNumber(mItemAlarm.getNumberContact());
+            updateNameContact(mPhoneCustom);
+
             seekbarVolume.setProgress(volumeSeekbar);
         } else {// new alarm
             uriCustomSelected = new UriCustom();
@@ -379,6 +428,10 @@ public class AddAlarmActivity extends BaseActivity {
             }).start();
             seekbarVolume.setProgress(audioManager
                     .getStreamVolume(AudioManager.STREAM_MUSIC));
+
+            mPhoneCustom = new PhoneCustom();
+            mPhoneCustom.setName(getString(R.string.text_none));
+            updateNameContact(mPhoneCustom);
         }
     }
 
@@ -390,6 +443,11 @@ public class AddAlarmActivity extends BaseActivity {
                 layoutVolume.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    public void pickContactNumber() {
+        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+        startActivityForResult(intent, REQUEST_CODE_SELECT_CONTACT);
     }
 
     private void showTimeDefault() {
@@ -519,6 +577,9 @@ public class AddAlarmActivity extends BaseActivity {
         itemAlarm.setPathImageWallPaper(pathImageSelected);
         itemAlarm.setNameImageWallPaper(nameImageSelected);
         itemAlarm.setVolume(volumeSeekbar);
+
+        itemAlarm.setNameContact(mPhoneCustom.getName());
+        itemAlarm.setNumberContact(mPhoneCustom.getNumber());
     }
 
     /**
@@ -751,8 +812,20 @@ public class AddAlarmActivity extends BaseActivity {
         if (str != null) {
             etAlarmWallPaper.setText(str);
         }
-        if(!TextUtils.isEmpty(pathImageSelected)){
+        if (!TextUtils.isEmpty(pathImageSelected)) {
             imgDeleteWallPaper.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void updateNameContact(PhoneCustom phoneCustom) {
+        imgDeleteSMS.setVisibility(View.GONE);
+        if (phoneCustom != null) {
+            String display = phoneCustom.getName();
+            if(phoneCustom.getNumber() != null){
+                display +=  "("+phoneCustom.getNumber() + ")";
+                imgDeleteSMS.setVisibility(View.VISIBLE);
+            }
+            etSendSMS.setText(display);
         }
     }
 
@@ -794,6 +867,69 @@ public class AddAlarmActivity extends BaseActivity {
         }
     }
 
+    public void askForContactPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.READ_CONTACTS)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setTitle("Contacts access needed");
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setMessage("Llease confirm Contacts access");//TODO put real question
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @TargetApi(Build.VERSION_CODES.M)
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            requestPermissions(
+                                    new String[]
+                                            {Manifest.permission.READ_CONTACTS}
+                                    , PERMISSION_REQUEST_CONTACT);
+                        }
+                    });
+                    builder.show();
+
+                } else {
+
+                    // No explanation needed, we can request the permission.
+
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.READ_CONTACTS},
+                            PERMISSION_REQUEST_CONTACT);
+
+                    // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                    // app-defined int constant. The callback method gets the
+                    // result of the request.
+                }
+            }else{
+                pickContactNumber();
+            }
+        }
+        else{
+            pickContactNumber();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CONTACT: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    pickContactNumber();
+
+                } else {
+                    Toast.makeText(this, "No permission for contacts", Toast.LENGTH_SHORT).show();
+
+                }
+                return;
+            }
+
+        }
+    }
     class AsyncTaskLoadImage extends AsyncTask<String, Void, Bitmap> {
 
         @Override
@@ -863,6 +999,37 @@ public class AddAlarmActivity extends BaseActivity {
                         setDisplayImageWallPapper(pathImageSelected);
                     }
                 }).start();
+
+            }
+        }else if (requestCode == REQUEST_CODE_SELECT_CONTACT) {
+            if (resultCode == Activity.RESULT_OK) {
+                Uri contactData = data.getData();
+
+                Cursor phone = getContentResolver().query(contactData, null, null, null, null);
+                    if (phone.moveToFirst()) {
+
+                        String contactId = phone.getString(phone.getColumnIndex(ContactsContract.Contacts._ID));
+                        String hasNumber = phone.getString(phone.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                        String contactName = phone.getString(phone.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                        String num = "";
+                        if (Integer.valueOf(hasNumber) == 1) {
+                            Cursor numbers = this.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+                            while (numbers.moveToNext()) {
+                                num = numbers.getString(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                            }
+                        }
+                        else{
+                            Toast.makeText(this, getString(R.string.text_contact_no_number), Toast.LENGTH_LONG).show();
+                        }
+                        mPhoneCustom = new PhoneCustom();
+                        mPhoneCustom.setName(contactName);
+                        mPhoneCustom.setNumber(num);
+                        updateNameContact(mPhoneCustom);
+
+                    }
+
 
             }
         }

@@ -30,6 +30,9 @@ public class ItemAlarm implements Serializable {
     private String pathImageWallPaper;
     private String nameImageWallPaper;
     private int volume;
+    // contact
+    private String nameContact;
+    private String numberContact;
 
     public long getMilisecod() {
         return milisecod;
@@ -46,7 +49,6 @@ public class ItemAlarm implements Serializable {
     public void setNameTone(String nameTone) {
         this.nameTone = nameTone;
     }
-
 
 
     public Uri getUriCustom() {
@@ -213,6 +215,22 @@ public class ItemAlarm implements Serializable {
 
     public void setVolume(int volume) {
         this.volume = volume;
+    }
+
+    public String getNameContact() {
+        return nameContact;
+    }
+
+    public void setNameContact(String nameContact) {
+        this.nameContact = nameContact;
+    }
+
+    public String getNumberContact() {
+        return numberContact;
+    }
+
+    public void setNumberContact(String numberContact) {
+        this.numberContact = numberContact;
     }
 }
 
