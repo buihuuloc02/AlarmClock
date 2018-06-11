@@ -27,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = DatabaseHelper.class.getSimpleName();
 
     // Database Version
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 15;
 
     // Database Name
     private static final String DATABASE_NAME = "AlarmClock";
@@ -66,6 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_VOLUME = "KEY_VOLUME";
     private static final String KEY_NAME_CONTACT = "KEY_NAME_CONTACT";
     private static final String KEY_NUMBER_CONTACT = "KEY_NUMBER_CONTACT";
+    private static final String KEY_METHOD_STOP = "KEY_METHOD_STOP";
 
     // Island table create statement
     private static final String CREATE_island_TABLE = "CREATE TABLE " + TABLE_ALARM + "("
@@ -85,6 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_REPEAT_SU + " INTEGER,"
             + KEY_DAY_CREATE + " INTEGER,"
             + KEY_MONTH_CREATE + " INTEGER,"
+            + KEY_METHOD_STOP + " INTEGER,"
             + KEY_URI_TONE + " TEXT,"
             + KEY_NAME_TONE + " TEXT,"
             + KEY_MINISECOND + " TEXT,"
@@ -172,6 +174,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     alarm.setNameImageWallPaper(cursor.getString(cursor.getColumnIndex(KEY_NAME_IMAGE)));
                     alarm.setVolume(cursor.getInt(cursor.getColumnIndex(KEY_VOLUME)));
 
+                    alarm.setMethodStop(cursor.getInt(cursor.getColumnIndex(KEY_METHOD_STOP)));
+
                     String miliseconds = (cursor.getString(cursor.getColumnIndex(KEY_MINISECOND)));
                     alarm.setMilisecod(Long.parseLong(miliseconds));
 
@@ -226,7 +230,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     alarm.setRepeatSu(cursor.getInt(cursor.getColumnIndex(KEY_REPEAT_SU)));
                     alarm.setNameTone(cursor.getString(cursor.getColumnIndex(KEY_NAME_TONE)));
                     alarm.setPathImageWallPaper(cursor.getString(cursor.getColumnIndex(KEY_PATH_IMAGE)));
-
+                    alarm.setMethodStop(cursor.getInt(cursor.getColumnIndex(KEY_METHOD_STOP)));
 
                     alarm.setNameContact(cursor.getString(cursor.getColumnIndex(KEY_NAME_CONTACT)));
                     alarm.setNumberContact(cursor.getString(cursor.getColumnIndex(KEY_NUMBER_CONTACT)));
@@ -291,6 +295,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_NAME_IMAGE, alarm.getNameImageWallPaper());
             values.put(KEY_PATH_IMAGE, alarm.getPathImageWallPaper());
             values.put(KEY_VOLUME, alarm.getVolume());
+            values.put(KEY_METHOD_STOP, alarm.getMethodStop());
 
             String nameTone = alarm.getNameTone();
             values.put(KEY_NAME_TONE, nameTone);
@@ -376,6 +381,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_VOLUME, alarm.getVolume());
             values.put(KEY_NAME_IMAGE, alarm.getNameImageWallPaper());
             values.put(KEY_PATH_IMAGE, alarm.getPathImageWallPaper());
+
+            values.put(KEY_METHOD_STOP, alarm.getMethodStop());
 
             String nameTone = alarm.getNameTone();
             values.put(KEY_NAME_TONE, nameTone);

@@ -105,7 +105,7 @@ public class GetListImageActivity extends BaseActivity implements CustomGridAdap
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
 
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getPhoneAlbums(GetListImageActivity.this);
             }
         }

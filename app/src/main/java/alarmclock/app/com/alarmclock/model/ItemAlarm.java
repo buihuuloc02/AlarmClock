@@ -34,6 +34,8 @@ public class ItemAlarm implements Serializable {
     private String nameContact;
     private String numberContact;
 
+    private int methodStop;
+
     public long getMilisecod() {
         return milisecod;
     }
@@ -231,6 +233,14 @@ public class ItemAlarm implements Serializable {
 
     public void setNumberContact(String numberContact) {
         this.numberContact = numberContact;
+    }
+
+    public int getMethodStop() {
+        return methodStop;
+    }
+
+    public void setMethodStop(int methodStop) {
+        this.methodStop = methodStop;
     }
 }
 

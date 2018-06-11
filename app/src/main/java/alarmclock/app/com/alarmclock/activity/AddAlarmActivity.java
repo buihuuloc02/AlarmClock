@@ -46,6 +46,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -57,9 +58,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.model.ItemAlarm;
+import alarmclock.app.com.alarmclock.model.MethodStop;
 import alarmclock.app.com.alarmclock.model.PhoneCustom;
 import alarmclock.app.com.alarmclock.model.UriCustom;
 import alarmclock.app.com.alarmclock.util.DatabaseHelper;
@@ -164,6 +167,9 @@ public class AddAlarmActivity extends BaseActivity {
     @BindView(R.id.seekbarVolume)
     SeekBar seekbarVolume;
 
+    @BindView(R.id.spinnerMethod)
+    Spinner spinnerMethod;
+
 
     private String hour;
     private String minute;
@@ -188,6 +194,9 @@ public class AddAlarmActivity extends BaseActivity {
     private int volumeSeekbar = 50;
     private boolean isPlayingSound = false;
     AudioManager audioManager;
+    private int mIndexMethodStopSelected = 0;
+    private List<MethodStop> listMethods;
+    private ArrayList<String> nameMethods;
 
     @OnClick({R.id.imgPlayStopSound, R.id.imgDeleteWallPaper, R.id.imgDeleteSMS})
     public void onClick(View v) {
@@ -201,9 +210,9 @@ public class AddAlarmActivity extends BaseActivity {
                 nameImageSelected = getString(R.string.text_none);
                 updateNameImage(nameImageSelected);
                 break;
-                case R.id.imgDeleteSMS:
-                    mPhoneCustom = new PhoneCustom();
-                    mPhoneCustom.setName(getString(R.string.text_none));
+            case R.id.imgDeleteSMS:
+                mPhoneCustom = new PhoneCustom();
+                mPhoneCustom.setName(getString(R.string.text_none));
                 updateNameContact(mPhoneCustom);
                 break;
         }
@@ -261,6 +270,8 @@ public class AddAlarmActivity extends BaseActivity {
         showTimeDefault();
 
         mUriCustoms = getListAlarm();
+
+        initDataSpinnerMethodStop();
 
         setDataUpdate(mItemAlarm);
 
@@ -407,6 +418,8 @@ public class AddAlarmActivity extends BaseActivity {
             updateNameContact(mPhoneCustom);
 
             seekbarVolume.setProgress(volumeSeekbar);
+            mIndexMethodStopSelected = mItemAlarm.getMethodStop();
+            spinnerMethod.setSelection(mIndexMethodStopSelected);
         } else {// new alarm
             uriCustomSelected = new UriCustom();
             uriCustomSelected.setUri(null);
@@ -443,6 +456,45 @@ public class AddAlarmActivity extends BaseActivity {
                 layoutVolume.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    private void initDataSpinnerMethodStop() {
+        listMethods = new ArrayList<MethodStop>();
+        nameMethods = new ArrayList<String>();
+        MethodStop methodNormal = new MethodStop();
+        methodNormal.setIndex(0);
+        methodNormal.setName(getString(R.string.text_method_normal));
+        nameMethods.add(getString(R.string.text_method_normal));
+        listMethods.add(methodNormal);
+
+        MethodStop methodShake = new MethodStop();
+        methodShake.setIndex(1);
+        methodShake.setName(getString(R.string.text_method_shake));
+        nameMethods.add(getString(R.string.text_method_shake));
+        listMethods.add(methodShake);
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nameMethods);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinnerMethod.setAdapter(dataAdapter);
+        spinnerMethod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                mIndexMethodStopSelected = i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        // int selected = sharedPreferences.getInt(SharePreferenceHelper.Key.NUMBERSHAKE, 0);
+        //int selected = mUserSetting != null ? mUserSetting.getNumberShake() : 0;
+        // spinnerNumberShake.setSelection(selected);
     }
 
     public void pickContactNumber() {
@@ -580,6 +632,7 @@ public class AddAlarmActivity extends BaseActivity {
 
         itemAlarm.setNameContact(mPhoneCustom.getName());
         itemAlarm.setNumberContact(mPhoneCustom.getNumber());
+        itemAlarm.setMethodStop(mIndexMethodStopSelected);
     }
 
     /**
@@ -821,8 +874,8 @@ public class AddAlarmActivity extends BaseActivity {
         imgDeleteSMS.setVisibility(View.GONE);
         if (phoneCustom != null) {
             String display = phoneCustom.getName();
-            if(phoneCustom.getNumber() != null){
-                display +=  "("+phoneCustom.getNumber() + ")";
+            if (phoneCustom.getNumber() != null) {
+                display += "(" + phoneCustom.getNumber() + ")";
                 imgDeleteSMS.setVisibility(View.VISIBLE);
             }
             etSendSMS.setText(display);
@@ -867,9 +920,9 @@ public class AddAlarmActivity extends BaseActivity {
         }
     }
 
-    public void askForContactPermission(){
+    public void askForContactPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this,Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
 
                 // Should we show an explanation?
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this,
@@ -902,11 +955,10 @@ public class AddAlarmActivity extends BaseActivity {
                     // app-defined int constant. The callback method gets the
                     // result of the request.
                 }
-            }else{
+            } else {
                 pickContactNumber();
             }
-        }
-        else{
+        } else {
             pickContactNumber();
         }
     }
@@ -930,6 +982,7 @@ public class AddAlarmActivity extends BaseActivity {
 
         }
     }
+
     class AsyncTaskLoadImage extends AsyncTask<String, Void, Bitmap> {
 
         @Override
@@ -1001,34 +1054,33 @@ public class AddAlarmActivity extends BaseActivity {
                 }).start();
 
             }
-        }else if (requestCode == REQUEST_CODE_SELECT_CONTACT) {
+        } else if (requestCode == REQUEST_CODE_SELECT_CONTACT) {
             if (resultCode == Activity.RESULT_OK) {
                 Uri contactData = data.getData();
 
                 Cursor phone = getContentResolver().query(contactData, null, null, null, null);
-                    if (phone.moveToFirst()) {
+                if (phone.moveToFirst()) {
 
-                        String contactId = phone.getString(phone.getColumnIndex(ContactsContract.Contacts._ID));
-                        String hasNumber = phone.getString(phone.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-                        String contactName = phone.getString(phone.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                        String num = "";
-                        if (Integer.valueOf(hasNumber) == 1) {
-                            Cursor numbers = this.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
-                            while (numbers.moveToNext()) {
-                                num = numbers.getString(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    String contactId = phone.getString(phone.getColumnIndex(ContactsContract.Contacts._ID));
+                    String hasNumber = phone.getString(phone.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                    String contactName = phone.getString(phone.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                    String num = "";
+                    if (Integer.valueOf(hasNumber) == 1) {
+                        Cursor numbers = this.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+                        while (numbers.moveToNext()) {
+                            num = numbers.getString(numbers.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                            }
                         }
-                        else{
-                            Toast.makeText(this, getString(R.string.text_contact_no_number), Toast.LENGTH_LONG).show();
-                        }
-                        mPhoneCustom = new PhoneCustom();
-                        mPhoneCustom.setName(contactName);
-                        mPhoneCustom.setNumber(num);
-                        updateNameContact(mPhoneCustom);
-
+                    } else {
+                        Toast.makeText(this, getString(R.string.text_contact_no_number), Toast.LENGTH_LONG).show();
                     }
+                    mPhoneCustom = new PhoneCustom();
+                    mPhoneCustom.setName(contactName);
+                    mPhoneCustom.setNumber(num);
+                    updateNameContact(mPhoneCustom);
+
+                }
 
 
             }

@@ -27,7 +27,8 @@
     <string name="text_time">Time:</string>
     <string name="text_title">Title:</string>
     <string name="text_tone">Alarm tone:</string>
-    <string name="help">Click \'Stop\' or shake sharply your phone to stop alarm!</string>
+    <string name="text_click_stop">Click \'Stop\' to stop alarm!</string>
+    <string name="text_shake">You need shake sharply your phone to stop alarm!</string>
     <string name="text_repaet">Repeat:</string>
     <string name="text_mon">Mon</string>
     <string name="text_tue">Tue</string>
@@ -81,5 +82,9 @@
     <string name="text_current_version_lastest">The current version is the latest!</string>
     <string name="text_message_new_version">Please, update app to new version to continue resposting.</string>
     <string name="text_button_update">UPDATE</string>
+    <string name="text_method_stop">Turn off alarms:</string>
+    <string name="text_method_normal">Normal</string>
+    <string name="text_method_shake">Shake</string>
+    <string name="text_choose_one">Choose one</string>
 
 </resources>

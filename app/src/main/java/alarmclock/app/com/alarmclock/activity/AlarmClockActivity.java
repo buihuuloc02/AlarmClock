@@ -47,8 +47,8 @@ import butterknife.OnClick;
 
 public class AlarmClockActivity extends BaseActivity implements SensorListener {
 
-    private final static int TIME_VIBRATION = 1000 * 30;
-    private final static int SET_TIME_VIBRATION_MINUTE = 1;// 3 minute
+    private final static int TIME_VIBRATION = 1000 * 60;
+    private final static int SET_TIME_VIBRATION_MINUTE = 3;// 3 minute
     public final static long TIME_VIBRATION_IN_MINUTE = TIME_VIBRATION * SET_TIME_VIBRATION_MINUTE;
 
     private static final int SHAKE_THRESHOLD = 1000;
@@ -146,6 +146,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
         btnStop.setTextColor(getResources().getColorStateList(R.drawable.selector_button_text_black));
         setDisplayButtonStop();
+        setDisplayTextView();
     }
 
 
@@ -210,11 +211,26 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
     }
 
     private void setDisplayButtonStop() {
-        if (mUserSetting != null) {
-            btnStop.setVisibility(View.VISIBLE);
-            if (mUserSetting.getShowButtonStop() == 0) {
+        if (itemAlarm != null) {
+            if(itemAlarm.getMethodStop() == 0) {
+                btnStop.setVisibility(View.VISIBLE);
+            }
+            else {
                 btnStop.setVisibility(View.GONE);
             }
+        }
+    }
+    private void setDisplayTextView() {
+        if (itemAlarm != null) {
+            String str = getString(R.string.text_click_stop);
+            if(itemAlarm.getMethodStop() == 1) {
+                str = getString(R.string.text_shake);
+                tvNumberShake.setVisibility(View.VISIBLE);
+            }else{
+                tvNumberShake.setVisibility(View.GONE);
+                str = getString(R.string.text_click_stop);
+            }
+            tvHelp.setText(str);
         }
     }
 
@@ -402,9 +418,12 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         setTextTitleAlarm();
 
         mSpeekShake = 1000 + (mSpeekShake * 100);
-        sensorMgr.registerListener(this,
-                SensorManager.SENSOR_ACCELEROMETER,
-                SensorManager.SENSOR_DELAY_NORMAL);
+
+        if(itemAlarm != null && itemAlarm.getMethodStop() == 1) {
+            sensorMgr.registerListener(this,
+                    SensorManager.SENSOR_ACCELEROMETER,
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
 
         handler.postDelayed(runnable, TIME_VIBRATION_IN_MINUTE);
         initVibration();

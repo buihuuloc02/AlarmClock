@@ -26,7 +26,8 @@
     <string name="text_time">時間：</string>
     <string name="text_title">タイトル：</string>
     <string name="text_tone">アラーム音：</string>
-    <string name="help">アラームを停止するには、[停止]をクリックするか、携帯電話を急に振ってください！</string>
+    <string name="text_click_stop">アラームを停止するには「停止」をクリックしてください！</string>
+    <string name="text_shake">アラームを止めるにはあなたの携帯電話を急に振る必要があります！</string>
     <string name="text_repaet">繰り返す：</string>
     <string name="text_mon">月曜日</string>
     <string name="text_tue">火曜日</string>
@@ -80,4 +81,8 @@
     <string name="text_current_version_lastest">現在のバージョンが最新です！</string>
     <string name="text_message_new_version">再ポスティングを続けるには、アプリを新しいバージョンに更新してください。</string>
     <string name="text_button_update">更新</string>
+    <string name="text_method_stop">アラームをオフにする：</string>
+    <string name="text_method_normal">ノーマル</string>
+    <string name="text_method_shake">振る</string>
+    <string name="text_choose_one">いずれかを選択します。</string>
 </resources>

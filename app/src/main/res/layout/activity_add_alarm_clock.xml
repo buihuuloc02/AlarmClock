@@ -132,6 +132,41 @@
                 android:layout_margin="@dimen/margin_10" />
 
             <LinearLayout
+                android:id="@+id/layoutMthoadStop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/text_method_stop"
+                    android:textSize="@dimen/text_size_14_sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spinnerMethod"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/text_none"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/color_hyberlink"
+                    android:textColorHint="@color/color_hyberlink"
+                    android:textSize="@dimen/text_size_14_sp" />
+
+            </LinearLayout><View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="@dimen/margin_10" />
+
+            <LinearLayout
                 android:id="@+id/layoutAlarmTone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

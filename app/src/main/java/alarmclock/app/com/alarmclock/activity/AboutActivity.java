@@ -76,7 +76,7 @@ public class AboutActivity extends BaseActivity {
         String sAux = "\nLet me recommend you this application\n\n";
         sAux = sAux + "https://play.google.com/store/apps/details?id=com.app.alarmclock.bhloc\n\n";
         i.putExtra(Intent.EXTRA_TEXT, sAux);
-        startActivity(Intent.createChooser(i, "Choose one"));
+        startActivity(Intent.createChooser(i, getString(R.string.text_choose_one)));
     }
 
     @Override

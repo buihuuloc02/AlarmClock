@@ -75,9 +75,6 @@ public class SettingActivity extends BaseActivity {
     @BindView(R.id.imgStatusPurchaseApp)
     ImageView imgStatusPurchaseApp;
 
-    @BindView(R.id.cbShowButtonStop)
-    CheckBox cbShowButtonStop;
-
     @BindView(R.id.cbShowNotification)
     CheckBox cbShowNotification;
 
@@ -148,7 +145,6 @@ public class SettingActivity extends BaseActivity {
         mUserSetting = (UserSetting) getSharePreferences().getObject(SharePreferenceHelper.Key.KEY_USER_SETTING, UserSetting.class);
         initDataNumberShake();
         initDataSpeedShake();
-        initDataCheckBoxShowButtonStop();
         initDataCheckBoxShowNotification();
         initActionTextViewPurchase();
         setDataCurrentVersion();
@@ -257,31 +253,6 @@ public class SettingActivity extends BaseActivity {
         });
         int selected = mUserSetting != null ? mUserSetting.getSpeedShake() : 0;
         spinnerSpeekShake.setSelection(selected);
-    }
-
-    /**
-     * Function set show button 'Stop' at screen Alarm
-     */
-    private void initDataCheckBoxShowButtonStop() {
-        int selected = mUserSetting != null ? mUserSetting.getShowButtonStop() : 1;// default 'SHOW'
-        cbShowButtonStop.setChecked(selected == 1 ? true : false);
-        cbShowButtonStop.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                int number = b ? 1 : 0;
-                if (mUserSetting == null) {
-                    mUserSetting = new UserSetting();
-                }
-                mUserSetting.setShowButtonStop(number);
-                sharedPreferences.putObject(SharePreferenceHelper.Key.KEY_USER_SETTING, mUserSetting);
-                if (!isFirstLoad) {
-                    Snackbar snackbar = Snackbar.make(layoutMain, getResources().getString(R.string.text_updated), Snackbar.LENGTH_LONG);
-                    snackbar.show();
-                }
-                isFirstLoad = false;
-            }
-        });
-
     }
 
     private void initDataCheckBoxShowNotification() {

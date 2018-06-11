@@ -13,8 +13,8 @@
         <ImageView
             android:id="@+id/imageWallPaper"
             android:layout_width="match_parent"
-            android:scaleType="fitXY"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scaleType="fitXY" />
 
         <LinearLayout
             android:id="@+id/imgClock"
@@ -86,7 +86,7 @@
                     android:layout_marginRight="@dimen/margin_20"
                     android:fontFamily="@font/simplyfont"
                     android:gravity="center"
-                    android:text="@string/help"
+                    android:text="@string/text_click_stop"
                     android:textStyle="bold" />
 
                 <TextView
@@ -99,7 +99,8 @@
                     android:fontFamily="@font/simplyfont"
                     android:gravity="center"
                     android:text="@string/text_confirm_number_shake"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout
