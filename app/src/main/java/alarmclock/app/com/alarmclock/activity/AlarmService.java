@@ -16,7 +16,6 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.JobIntentService;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,9 +25,11 @@ import java.util.Comparator;
 import alarmclock.app.com.alarmclock.BuildConfig;
 import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.model.ItemAlarm;
+import alarmclock.app.com.alarmclock.model.UserSetting;
 import alarmclock.app.com.alarmclock.util.DatabaseHelper;
 import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
 
+import static alarmclock.app.com.alarmclock.activity.MainActivity.EXTRA_NOTIFICATION;
 import static alarmclock.app.com.alarmclock.util.Constant.HOUR;
 import static alarmclock.app.com.alarmclock.util.Constant.MINUTE;
 import static android.support.v4.content.WakefulBroadcastReceiver.startWakefulService;
@@ -40,6 +41,9 @@ import static android.support.v4.content.WakefulBroadcastReceiver.startWakefulSe
 public class AlarmService extends JobIntentService {
 
     public final static String EXTRA_TIME = "EXTRA_TIME";
+    public final static int SHOWED = 1;
+    public final static int DO_NOT_SHOW = 0;
+    public final static int SHOW_ITEM_FIRST = -1;
     private final static String TAG = AlarmService.class.getSimpleName();
     private NotificationManager alarmNotificationManager;
     private int hLast;
@@ -132,8 +136,6 @@ public class AlarmService extends JobIntentService {
                     // setResultCode(Activity.RESULT_OK);
                 }
             }
-
-
         }
         if (BuildConfig.DEBUG) {
             Handler handler = new Handler(Looper.getMainLooper());
@@ -150,11 +152,28 @@ public class AlarmService extends JobIntentService {
         if (itemAlarm != null) {
             setAlarm(itemAlarm);
             String strTime = getStringTimeMinute(itemAlarm);
-            //sendNotification(this.getResources().getString(R.string.text_next), strTime);
+            int showNotification = sharePreferenceHelper.getInt(SharePreferenceHelper.Key.KEY_SHOW_NOTIFICATION, DO_NOT_SHOW);
+            if (showNotification == DO_NOT_SHOW) {
+                sendNotification(this.getResources().getString(R.string.text_next), strTime);
+                sharePreferenceHelper.put(SharePreferenceHelper.Key.KEY_SHOW_NOTIFICATION, SHOWED);
+            }
             Log.d(TAG, itemAlarm.getHour() + " : " + itemAlarm.getMinute());
         } else {
-            //sendNotification("", timeReceive);
-            Log.d(TAG, "null");
+            ArrayList<ItemAlarm> itemAlarms = getDataFromDatabase(this);
+
+            if (itemAlarms != null && itemAlarms.size() > 0) {
+                ItemAlarm itemNext = getFirstAlarmClock(itemAlarms);
+                if (itemNext != null) {
+                    setAlarm(itemNext);
+                    int showNotification = sharePreferenceHelper.getInt(SharePreferenceHelper.Key.KEY_SHOW_NOTIFICATION, DO_NOT_SHOW);
+                    if (showNotification == DO_NOT_SHOW) {
+                        String strTime = getStringTimeMinute(itemNext);
+                        sendNotification("",strTime);
+                        sharePreferenceHelper.put(SharePreferenceHelper.Key.KEY_SHOW_NOTIFICATION, SHOWED);
+                    }
+                }
+            }
+
         }
     }
 
@@ -177,32 +196,35 @@ public class AlarmService extends JobIntentService {
     }
 
     private void sendNotification(String title, String msg) {
-        if (isSended) {
+        SharePreferenceHelper sharePreferenceHelper = SharePreferenceHelper.getInstances(this);
+        UserSetting mUserSetting = (UserSetting) sharePreferenceHelper.getObject(SharePreferenceHelper.Key.KEY_USER_SETTING, UserSetting.class);
+        int selected = mUserSetting != null ? mUserSetting.getShowNotification() : 1;
+        if(selected == 0){
             return;
         }
-        isSended = true;
         Log.d(TAG, "Preparing to send notification...: " + msg);
         alarmNotificationManager = (NotificationManager) this
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, AlarmClockActivity.class), 0);
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(EXTRA_NOTIFICATION, "EXTRA_NOTIFICATION");
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         String strTitle = title + " " + getResources().getString(R.string.text_alarm_clock);
         Notification n = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_noti)
-                //.setContentIntent(contentIntent)
+                .setContentIntent(contentIntent)
                 .setContentTitle(strTitle.trim())
                 .setContentText(msg)
-                .setAutoCancel(true)
+                //.setAutoCancel(true)
                 .setSound(alarmSound)
-                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(), 0))
-                .setAutoCancel(true).build();
+//                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(), 0))
+                .build();
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         alarmNotificationManager.notify(1, n);
+
         Log.d(TAG, "Notification sent.");
     }
 
@@ -309,12 +331,19 @@ public class AlarmService extends JobIntentService {
         calendar.set(Calendar.SECOND, 0);
         long timcurrent = hour * 60 + minute;
         for (ItemAlarm itemAlarm : itemAlarms) {
-            if (itemAlarm.getMilisecod() >= timcurrent) {
+            if (itemAlarm.getMilisecod() >= timcurrent && itemAlarm.getStatus().endsWith("0")) {
                 return itemAlarm;
             }
         }
-        if(itemAlarms != null && itemAlarms.size() > 0){
-            return itemAlarms.get(0);
+        return null;
+    }
+
+    private ItemAlarm getFirstAlarmClock(ArrayList<ItemAlarm> itemAlarms) {
+        Collections.sort(itemAlarms, new TimeAlarmComparator());
+        for (ItemAlarm itemAlarm : itemAlarms) {
+            if (itemAlarm.getStatus().endsWith("0")) {
+                return itemAlarm;
+            }
         }
         return null;
     }

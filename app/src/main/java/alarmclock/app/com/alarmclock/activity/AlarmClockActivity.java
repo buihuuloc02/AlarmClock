@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -222,6 +223,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
     }
 
     private void playSound(Context context, Uri alert) {
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         int maxVolume = 100;
         int currVolume = itemAlarm.getVolume();
         float log1 = (float) (Math.log(maxVolume - currVolume) / Math.log(maxVolume));
@@ -232,7 +234,9 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
                 mMediaPlayer.setDataSource(this, alert);
                 float volume = 1 - log1;
                 Log.d("volume", volume + "");
-                mMediaPlayer.setVolume(volume, volume);
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                        currVolume, 0);
+                // mMediaPlayer.setVolume(volume, volume);
                 mMediaPlayer.prepare();
                 mMediaPlayer.setLooping(true);
                 mMediaPlayer.start();

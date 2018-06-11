@@ -10,6 +10,7 @@ public class UserSetting implements Serializable {
     private int numberShake;
     private int speedShake;
     private int showButtonStop = 1; //0: hide; 1: show
+    private int showNotification = 1; //0: hide; 1: show
 
     public UserSetting() {
     }
@@ -36,5 +37,13 @@ public class UserSetting implements Serializable {
 
     public void setShowButtonStop(int showButtonStop) {
         this.showButtonStop = showButtonStop;
+    }
+
+    public int getShowNotification() {
+        return showNotification;
+    }
+
+    public void setShowNotification(int showNotification) {
+        this.showNotification = showNotification;
     }
 }

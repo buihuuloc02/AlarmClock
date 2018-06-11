@@ -198,8 +198,8 @@
 
                 <ImageView
                     android:id="@+id/imgPlayStopSound"
-                    android:layout_width="@dimen/width_20_dp"
-                    android:layout_height="@dimen/width_20_dp"
+                    android:layout_width="@dimen/width_35_dp"
+                    android:layout_height="@dimen/width_35_dp"
                     android:layout_marginLeft="@dimen/margin_10"
                     android:background="@drawable/ic_play" />
             </LinearLayout>

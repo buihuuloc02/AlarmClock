@@ -68,4 +68,5 @@
     <string name="text_privacy_legal"><u>Privacy and Legal</u></string>
     <string name="text_check_version">バージョンを確認する....</string>
     <string name="text_show_button_stop_at_screen_alarm">画面に「停止」ボタンを表示するアラーム：</string>
+    <string name="text_show_notification">通知を表示する：</string>
 </resources>

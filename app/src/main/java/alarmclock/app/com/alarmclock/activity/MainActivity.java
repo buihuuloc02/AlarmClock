@@ -2,6 +2,7 @@ package alarmclock.app.com.alarmclock.activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -53,9 +54,12 @@ import butterknife.OnClick;
 import hotchemi.android.rate.AppRate;
 import hotchemi.android.rate.OnClickButtonListener;
 
+import static alarmclock.app.com.alarmclock.util.Constant.TIME_CHECK_NOTIFICATION;
+
 public class MainActivity extends BaseActivity implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     private final static String TAG = MainActivity.class.getSimpleName();
+    public final static String EXTRA_NOTIFICATION = "EXTRA_NOTIFICATION";
 
     @BindView(R.id.layoutMain)
     View layoutMain;
@@ -93,9 +97,10 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
 
     private float dX, dY;
     private int lastAction;
-    private Handler handler = new Handler();
     boolean startActivity = false;
     NetworkChangeReceiver receiver;
+
+    private Handler handlerCheckNotification = new Handler();
 
     @OnClick({R.id.fabAdd})
     public void OnButtonClick(View v) {
@@ -183,6 +188,13 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
         });
         EventBus.getDefault().register(this);
 
+        if(getIntent().hasExtra(EXTRA_NOTIFICATION)){
+            sharePreferenceHelper.put(SharePreferenceHelper.Key.KEY_SHOW_NOTIFICATION, 0);
+        }
+
+        Intent intent = new Intent("com.app.alarmclock.bhloc");
+        sendBroadcast(intent);
+
     }
 
     @Subscribe
@@ -241,6 +253,12 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
             public void OnClickItemSwitchChange(ItemAlarm itemAlarm, int position, boolean checked) {
                 itemAlarm.setStatus(checked ? "0" : "1");
                 databaseHelper.addOrUpdateAlarm(itemAlarm);
+                clearNotification();
+                if(handlerCheckNotification != null){
+                    handlerCheckNotification.removeCallbacks(runnableCheckNotification);
+                }
+                handlerCheckNotification = new Handler();
+                handlerCheckNotification.post(runnableCheckNotification);
             }
         });
 
@@ -253,6 +271,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
             tvNodata.setVisibility(View.VISIBLE);
             recyclerViewAlarm.setVisibility(View.GONE);
         }
+        clearNotification();
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerViewAlarm);
 
@@ -307,23 +326,23 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
         return super.onOptionsItemSelected(item);
     }
 
-    Runnable runnable = new Runnable() {
+    Runnable runnableCheckNotification = new Runnable() {
         @Override
         public void run() {
-            if (checkHasAlarm()) {
-
-                if (!startActivity) {
-
-                    Intent myintent = new Intent(MainActivity.this, AlarmClockActivity.class);
-                    myintent.putExtra("TIME", itemAlarmCurrent.getHour() + " : " + itemAlarmCurrent.getMinute());
-                    startActivity = true;
-                    startActivity(myintent);
-                }
-            }
-            handler.postDelayed(this, 1000);
+            sharePreferenceHelper.put(SharePreferenceHelper.Key.KEY_SHOW_NOTIFICATION, 0);
+            Intent intent = new Intent("com.app.alarmclock.bhloc");
+            sendBroadcast(intent);
+            handlerCheckNotification.postDelayed(this, TIME_CHECK_NOTIFICATION);
         }
     };
 
+    /**
+     * Function clear notification
+     */
+    private void clearNotification(){
+        NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nMgr.cancel(1);
+    }
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void addAlarm() {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -368,6 +387,12 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
             alarmAdapter.removeItem(viewHolder.getAdapterPosition());
             databaseHelper.deleteAlarmById(deletedItem.getId());
             initData();
+            clearNotification();
+            if(handlerCheckNotification != null){
+                handlerCheckNotification.removeCallbacks(runnableCheckNotification);
+            }
+            handlerCheckNotification = new Handler();
+            handlerCheckNotification.post(runnableCheckNotification);
             Toast.makeText(this, getResources().getString(R.string.text_delete_success), Toast.LENGTH_SHORT).show();
         }
     }
@@ -386,6 +411,8 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
         setDisplayAdmob();
 
         //showRateApp();
+        handlerCheckNotification.post(runnableCheckNotification);
+
     }
 
     private void showRateApp() {

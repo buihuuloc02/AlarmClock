@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -157,7 +158,7 @@ public class AddAlarmActivity extends BaseActivity {
     private Bitmap theBitmap = null;
     private int volumeSeekbar = 50;
     private boolean isPlayingSound = false;
-
+    AudioManager audioManager;
     @OnClick({R.id.imgPlayStopSound, R.id.imgDeleteWallPaper})
     public void onClick(View v) {
         int id = v.getId();
@@ -221,6 +222,7 @@ public class AddAlarmActivity extends BaseActivity {
             }
         });
 
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         showTimeDefault();
 
         mUriCustoms = getListAlarm();
@@ -233,6 +235,7 @@ public class AddAlarmActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 showdialog();
+                stopSound();
             }
         });
 
@@ -240,6 +243,7 @@ public class AddAlarmActivity extends BaseActivity {
         etAlarmWallPaper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                stopSound();
                 Intent intent = new Intent(AddAlarmActivity.this, GetListImageActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_ADD_IMAGE_PAPER);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
@@ -251,8 +255,8 @@ public class AddAlarmActivity extends BaseActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 volumeSeekbar = i;
-                stopSound();
-                imgPlayStopSound.setBackgroundResource(R.drawable.ic_play);
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                        volumeSeekbar, 0);
             }
 
             @Override
@@ -265,7 +269,8 @@ public class AddAlarmActivity extends BaseActivity {
 
             }
         });
-
+        seekbarVolume.setMax(audioManager
+                .getStreamMaxVolume(AudioManager.STREAM_MUSIC));
 
     }
 
@@ -351,6 +356,7 @@ public class AddAlarmActivity extends BaseActivity {
                 }
             }).start();
             volumeSeekbar = mItemAlarm.getVolume();
+
             seekbarVolume.setProgress(volumeSeekbar);
         } else {// new alarm
             uriCustomSelected = new UriCustom();
@@ -371,7 +377,8 @@ public class AddAlarmActivity extends BaseActivity {
                     setDisplayImageWallPapper(pathImageSelected);
                 }
             }).start();
-            seekbarVolume.setProgress(volumeSeekbar);
+            seekbarVolume.setProgress(audioManager
+                    .getStreamVolume(AudioManager.STREAM_MUSIC));
         }
     }
 
@@ -715,12 +722,12 @@ public class AddAlarmActivity extends BaseActivity {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setDataSource(this, uri);
             mediaPlayer.prepare();
-            mediaPlayer.setLooping(false);
+            mediaPlayer.setLooping(true);
             if (volume != -1) {
-                int maxVolume = 100;
-                int currVolume = volume;
-                float log1 = 1 - (float) (Math.log(maxVolume - currVolume) / Math.log(maxVolume));
-                mediaPlayer.setVolume(log1, log1);
+//                int maxVolume = 100;
+//                int currVolume = volume;
+//                float log1 = 1 - (float) (Math.log(maxVolume - currVolume) / Math.log(maxVolume));
+//                mediaPlayer.setVolume(log1, log1);
             }
             mediaPlayer.start();
         } catch (IOException e) {

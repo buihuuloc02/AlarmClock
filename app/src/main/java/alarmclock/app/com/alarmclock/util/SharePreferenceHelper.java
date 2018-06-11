@@ -30,6 +30,7 @@ public class SharePreferenceHelper {
         public static final String KEY_TOKEN = "KEY_TOKEN";
         public static final String KEY_PURCHASE = "KEY_PURCHASE";
         public static final String KEY_USER_SETTING = "KEY_USER_SETTING";
+        public static final String KEY_SHOW_NOTIFICATION = "KEY_SHOW_NOTIFICATION";
     }
 
     public SharePreferenceHelper(Context context) {

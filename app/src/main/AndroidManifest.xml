@@ -72,9 +72,14 @@
         <service
             android:name=".activity.AlarmService"
             android:enabled="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+            android:permission="android.permission.BIND_JOB_SERVICE">
+        </service>
 
-        <receiver android:name=".activity.AlarmReceiver"></receiver>
+        <receiver android:name=".activity.AlarmReceiver">
+            <intent-filter>
+                <action android:name="com.app.alarmclock.bhloc" />
+            </intent-filter>
+        </receiver>
         <receiver android:name=".activity.NetworkChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />

@@ -78,6 +78,9 @@ public class SettingActivity extends BaseActivity {
     @BindView(R.id.cbShowButtonStop)
     CheckBox cbShowButtonStop;
 
+    @BindView(R.id.cbShowNotification)
+    CheckBox cbShowNotification;
+
     @OnClick({R.id.tvPurchaseApp, R.id.tvRemovePurchase})
     public void OnButtonClick(View v) {
         int id = v.getId();
@@ -146,6 +149,7 @@ public class SettingActivity extends BaseActivity {
         initDataNumberShake();
         initDataSpeedShake();
         initDataCheckBoxShowButtonStop();
+        initDataCheckBoxShowNotification();
         initActionTextViewPurchase();
         setDataCurrentVersion();
     }
@@ -269,6 +273,28 @@ public class SettingActivity extends BaseActivity {
                     mUserSetting = new UserSetting();
                 }
                 mUserSetting.setShowButtonStop(number);
+                sharedPreferences.putObject(SharePreferenceHelper.Key.KEY_USER_SETTING, mUserSetting);
+                if (!isFirstLoad) {
+                    Snackbar snackbar = Snackbar.make(layoutMain, getResources().getString(R.string.text_updated), Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                }
+                isFirstLoad = false;
+            }
+        });
+
+    }
+
+    private void initDataCheckBoxShowNotification() {
+        int selected = mUserSetting != null ? mUserSetting.getShowNotification() : 1;// default 'SHOW'
+        cbShowNotification.setChecked(selected == 1 ? true : false);
+        cbShowNotification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                int number = b ? 1 : 0;
+                if (mUserSetting == null) {
+                    mUserSetting = new UserSetting();
+                }
+                mUserSetting.setShowNotification(number);
                 sharedPreferences.putObject(SharePreferenceHelper.Key.KEY_USER_SETTING, mUserSetting);
                 if (!isFirstLoad) {
                     Snackbar snackbar = Snackbar.make(layoutMain, getResources().getString(R.string.text_updated), Snackbar.LENGTH_LONG);

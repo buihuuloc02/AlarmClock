@@ -69,5 +69,6 @@
     <string name="text_privacy_legal"><u>Privacy and Legal</u></string>
     <string name="text_check_version">Checking version....</string>
     <string name="text_show_button_stop_at_screen_alarm">Show button \'STOP\' at screen Alarm:</string>
+    <string name="text_show_notification">Show notification:</string>
 
 </resources>

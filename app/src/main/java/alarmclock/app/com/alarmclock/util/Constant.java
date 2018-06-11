@@ -12,4 +12,5 @@ public interface Constant {
     public static final int REQUEST_CODE_ADD_IMAGE_PAPER = 1002;
     public static final int PURCHASED = 1;
     public static final int DO_NOT_PURCHASE = 0;
+    public static final int TIME_CHECK_NOTIFICATION = 60000 * 5; // 5 MINUTE
 }

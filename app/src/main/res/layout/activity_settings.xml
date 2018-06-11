@@ -27,9 +27,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.7"
             android:gravity="right"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size_14_sp"></TextView>
-    </LinearLayout>    <LinearLayout
+            android:textSize="@dimen/text_size_14_sp"
+            android:textStyle="bold"></TextView>
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_10"
@@ -91,6 +93,7 @@
         android:layout_below="@+id/tvTitle"
         android:layout_margin="@dimen/margin_10"
         android:background="@color/darker_gray" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -109,10 +112,43 @@
             android:textStyle="bold" />
 
         <CheckBox
-            android:checked="true"
             android:id="@+id/cbShowButtonStop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
+            android:foregroundGravity="right"
+            android:textSize="@dimen/text_size_14_sp"></CheckBox>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tvTitle"
+        android:layout_margin="@dimen/margin_10"
+        android:background="@color/darker_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_10"
+        android:layout_marginBottom="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_10"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.99"
+            android:text="@string/text_show_notification"
+            android:textSize="@dimen/text_size_14_sp"
+            android:textStyle="bold" />
+
+        <CheckBox
+            android:id="@+id/cbShowNotification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
             android:foregroundGravity="right"
             android:textSize="@dimen/text_size_14_sp"></CheckBox>
     </LinearLayout>
