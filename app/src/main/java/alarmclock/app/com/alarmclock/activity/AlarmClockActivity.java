@@ -47,8 +47,8 @@ import butterknife.OnClick;
 
 public class AlarmClockActivity extends BaseActivity implements SensorListener {
 
-    private final static int TIME_VIBRATION = 1000 * 60;
-    private final static int SET_TIME_VIBRATION_MINUTE = 3;// 3 minute
+    private final static int TIME_VIBRATION = 1000 * 30;
+    private final static int SET_TIME_VIBRATION_MINUTE = 1;// 3 minute
     public final static long TIME_VIBRATION_IN_MINUTE = TIME_VIBRATION * SET_TIME_VIBRATION_MINUTE;
 
     private static final int SHAKE_THRESHOLD = 1000;
@@ -106,7 +106,10 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         int id = v.getId();
         switch (id) {
             case R.id.btnStop:
-                handler.post(runnable);
+                finish();
+                stopVibration();
+                stopSound();
+                skillApp();
                 break;
         }
     }
@@ -249,12 +252,28 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
+            sendSmsToContact(itemAlarm);
             finish();
             stopVibration();
             stopSound();
             skillApp();
+
         }
     };
+
+    private void sendSmsToContact(ItemAlarm itemAlarm) {
+        if (itemAlarm != null) {
+            if (!TextUtils.isEmpty(itemAlarm.getNumberContact())) {
+                String number = itemAlarm.getNumberContact();
+                String message = getString(R.string.text_message_send_contact);
+                String h = itemAlarm.getHour().length() == 1 ? "0" + itemAlarm.getHour() : itemAlarm.getHour();
+                String m = itemAlarm.getMinute().length() == 1 ? "0" + itemAlarm.getMinute() : itemAlarm.getMinute();
+                String time = h + ":" + m;
+                message = String.format(message, time);
+                sendSms(number, message);
+            }
+        }
+    }
 
     private void stopSound() {
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
@@ -306,7 +325,10 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
 
                         tvNumberShake.setText(str);
                     } else {
-                        handler.post(runnable);
+                        finish();
+                        stopVibration();
+                        stopSound();
+                        skillApp();
                     }
                 }
                 last_x = x;

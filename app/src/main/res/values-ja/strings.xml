@@ -71,4 +71,8 @@
     <string name="text_show_notification">通知を表示する：</string>
     <string name="text_user_receive_msm">メッセージ受信者：</string>
     <string name="text_contact_no_number">連絡先には電話番号がありません！</string>
+    <string name="text_message_send_contact">[Alarm shake]\n
+        アラームに失敗しました！当時の %s\n
+        私に目を覚ましてください！
+    </string>
 </resources>

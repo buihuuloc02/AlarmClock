@@ -72,5 +72,9 @@
     <string name="text_show_notification">Show notification:</string>
     <string name="text_user_receive_msm">Message recipients:</string>
     <string name="text_contact_no_number">The contact has no phone number!</string>
+    <string name="text_message_send_contact">[Alarm shake]\n
+        Alarm failed! At time %s\n
+        Please call me wake up!
+    </string>
 
 </resources>
