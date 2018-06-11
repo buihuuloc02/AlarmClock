@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.muddzdev.styleabletoastlibrary.StyleableToast;
 
 import alarmclock.app.com.alarmclock.R;
+import alarmclock.app.com.alarmclock.util.VersionChecker;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -49,6 +50,7 @@ public class AboutActivity extends BaseActivity {
                         .textColor(Color.WHITE)
                         .backgroundColor(R.color.actionBarDarkgray)
                         .show();
+                new VersionChecker(getVersionName(), this).execute();
                 break;
             case R.id.layoutShare:
                 openShareApp();

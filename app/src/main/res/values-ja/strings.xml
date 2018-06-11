@@ -75,4 +75,9 @@
         アラームに失敗しました！当時の %s\n
         私に目を覚ましてください！
     </string>
+    <string name="text_notice">お知らせ！</string>
+    <string name="text_title_notice_has_version">新しいバージョンがあります！</string>
+    <string name="text_current_version_lastest">現在のバージョンが最新です！</string>
+    <string name="text_message_new_version">再ポスティングを続けるには、アプリを新しいバージョンに更新してください。</string>
+    <string name="text_button_update">更新</string>
 </resources>

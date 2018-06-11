@@ -76,5 +76,10 @@
         Alarm failed! At time %s\n
         Please call me wake up!
     </string>
+    <string name="text_notice">Notification!</string>
+    <string name="text_title_notice_has_version">New version Available!</string>
+    <string name="text_current_version_lastest">The current version is the latest!</string>
+    <string name="text_message_new_version">Please, update app to new version to continue resposting.</string>
+    <string name="text_button_update">UPDATE</string>
 
 </resources>
