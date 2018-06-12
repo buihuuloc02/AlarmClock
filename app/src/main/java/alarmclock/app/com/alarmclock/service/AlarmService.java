@@ -172,7 +172,7 @@ public class AlarmService extends JobIntentService {
                     int showNotification = sharePreferenceHelper.getInt(SharePreferenceHelper.Key.KEY_SHOW_NOTIFICATION, DO_NOT_SHOW);
                     if (showNotification == DO_NOT_SHOW) {
                         String strTime = getStringTimeMinute(itemNext);
-                        sendNotification("",strTime);
+                        sendNotification("", strTime);
                         sharePreferenceHelper.put(SharePreferenceHelper.Key.KEY_SHOW_NOTIFICATION, SHOWED);
                     }
                 }
@@ -203,7 +203,7 @@ public class AlarmService extends JobIntentService {
         SharePreferenceHelper sharePreferenceHelper = SharePreferenceHelper.getInstances(this);
         UserSetting mUserSetting = (UserSetting) sharePreferenceHelper.getObject(SharePreferenceHelper.Key.KEY_USER_SETTING, UserSetting.class);
         int selected = mUserSetting != null ? mUserSetting.getShowNotification() : 1;
-        if(selected == 0){
+        if (selected == 0) {
             return;
         }
         Log.d(TAG, "Preparing to send notification...: " + msg);
