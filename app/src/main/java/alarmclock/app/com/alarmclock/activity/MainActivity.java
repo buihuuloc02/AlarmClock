@@ -188,12 +188,21 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
         });
         EventBus.getDefault().register(this);
 
-        if(getIntent().hasExtra(EXTRA_NOTIFICATION)){
+        if (getIntent().hasExtra(EXTRA_NOTIFICATION)) {
             sharePreferenceHelper.put(SharePreferenceHelper.Key.KEY_SHOW_NOTIFICATION, 0);
         }
 
         Intent intent = new Intent("com.app.alarmclock.bhloc");
         sendBroadcast(intent);
+
+        Handler handlerShowRating = new Handler();
+        handlerShowRating.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showRateApp();
+            }
+        }, 1500);
+
 
     }
 
@@ -254,7 +263,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
                 itemAlarm.setStatus(checked ? "0" : "1");
                 databaseHelper.addOrUpdateAlarm(itemAlarm);
                 clearNotification();
-                if(handlerCheckNotification != null){
+                if (handlerCheckNotification != null) {
                     handlerCheckNotification.removeCallbacks(runnableCheckNotification);
                 }
                 handlerCheckNotification = new Handler();
@@ -339,10 +348,11 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     /**
      * Function clear notification
      */
-    private void clearNotification(){
+    private void clearNotification() {
         NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         nMgr.cancel(1);
     }
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void addAlarm() {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -388,7 +398,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
             databaseHelper.deleteAlarmById(deletedItem.getId());
             initData();
             clearNotification();
-            if(handlerCheckNotification != null){
+            if (handlerCheckNotification != null) {
                 handlerCheckNotification.removeCallbacks(runnableCheckNotification);
             }
             handlerCheckNotification = new Handler();
@@ -410,7 +420,6 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
         //setLayoutButtonAddAlarm();
         setDisplayAdmob();
 
-        //showRateApp();
         handlerCheckNotification.post(runnableCheckNotification);
 
     }
@@ -418,10 +427,10 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     private void showRateApp() {
 
         AppRate.with(getApplicationContext())
-                .setInstallDays(0)
-                .setLaunchTimes(0)
-                .setRemindInterval(0)
-                .setDebug(true)
+                .setInstallDays(0) // time after install
+                .setLaunchTimes(3) // number run app
+                .setRemindInterval(1)// remind
+                .setDebug(true)      // rating will show when this app
                 .setShowNeverButton(false)
                 .setOnClickButtonListener(new OnClickButtonListener() {
                     @Override
