@@ -87,5 +87,5 @@
     <string name="text_method_shake">Shake</string>
     <string name="text_choose_one">Choose one</string>
     <string name="text_news_and_weather_actionbar">News and Weather</string>
-
+    <string name="text_title_scree_news_and_weather">News and weather</string>
 </resources>

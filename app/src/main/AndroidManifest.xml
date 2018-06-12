@@ -26,12 +26,11 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.SplashActivity"
-            android:theme="@style/AppFullScreenTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppFullScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,8 +52,15 @@
         <activity
             android:name=".activity.SettingActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity><activity
+            android:windowSoftInputMode="stateAlwaysHidden">
+
+        </activity>
+        <activity
             android:name=".activity.AboutActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".activity.NewsAndWeatherActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity
@@ -65,24 +71,24 @@
             android:theme="@style/AppFullScreenTheme"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
 
-        <service android:name=".util.MyFirebaseInstanceIDService"
+        <service
+            android:name=".util.MyFirebaseInstanceIDService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".activity.AlarmService"
+            android:name=".service.AlarmService"
             android:enabled="true"
-            android:permission="android.permission.BIND_JOB_SERVICE">
-        </service>
+            android:permission="android.permission.BIND_JOB_SERVICE"></service>
 
-        <receiver android:name=".activity.AlarmReceiver">
+        <receiver android:name=".receiver.AlarmReceiver">
             <intent-filter>
                 <action android:name="com.app.alarmclock.bhloc" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".activity.NetworkChangeReceiver">
+        <receiver android:name=".receiver.NetworkChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
@@ -90,7 +96,7 @@
 
         </receiver>
 
-        <receiver android:name=".activity.BootReceiver" >
+        <receiver android:name=".receiver.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

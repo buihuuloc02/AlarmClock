@@ -1,9 +1,11 @@
-package alarmclock.app.com.alarmclock.activity;
+package alarmclock.app.com.alarmclock.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import alarmclock.app.com.alarmclock.service.AlarmService;
 
 /**
  * Created by Administrator on 6/9/2018.

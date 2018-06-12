@@ -60,6 +60,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import alarmclock.app.com.alarmclock.receiver.AlarmReceiver;
 import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.model.ItemAlarm;
 import alarmclock.app.com.alarmclock.model.MethodStop;

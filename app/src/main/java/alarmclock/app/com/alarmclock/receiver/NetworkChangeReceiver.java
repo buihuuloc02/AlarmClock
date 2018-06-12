@@ -1,4 +1,4 @@
-package alarmclock.app.com.alarmclock.activity;
+package alarmclock.app.com.alarmclock.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

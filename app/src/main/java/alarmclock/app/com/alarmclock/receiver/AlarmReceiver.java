@@ -1,30 +1,17 @@
-package alarmclock.app.com.alarmclock.activity;
+package alarmclock.app.com.alarmclock.receiver;
 
-import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.KeyguardManager;
-import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.PowerManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import alarmclock.app.com.alarmclock.BuildConfig;
-import alarmclock.app.com.alarmclock.model.ItemAlarm;
-import alarmclock.app.com.alarmclock.util.DatabaseHelper;
+import alarmclock.app.com.alarmclock.service.AlarmService;
 import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
 
-import static alarmclock.app.com.alarmclock.util.Constant.ACTION_ALARM_CLOCK;
 import static alarmclock.app.com.alarmclock.util.Constant.HOUR;
 import static alarmclock.app.com.alarmclock.util.Constant.MINUTE;
 

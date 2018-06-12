@@ -41,9 +41,11 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 
+import alarmclock.app.com.alarmclock.receiver.AlarmReceiver;
 import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.adapter.AlarmAdapter;
 import alarmclock.app.com.alarmclock.model.ItemAlarm;
+import alarmclock.app.com.alarmclock.receiver.NetworkChangeReceiver;
 import alarmclock.app.com.alarmclock.util.Constant;
 import alarmclock.app.com.alarmclock.util.DatabaseHelper;
 import alarmclock.app.com.alarmclock.util.RecyclerItemTouchHelper;
@@ -331,6 +333,11 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 return true;
+            case R.id.actionNewsAndWeather:
+                intent = new Intent(MainActivity.this, NewsAndWeatherActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -419,8 +426,11 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
         //setLayoutRecycler();
         //setLayoutButtonAddAlarm();
         setDisplayAdmob();
-
-        handlerCheckNotification.post(runnableCheckNotification);
+        if (handlerCheckNotification != null) {
+            handlerCheckNotification.removeCallbacks(runnableCheckNotification);
+        }
+        handlerCheckNotification = new Handler();
+        handlerCheckNotification.postDelayed(runnableCheckNotification, 2000);
 
     }
 

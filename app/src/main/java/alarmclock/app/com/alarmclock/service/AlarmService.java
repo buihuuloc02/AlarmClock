@@ -1,4 +1,4 @@
-package alarmclock.app.com.alarmclock.activity;
+package alarmclock.app.com.alarmclock.service;
 
 import android.app.AlarmManager;
 import android.app.KeyguardManager;
@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -24,6 +25,9 @@ import java.util.Comparator;
 
 import alarmclock.app.com.alarmclock.BuildConfig;
 import alarmclock.app.com.alarmclock.R;
+import alarmclock.app.com.alarmclock.activity.AlarmClockActivity;
+import alarmclock.app.com.alarmclock.activity.MainActivity;
+import alarmclock.app.com.alarmclock.receiver.AlarmReceiver;
 import alarmclock.app.com.alarmclock.model.ItemAlarm;
 import alarmclock.app.com.alarmclock.model.UserSetting;
 import alarmclock.app.com.alarmclock.util.DatabaseHelper;
@@ -215,6 +219,7 @@ public class AlarmService extends JobIntentService {
         Notification n = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_noti)
                 .setContentIntent(contentIntent)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_app_main))
                 .setContentTitle(strTitle.trim())
                 .setContentText(msg)
                 //.setAutoCancel(true)

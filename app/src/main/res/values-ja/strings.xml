@@ -86,4 +86,5 @@
     <string name="text_method_shake">振る</string>
     <string name="text_choose_one">いずれかを選択します。</string>
     <string name="text_news_and_weather_actionbar">ニュースと天気</string>
+    <string name="text_title_scree_news_and_weather">ニュースと天気</string>
 </resources>
