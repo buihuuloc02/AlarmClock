@@ -66,7 +66,7 @@
     <string name="text_share_with_friend">Share with Friends</string>
     <string name="text_about_us">About us</string>
     <string name="text_website"><u>http://mor.vn/</u></string>
-    <string name="text_name_company">MOR Corporation</string>
+    <string name="text_name_company">MOR Corporation, Ltd</string>
     <string name="text_privacy_legal"><u>Privacy and Legal</u></string>
     <string name="text_check_version">Checking version....</string>
     <string name="text_show_button_stop_at_screen_alarm">Show button \'STOP\' at screen Alarm:</string>
@@ -86,5 +86,6 @@
     <string name="text_method_normal">Normal</string>
     <string name="text_method_shake">Shake</string>
     <string name="text_choose_one">Choose one</string>
+    <string name="text_news_and_weather_actionbar">News and Weather</string>
 
 </resources>

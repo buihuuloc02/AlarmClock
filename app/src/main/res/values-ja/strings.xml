@@ -65,7 +65,7 @@
     <string name="text_share_with_friend">友人たちと分ける</string>
     <string name="text_about_us">私たちについて</string>
     <string name="text_website"><u>http://mor.vn/</u></string>
-    <string name="text_name_company">MOR Corporation</string>
+    <string name="text_name_company">MOR Corporation, Ltd</string>
     <string name="text_privacy_legal"><u>Privacy and Legal</u></string>
     <string name="text_check_version">バージョンを確認する....</string>
     <string name="text_show_button_stop_at_screen_alarm">画面に「停止」ボタンを表示するアラーム：</string>
@@ -85,4 +85,5 @@
     <string name="text_method_normal">ノーマル</string>
     <string name="text_method_shake">振る</string>
     <string name="text_choose_one">いずれかを選択します。</string>
+    <string name="text_news_and_weather_actionbar">ニュースと天気</string>
 </resources>
