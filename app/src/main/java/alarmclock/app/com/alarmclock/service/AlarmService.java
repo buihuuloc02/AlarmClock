@@ -211,6 +211,7 @@ public class AlarmService extends JobIntentService {
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(EXTRA_NOTIFICATION, "EXTRA_NOTIFICATION");
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
 

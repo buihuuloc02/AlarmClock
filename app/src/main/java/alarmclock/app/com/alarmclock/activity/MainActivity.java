@@ -508,6 +508,9 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     @Override
     protected void onPause() {
         super.onPause();
+        if(handlerCheckNotification != null){
+            handlerCheckNotification.removeCallbacks(runnableCheckNotification);
+        }
 
     }
 
