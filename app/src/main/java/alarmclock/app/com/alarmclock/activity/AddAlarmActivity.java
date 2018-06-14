@@ -202,19 +202,40 @@ public class AddAlarmActivity extends BaseActivity {
     @OnClick({R.id.imgPlayStopSound, R.id.imgDeleteWallPaper, R.id.imgDeleteSMS})
     public void onClick(View v) {
         int id = v.getId();
+        Snackbar snackbar = null;
         switch (id) {
             case R.id.imgPlayStopSound:
                 setPlayOrStopSound();
                 break;
             case R.id.imgDeleteWallPaper:
-                pathImageSelected = "";
-                nameImageSelected = getString(R.string.text_none);
-                updateNameImage(nameImageSelected);
+                snackbar = Snackbar
+                        .make(layoutMain, getString(R.string.text_confirm_delete_image), Snackbar.LENGTH_LONG)
+                        .setAction(getString(R.string.text_button_ok), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                pathImageSelected = "";
+                                nameImageSelected = getString(R.string.text_none);
+                                updateNameImage(nameImageSelected);
+                            }
+                        });
+                // Changing message text color
+                snackbar.setActionTextColor(Color.RED);
+                snackbar.show();
                 break;
             case R.id.imgDeleteSMS:
-                mPhoneCustom = new PhoneCustom();
-                mPhoneCustom.setName(getString(R.string.text_none));
-                updateNameContact(mPhoneCustom);
+                snackbar = Snackbar
+                        .make(layoutMain, getString(R.string.text_confirm_delete_sms), Snackbar.LENGTH_LONG)
+                        .setAction(getString(R.string.text_button_ok), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                mPhoneCustom = new PhoneCustom();
+                                mPhoneCustom.setName(getString(R.string.text_none));
+                                updateNameContact(mPhoneCustom);
+                            }
+                        });
+                // Changing message text color
+                snackbar.setActionTextColor(Color.RED);
+                snackbar.show();
                 break;
         }
     }
