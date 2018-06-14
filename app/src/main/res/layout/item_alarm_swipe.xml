@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/viewBackground"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/height_50_dp"
+    android:background="#cc3333"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:weightSum="3">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingLeft="10dp"
+        android:text="@string/text_archived"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_14_sp" />
+
+
+    <TextView
+        android:id="@+id/undo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:gravity="end"
+        android:paddingBottom="5dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="5dp"
+        android:text="@string/undo_label"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_20_sp"
+        android:textStyle="bold" />
+</LinearLayout>

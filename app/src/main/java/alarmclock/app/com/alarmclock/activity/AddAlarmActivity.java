@@ -60,12 +60,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import alarmclock.app.com.alarmclock.receiver.AlarmReceiver;
 import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.model.ItemAlarm;
 import alarmclock.app.com.alarmclock.model.MethodStop;
 import alarmclock.app.com.alarmclock.model.PhoneCustom;
 import alarmclock.app.com.alarmclock.model.UriCustom;
+import alarmclock.app.com.alarmclock.receiver.AlarmReceiver;
 import alarmclock.app.com.alarmclock.util.DatabaseHelper;
 import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
 import butterknife.BindView;
@@ -282,6 +282,9 @@ public class AddAlarmActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 showdialog();
+                if (isPlayingSound) {
+                    setPlayOrStopSound();
+                }
                 stopSound();
             }
         });
@@ -290,6 +293,9 @@ public class AddAlarmActivity extends BaseActivity {
         layoutImageWallPaper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (isPlayingSound) {
+                    setPlayOrStopSound();
+                }
                 stopSound();
                 Intent intent = new Intent(AddAlarmActivity.this, GetListImageActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_ADD_IMAGE_PAPER);
@@ -301,6 +307,9 @@ public class AddAlarmActivity extends BaseActivity {
         layoutContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (isPlayingSound) {
+                    setPlayOrStopSound();
+                }
                 stopSound();
                 askForContactPermission();
 
@@ -485,11 +494,18 @@ public class AddAlarmActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 mIndexMethodStopSelected = i;
+                if (isPlayingSound) {
+                    setPlayOrStopSound();
+                }
+                stopSound();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                if (isPlayingSound) {
+                    setPlayOrStopSound();
+                }
+                stopSound();
             }
         });
 

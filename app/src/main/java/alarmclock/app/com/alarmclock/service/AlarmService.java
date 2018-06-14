@@ -45,6 +45,7 @@ import static android.support.v4.content.WakefulBroadcastReceiver.startWakefulSe
 public class AlarmService extends JobIntentService {
 
     public final static String EXTRA_TIME = "EXTRA_TIME";
+    public final static String ACTION_BOOT_COMPLETE = "ACTION_BOOT_COMPLETE";
     public final static int SHOWED = 1;
     public final static int DO_NOT_SHOW = 0;
     public final static int SHOW_ITEM_FIRST = -1;
@@ -64,6 +65,9 @@ public class AlarmService extends JobIntentService {
     protected void onHandleWork(@NonNull Intent intent) {
         if (intent.hasExtra(EXTRA_TIME)) {
             timeReceive = intent.getStringExtra(EXTRA_TIME);
+        }else if(intent.hasExtra(ACTION_BOOT_COMPLETE)){
+            SharePreferenceHelper sharePreferenceHelper = SharePreferenceHelper.getInstances(this);
+            sharePreferenceHelper.put(SharePreferenceHelper.Key.KEY_SHOW_NOTIFICATION, DO_NOT_SHOW);
         }
         mContext = getApplicationContext();
         doCheckAlarm();

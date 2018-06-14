@@ -11,4 +11,8 @@
     <color name="darker_gray">#E1E1E1</color>
     <color name="color_orange">#FF7F00</color>
     <color name="color_bg_splash">#282F3C</color>
+    <color name="color_black">#000000</color>
+    <color name="swipebg">#cc3333</color>
+
+
 </resources>

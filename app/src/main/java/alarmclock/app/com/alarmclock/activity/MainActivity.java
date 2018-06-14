@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,15 +42,17 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 
-import alarmclock.app.com.alarmclock.receiver.AlarmReceiver;
+import alarmclock.app.com.alarmclock.BuildConfig;
 import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.adapter.AlarmAdapter;
 import alarmclock.app.com.alarmclock.model.ItemAlarm;
+import alarmclock.app.com.alarmclock.receiver.AlarmReceiver;
 import alarmclock.app.com.alarmclock.receiver.NetworkChangeReceiver;
 import alarmclock.app.com.alarmclock.util.Constant;
 import alarmclock.app.com.alarmclock.util.DatabaseHelper;
 import alarmclock.app.com.alarmclock.util.RecyclerItemTouchHelper;
 import alarmclock.app.com.alarmclock.util.SharePreferenceHelper;
+import alarmclock.app.com.alarmclock.util.SwipeUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -101,6 +104,8 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     private int lastAction;
     boolean startActivity = false;
     NetworkChangeReceiver receiver;
+
+    private MenuItem menuItemNews;
 
     private Handler handlerCheckNotification = new Handler();
 
@@ -249,15 +254,20 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
 
             @Override
             public void OnClickItemAlarmDelete(ItemAlarm itemAlarm, int position) {
-                showDialog(MainActivity.this, "Are you sure delete?", false, "OK", "Cancel", new CallBackDismiss() {
-                    @Override
-                    public void callBackDismiss() {
-                        databaseHelper.deleteAlarmById(itemAlarm.getId());
-                        //clearAlarm();
-                        initData();
-                        Toast.makeText(MainActivity.this, "Delete success!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                databaseHelper.deleteAlarmById(itemAlarm.getId());
+                initData();
+                clearNotification();
+                if (handlerCheckNotification != null) {
+                    handlerCheckNotification.removeCallbacks(runnableCheckNotification);
+                }
+                handlerCheckNotification = new Handler();
+                handlerCheckNotification.post(runnableCheckNotification);
+                Toast.makeText(MainActivity.this, getResources().getString(R.string.text_delete_success), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void OnClickItemUndo(ItemAlarm itemAlarm, int position) {
+
             }
 
             @Override
@@ -283,10 +293,42 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
             recyclerViewAlarm.setVisibility(View.GONE);
         }
         clearNotification();
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerViewAlarm);
+        setSwipeForRecyclerView();
+//        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+//        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerViewAlarm);
 
         //addAlarm();
+    }
+
+    private void setSwipeForRecyclerView() {
+
+        SwipeUtil swipeHelper = new SwipeUtil(0, ItemTouchHelper.LEFT, MainActivity.this) {
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int swipedPosition = viewHolder.getAdapterPosition();
+                AlarmAdapter adapter = (AlarmAdapter) recyclerViewAlarm.getAdapter();
+                adapter.pendingRemoval(swipedPosition);
+            }
+
+            @Override
+            public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                int position = viewHolder.getAdapterPosition();
+                AlarmAdapter adapter = (AlarmAdapter) recyclerViewAlarm.getAdapter();
+                if (adapter.isPendingRemoval(position)) {
+                    return 0;
+                }
+                return super.getSwipeDirs(recyclerView, viewHolder);
+            }
+        };
+
+        ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(swipeHelper);
+        mItemTouchHelper.attachToRecyclerView(recyclerViewAlarm);
+
+        //set swipe label
+        swipeHelper.setLeftSwipeLable("Archive");
+        //set swipe background-Color
+        swipeHelper.setLeftcolorCode(ContextCompat.getColor(MainActivity.this, R.color.swipebg));
+
     }
 
     public void getDataFromDatabase() {
@@ -315,6 +357,13 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_toolbar, menu);
+        menuItemNews = menu.findItem(R.id.actionNewsAndWeather);
+        if (menuItemNews != null) {
+            menuItemNews.setVisible(false);
+            if (BuildConfig.DEBUG) {
+                menuItemNews.setVisible(true);
+            }
+        }
         return true;
     }
 
@@ -508,7 +557,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     @Override
     protected void onPause() {
         super.onPause();
-        if(handlerCheckNotification != null){
+        if (handlerCheckNotification != null) {
             handlerCheckNotification.removeCallbacks(runnableCheckNotification);
         }
 

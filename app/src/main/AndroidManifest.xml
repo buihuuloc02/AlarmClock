@@ -70,6 +70,20 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppFullScreenTheme"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
+            android:name=".activity.WeatherPreferenceActivit"
+            android:parentActivityName="com.survivingwithandroid.weather.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".settings.CityFinderActivity"
+            android:parentActivityName=".settings.WeatherPreferenceActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".settings.WeatherPreferenceActivity" />
+        </activity>
 
         <service
             android:name=".util.MyFirebaseInstanceIDService"

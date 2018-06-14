@@ -208,6 +208,9 @@ public class GetListImageActivity extends BaseActivity implements CustomGridAdap
             customGridAdapter = new CustomGridAdapter(GetListImageActivity.this, photos, this);
             gridViewImage.setAdapter(customGridAdapter);
             setDisplayTextViewNoData();
+        }else{
+            tvNoData.setVisibility(View.VISIBLE);
+            gridViewImage.setVisibility(View.GONE);
         }
         return phoneAlbums;
     }

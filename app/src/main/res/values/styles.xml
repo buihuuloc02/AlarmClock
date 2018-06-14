@@ -14,5 +14,18 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+    <style name="textBig" parent="@android:style/TextAppearance.Large">
+        <item name="android:textSize">82sp</item>
+        <item name="android:textColor">@color/color_black</item>
+    </style>
 
+    <style name="textSmall" parent="@android:style/TextAppearance.Small">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/color_black</item>
+    </style>
+
+    <style name="textVerySmall" parent="@android:style/TextAppearance.Small">
+        <item name="android:textSize">8sp</item>
+        <item name="android:textColor">@color/color_black</item>
+    </style>
 </resources>

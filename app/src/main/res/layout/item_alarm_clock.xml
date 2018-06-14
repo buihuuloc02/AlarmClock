@@ -1,116 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layoutMain"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
+    android:layout_height="@dimen/height_50_dp"
+    android:layout_margin="@dimen/margin_5"
     android:orientation="vertical">
 
 
-    <LinearLayout
-        android:id="@+id/viewForeground"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="@dimen/margin_10"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:weightSum="3">
+    <include layout="@layout/item_alarm_regular"/>
+    <include layout="@layout/item_alarm_swipe"/>
 
-        <ImageView
-            android:layout_width="@dimen/width_35_dp"
-            android:layout_height="@dimen/height_35_dp"
-            android:src="@drawable/ic_app" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:layout_weight="3"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tvTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_14_sp"
-                    android:layout_marginRight="@dimen/margin_10"
-                    android:text="12: 00"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvTitle"
-                    android:textSize="@dimen/text_size_14_sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvRepeat"
-                android:textSize="@dimen/text_size_14_sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <com.github.angads25.toggle.LabeledSwitch
-                android:id="@+id/switchOnOff"
-                android:layout_width="@dimen/width_35_dp"
-                android:layout_height="@dimen/height_15_dp"
-
-                android:textSize="7sp"
-                app:colorBorder="@color/colorAccent"
-                app:on="false" />
-
-            <ImageView
-                android:id="@+id/imgDelete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_delete_black"
-                android:visibility="gone" />
-        </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_alignRight="@+id/viewForeground"
-        android:id="@+id/viewBackground"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="@dimen/margin_10"
-        android:gravity="center_horizontal|right"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        android:weightSum="4">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/text_button_delete" />
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="@dimen/margin_20"
-            android:background="@drawable/ic_delete_black" />
-    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -119,4 +19,4 @@
         android:layout_marginRight="@dimen/margin_10"
         android:background="@android:color/darker_gray"
         android:visibility="gone" />
-</RelativeLayout>
+</FrameLayout>
