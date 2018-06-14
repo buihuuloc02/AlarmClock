@@ -489,7 +489,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
                 .setInstallDays(0) // time after install
                 .setLaunchTimes(3) // number run app
                 .setRemindInterval(1)// remind
-                .setDebug(true)      // rating will show when this app
+                // rating will show when this app
                 .setShowNeverButton(false)
                 .setOnClickButtonListener(new OnClickButtonListener() {
                     @Override
