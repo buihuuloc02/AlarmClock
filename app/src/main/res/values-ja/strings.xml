@@ -118,6 +118,7 @@
     <string name="undo_label"><u>アンドゥ</u></string>
     <string name="text_confirm_delete_image">あなたは必ず画像の使用アラームの壁紙を削除していますか？</string>
     <string name="text_confirm_delete_sms">アラームメッセージの受信者を削除してもよろしいですか？</string>
+    <string name="text_confirm_delete_tone">トーンアラームを削除してもよろしいですか？</string>
     <!-- Units -->
     <string-array name="unit_names">
         <item>°C</item>

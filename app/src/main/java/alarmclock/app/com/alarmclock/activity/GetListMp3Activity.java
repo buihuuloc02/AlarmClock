@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.MediaPlayer;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ import static alarmclock.app.com.alarmclock.activity.AddAlarmActivity.EXTRA_PATH
 
 public class GetListMp3Activity extends BaseActivity {
     final String MEDIA_PATH = new String("/sdcard/");
+    public final static String EXTRA_NAME_SOUND = "EXTRA_NAME_SOUND";
     @BindView(R.id.listViewMp3)
     ListView listViewMp3;
     @BindView(R.id.tvNoData)
@@ -62,6 +64,7 @@ public class GetListMp3Activity extends BaseActivity {
     private String nameSelected = "";
     private String pathSelected = "";
     private MenuItem menuItemDone;
+    private UriCustom uriCustomSelected;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,21 +79,45 @@ public class GetListMp3Activity extends BaseActivity {
 
         setTitle(getResources().getString(R.string.text_title_screen_select_sound));
         ButterKnife.bind(this);
-
+        if (getIntent().hasExtra(EXTRA_NAME_SOUND)) {
+            nameSelected = getIntent().getStringExtra(EXTRA_NAME_SOUND);
+        }
+        getListAlarm();
         GetAllMediaMp3Files();
-
-        listViewMp3.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        listViewMp3.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, listNames));
+        setAdapterListView();
         listViewMp3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 nameSelected = listNames.get(i);
                 pathSelected = paths.get(i);
-                UriCustom uriCustomSelected = uriCustoms.get(i);
+                uriCustomSelected = uriCustoms.get(i);
                 playSound(uriCustomSelected.getUri());
             }
         });
         setDisplayNoData();
+    }
+
+    private void setAdapterListView() {
+        listViewMp3.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listViewMp3.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, listNames));
+        if (nameSelected != null) {
+            int indexSelected = indexToneInList(nameSelected);
+            if (indexSelected != -1) {
+                listViewMp3.setItemChecked(indexSelected, true);
+                listViewMp3.smoothScrollToPosition(indexSelected);
+                listViewMp3.setSelection(indexSelected);
+            }
+        }
+    }
+
+    private int indexToneInList(String nameFile) {
+        for (int i = 0; listNames != null && i < listNames.size(); i++) {
+            String str = listNames.get(i);
+            if (str.equals(nameFile)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private void setDisplayNoData() {
@@ -108,6 +135,46 @@ public class GetListMp3Activity extends BaseActivity {
             }
 
         }
+    }
+
+    private ArrayList<UriCustom> getListAlarm() {
+
+
+        RingtoneManager ringtoneMgr = new RingtoneManager(this);
+        ringtoneMgr.setType(RingtoneManager.TYPE_ALARM);
+        Cursor alarmsCursor = ringtoneMgr.getCursor();
+        int alarmsCount = alarmsCursor.getCount();
+        if (alarmsCount == 0 && !alarmsCursor.moveToFirst()) {
+            return null;
+        }
+        listNames = new ArrayList<>();
+        paths = new ArrayList<>();
+        uriCustoms = new ArrayList<>();
+
+        // add item NONE to list
+        // listNames.add(getResources().getString(R.string.text_none));
+        ArrayList<UriCustom> alarms = new ArrayList<UriCustom>();
+        //UriCustom uri = new UriCustom();
+        //uri.setName(getResources().getString(R.string.text_none));
+        //uri.setUri(null);
+        //alarms.add(uri);
+        // end
+
+        while (!alarmsCursor.isAfterLast() && alarmsCursor.moveToNext()) {
+            int currentPosition = alarmsCursor.getPosition();
+            UriCustom uriCustom = new UriCustom();
+            uriCustom.setUri(ringtoneMgr.getRingtoneUri(currentPosition));
+            paths.add(ringtoneMgr.getRingtoneUri(currentPosition).toString());
+            uriCustom.setSelected(false);
+            String name = RingtoneManager.getRingtone(this, ringtoneMgr.getRingtoneUri(currentPosition)).getTitle(this);
+            listNames.add(name);
+            uriCustom.setName(name);
+            alarms.add(uriCustom);
+            uriCustoms.add(uriCustom);
+        }
+        //alarmsCursor.close();
+
+        return alarms;
     }
 
     /**
@@ -214,9 +281,6 @@ public class GetListMp3Activity extends BaseActivity {
     }
 
     public void GetAllMediaMp3Files() {
-        listNames = new ArrayList<>();
-        paths = new ArrayList<>();
-        uriCustoms = new ArrayList<>();
         contentResolver = getContentResolver();
 
         uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -258,7 +322,9 @@ public class GetListMp3Activity extends BaseActivity {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getListAlarm();
                     GetAllMediaMp3Files();
+                    setAdapterListView();
                 } else {
                     Toast.makeText(GetListMp3Activity.this, "GET_ACCOUNTS Denied",
                             Toast.LENGTH_SHORT).show();

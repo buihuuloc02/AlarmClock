@@ -210,6 +210,13 @@
                 android:textColor="@color/color_hyberlink"
                 android:textSize="@dimen/text_size_14_sp"
                 android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/imgDeleteTone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:background="@drawable/ic_delete_black"
+                android:visibility="gone" />
         </LinearLayout>
 
 

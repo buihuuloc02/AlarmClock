@@ -160,6 +160,9 @@ public class AddAlarmActivity extends BaseActivity {
     @BindView(R.id.imgDeleteSMS)
     ImageView imgDeleteSMS;
 
+    @BindView(R.id.imgDeleteTone)
+    ImageView imgDeleteTone;
+
 
     @BindView(R.id.imgPlayStopSound)
     ImageView imgPlayStopSound;
@@ -199,7 +202,7 @@ public class AddAlarmActivity extends BaseActivity {
     private List<MethodStop> listMethods;
     private ArrayList<String> nameMethods;
 
-    @OnClick({R.id.imgPlayStopSound, R.id.imgDeleteWallPaper, R.id.imgDeleteSMS})
+    @OnClick({R.id.imgPlayStopSound, R.id.imgDeleteWallPaper, R.id.imgDeleteSMS, R.id.imgDeleteTone})
     public void onClick(View v) {
         int id = v.getId();
         Snackbar snackbar = null;
@@ -216,6 +219,27 @@ public class AddAlarmActivity extends BaseActivity {
                                 pathImageSelected = "";
                                 nameImageSelected = getString(R.string.text_none);
                                 updateNameImage(nameImageSelected);
+                            }
+                        });
+                // Changing message text color
+                snackbar.setActionTextColor(Color.RED);
+                snackbar.show();
+                break;
+            case R.id.imgDeleteTone:
+                snackbar = Snackbar
+                        .make(layoutMain, getString(R.string.text_confirm_delete_tone), Snackbar.LENGTH_LONG)
+                        .setAction(getString(R.string.text_button_ok), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                uriCustomSelected = new UriCustom();
+                                uriCustomSelected.setUri(null);
+                                uriCustomSelected.setName(getResources().getString(R.string.text_none));
+                                updateNameSound(uriCustomSelected);
+                                setDisplayLayoutVolume(uriCustomSelected);
+                                if (isPlayingSound) {
+                                    setPlayOrStopSound();
+                                }
+                                stopSound();
                             }
                         });
                 // Changing message text color
@@ -275,7 +299,7 @@ public class AddAlarmActivity extends BaseActivity {
             int idAlarm = getIntent().getIntExtra(EXTRA_ITEM_ALARM, 0);
             mItemAlarm = dbHelper.getAlarmById(idAlarm);
         }
-        setTitle(R.string.text_title_add_alarm);
+        setTitle(R.string.text_select_alarm);
         if (mItemAlarm != null) {
             setTitle(R.string.text_title_update_alarm);
         }
@@ -302,11 +326,17 @@ public class AddAlarmActivity extends BaseActivity {
         layoutAlarmTone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showdialog();
+                //showdialog();
                 if (isPlayingSound) {
                     setPlayOrStopSound();
                 }
                 stopSound();
+                Intent intent = new Intent(AddAlarmActivity.this, GetListMp3Activity.class);
+                if (uriCustomSelected != null) {
+                    intent.putExtra(GetListMp3Activity.EXTRA_NAME_SOUND, uriCustomSelected.getName());
+                }
+                startActivityForResult(intent, REQUEST_CODE_SELECT_SOUND);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
             }
         });
 
@@ -893,8 +923,12 @@ public class AddAlarmActivity extends BaseActivity {
      * @param uriCustom: UriCustom
      */
     private void updateNameSound(UriCustom uriCustom) {
+        imgDeleteTone.setVisibility(View.GONE);
         if (uriCustom != null) {
             etAlarmTone.setText(uriCustom.getName());
+            if (uriCustom.getUri() != null) {
+                imgDeleteTone.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -1068,7 +1102,6 @@ public class AddAlarmActivity extends BaseActivity {
                 uriCustom.setUri(Uri.parse(path));
                 uriCustom.setName(name);
                 stopSound();
-                dialogListSound.dismiss();
                 uriCustomSelected = uriCustom;
                 updateNameSound(uriCustomSelected);
                 setDisplayLayoutVolume(uriCustomSelected);
