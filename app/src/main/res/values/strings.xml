@@ -120,6 +120,7 @@
     <string name="text_confirm_delete_image">Are you sure delete image use alarm wallpaper?</string>
     <string name="text_confirm_delete_sms">Are you sure delete alarm message recipients?</string>
     <string name="text_confirm_delete_tone">Are you sure delete tone alarm?</string>
+    <string name="text_no_internet">No Internet connection!</string>
     <!-- Units -->
     <string-array name="unit_names">
         <item>°C</item>

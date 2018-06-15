@@ -42,6 +42,15 @@ public class AboutActivity extends BaseActivity {
     public void onClick(View v) {
 
         int id = v.getId();
+        if (!isNetworkEnabled()) {
+            showDialog(AboutActivity.this, getResources().getString(R.string.text_no_internet),
+                    false, getResources().getString(R.string.text_button_ok), "", new CallBackDismiss() {
+                        @Override
+                        public void callBackDismiss() {
+                        }
+                    });
+            return;
+        }
         switch (id) {
             case R.id.layoutUpdate:
                 new StyleableToast

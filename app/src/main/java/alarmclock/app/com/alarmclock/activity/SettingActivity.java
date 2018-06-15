@@ -83,16 +83,25 @@ public class SettingActivity extends BaseActivity {
         int id = v.getId();
         switch (id) {
             case R.id.tvPurchaseApp:
-                if (checkServiceSupportIab()) {
-                    if (!checkAppPurchased()) {
-                        callFunctionBuy();
+                if (isNetworkEnabled()) {
+                    if (checkServiceSupportIab()) {
+                        if (!checkAppPurchased()) {
+                            callFunctionBuy();
+                        } else {
+                            Snackbar snackbar = Snackbar.make(layoutMain, getResources().getString(R.string.text_status_purchased), Snackbar.LENGTH_LONG);
+                            snackbar.show();
+                        }
                     } else {
-                        Snackbar snackbar = Snackbar.make(layoutMain, getResources().getString(R.string.text_status_purchased), Snackbar.LENGTH_LONG);
+                        Snackbar snackbar = Snackbar.make(layoutMain, getResources().getString(R.string.text_you_need_login_gmail), Snackbar.LENGTH_LONG);
                         snackbar.show();
                     }
                 } else {
-                    Snackbar snackbar = Snackbar.make(layoutMain, getResources().getString(R.string.text_you_need_login_gmail), Snackbar.LENGTH_LONG);
-                    snackbar.show();
+                    showDialog(SettingActivity.this, getResources().getString(R.string.text_no_internet),
+                            false, getResources().getString(R.string.text_button_ok), "", new CallBackDismiss() {
+                                @Override
+                                public void callBackDismiss() {
+                                }
+                            });
                 }
                 break;
             case R.id.tvRemovePurchase:
