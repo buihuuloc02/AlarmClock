@@ -325,7 +325,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
         mItemTouchHelper.attachToRecyclerView(recyclerViewAlarm);
 
         //set swipe label
-        swipeHelper.setLeftSwipeLable("Archive");
+        swipeHelper.setLeftSwipeLable(getResources().getString(R.string.text_archive));
         //set swipe background-Color
         swipeHelper.setLeftcolorCode(ContextCompat.getColor(MainActivity.this, R.color.swipebg));
 

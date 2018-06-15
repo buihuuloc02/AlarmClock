@@ -120,6 +120,7 @@
     <string name="text_confirm_delete_sms">アラームメッセージの受信者を削除してもよろしいですか？</string>
     <string name="text_confirm_delete_tone">トーンアラームを削除してもよろしいですか？</string>
     <string name="text_no_internet">インターネット接続なし</string>
+    <string name="text_archive">Aアーカイブ</string>
     <!-- Units -->
     <string-array name="unit_names">
         <item>°C</item>

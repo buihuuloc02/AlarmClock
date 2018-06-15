@@ -12,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
+import alarmclock.app.com.alarmclock.R;
+
 /**
  * Created by Administrator on 6/14/2018.
  */
@@ -84,13 +86,13 @@ public abstract class SwipeUtil extends ItemTouchHelper.SimpleCallback {
 
 
         //Setting Swipe Icon
-        deleteIcon.setBounds(xMarkLeft, xMarkTop + 36, xMarkRight, xMarkBottom + 20);
+        deleteIcon.setBounds(xMarkLeft, xMarkTop + 36, xMarkRight - 10, xMarkBottom + 20);
         deleteIcon.draw(c);
 
         //Setting Swipe Text
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
-        paint.setTextSize(48);
+        paint.setTextSize(context.getResources().getDimensionPixelSize(R.dimen.text_size_14_sp));
         paint.setTextAlign(Paint.Align.CENTER);
         c.drawText(getLeftSwipeLable(), xMarkLeft + 40, xMarkTop + 30, paint);
 
