@@ -37,7 +37,7 @@
     <string name="text_fri">Fri</string>
     <string name="text_sat">Sat</string>
     <string name="text_sun">Sun</string>
-    <string name="text_select_alarm">Select alarm tone!</string>
+    <string name="text_select_alarm">Select alarm tone</string>
     <string name="text_alarm_clock">Alarm Clock!</string>
     <string name="text_none">None</string>
     <string name="text_add_success">Add success!</string>

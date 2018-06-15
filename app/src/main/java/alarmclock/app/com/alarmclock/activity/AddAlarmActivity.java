@@ -299,7 +299,7 @@ public class AddAlarmActivity extends BaseActivity {
             int idAlarm = getIntent().getIntExtra(EXTRA_ITEM_ALARM, 0);
             mItemAlarm = dbHelper.getAlarmById(idAlarm);
         }
-        setTitle(R.string.text_select_alarm);
+        setTitle(R.string.text_title_add_alarm);
         if (mItemAlarm != null) {
             setTitle(R.string.text_title_update_alarm);
         }

@@ -77,7 +77,7 @@ public class GetListMp3Activity extends BaseActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
 
-        setTitle(getResources().getString(R.string.text_title_screen_select_sound));
+        setTitle(getResources().getString(R.string.text_select_alarm));
         ButterKnife.bind(this);
         if (getIntent().hasExtra(EXTRA_NAME_SOUND)) {
             nameSelected = getIntent().getStringExtra(EXTRA_NAME_SOUND);
