@@ -358,12 +358,12 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_toolbar, menu);
         menuItemNews = menu.findItem(R.id.actionNewsAndWeather);
-        if (menuItemNews != null) {
-            menuItemNews.setVisible(false);
-            if (BuildConfig.DEBUG) {
-                menuItemNews.setVisible(true);
-            }
-        }
+//        if (menuItemNews != null) {
+//            menuItemNews.setVisible(false);
+//            if (BuildConfig.DEBUG) {
+//                menuItemNews.setVisible(true);
+//            }
+//        }
         return true;
     }
 

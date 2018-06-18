@@ -11,10 +11,11 @@ import java.util.Locale;
 import alarmclock.app.com.alarmclock.R;
 
 /**
- * Created by Administrator on 6/13/2018.
+ * Created by Administrator on 6/15/2018.
  */
 
-public class Weather {
+
+public class WeatherMain {
 
     public enum WindDirection {
         // don't change order
@@ -52,11 +53,11 @@ public class Weather {
     public static int windDirectionDegreeToIndex(double degree, int numberOfDirections) {
         // to be on the safe side
         degree %= 360;
-        if (degree < 0) degree += 360;
+        if(degree < 0) degree += 360;
 
         degree += 180 / numberOfDirections; // add offset to make North start from 0
 
-        int direction = (int) Math.floor(degree * numberOfDirections / 360);
+        int direction = (int)Math.floor(degree * numberOfDirections / 360);
 
         return direction % numberOfDirections;
     }
@@ -155,18 +156,20 @@ public class Weather {
         this.humidity = humidity;
     }
 
-    public Date getSunrise() {
+    public Date getSunrise(){
         return this.sunrise;
     }
 
     public void setSunrise(String dateString) {
         try {
             setSunrise(new Date(Long.parseLong(dateString) * 1000));
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             try {
                 setSunrise(inputFormat.parse(dateString));
-            } catch (ParseException e2) {
+            }
+            catch (ParseException e2) {
                 setSunrise(new Date()); // make the error somewhat obvious
                 e2.printStackTrace();
             }
@@ -177,18 +180,20 @@ public class Weather {
         this.sunrise = date;
     }
 
-    public Date getSunset() {
+    public Date getSunset(){
         return this.sunset;
     }
 
     public void setSunset(String dateString) {
         try {
             setSunset(new Date(Long.parseLong(dateString) * 1000));
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             try {
                 setSunrise(inputFormat.parse(dateString));
-            } catch (ParseException e2) {
+            }
+            catch (ParseException e2) {
                 setSunset(new Date()); // make the error somewhat obvious
                 e2.printStackTrace();
             }
@@ -207,18 +212,20 @@ public class Weather {
         this.icon = icon;
     }
 
-    public Date getDate() {
+    public Date getDate(){
         return this.date;
     }
 
     public void setDate(String dateString) {
         try {
             setDate(new Date(Long.parseLong(dateString) * 1000));
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             try {
                 setDate(inputFormat.parse(dateString));
-            } catch (ParseException e2) {
+            }
+            catch (ParseException e2) {
                 setDate(new Date()); // make the error somewhat obvious
                 e2.printStackTrace();
             }

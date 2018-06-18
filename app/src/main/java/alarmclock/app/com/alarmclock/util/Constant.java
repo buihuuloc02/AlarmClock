@@ -14,7 +14,7 @@ public interface Constant {
     public static final int REQUEST_CODE_SELECT_SOUND = 1003;
     public static final int REQUEST_CODE_SELECT_CONTACT = 1004;
 
-
+    public static final String  DEFAULT_CITY = "Thanh Pho Ho Chi Minh";
     public static final int PURCHASED = 1;
     public static final int DO_NOT_PURCHASE = 0;
     public static final int TIME_CHECK_NOTIFICATION = 60000 * 5; // 5 MINUTE

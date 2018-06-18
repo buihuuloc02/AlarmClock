@@ -25,6 +25,7 @@ public class SharePreferenceHelper {
         public static final String ALARMCLOCK = "ALARMCLOCK";
         public static final String NUMBERSHAKE = "NUMBERSHAKE";
         public static final String SPEEKSHAKE = "SPEEKSHAKE";
+        public static final String DEFAULT_CITY = "DEFAULT_CITY";
 
 
         public static final String KEY_TOKEN = "KEY_TOKEN";

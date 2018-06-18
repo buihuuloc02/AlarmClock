@@ -77,13 +77,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
-        <activity
-            android:name=".settings.CityFinderActivity"
-            android:parentActivityName=".settings.WeatherPreferenceActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".settings.WeatherPreferenceActivity" />
-        </activity>
 
         <service
             android:name=".util.MyFirebaseInstanceIDService"
