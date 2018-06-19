@@ -42,7 +42,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 
-import alarmclock.app.com.alarmclock.BuildConfig;
 import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.adapter.AlarmAdapter;
 import alarmclock.app.com.alarmclock.model.ItemAlarm;
@@ -357,7 +356,7 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_toolbar, menu);
-        menuItemNews = menu.findItem(R.id.actionNewsAndWeather);
+        menuItemNews = menu.findItem(R.id.actionWeather);
 //        if (menuItemNews != null) {
 //            menuItemNews.setVisible(false);
 //            if (BuildConfig.DEBUG) {
@@ -382,8 +381,8 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 return true;
-            case R.id.actionNewsAndWeather:
-                intent = new Intent(MainActivity.this, NewsAndWeatherActivity.class);
+            case R.id.actionWeather:
+                intent = new Intent(MainActivity.this, WeatherActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 return true;

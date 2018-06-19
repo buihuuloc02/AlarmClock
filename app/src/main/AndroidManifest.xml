@@ -60,7 +60,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity
-            android:name=".activity.NewsAndWeatherActivity"
+            android:name=".activity.WeatherActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity

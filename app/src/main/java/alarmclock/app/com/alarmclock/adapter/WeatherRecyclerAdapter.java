@@ -2,7 +2,6 @@ package alarmclock.app.com.alarmclock.adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.preference.PreferenceManager;
 import android.support.v4.content.res.ResourcesCompat;
@@ -18,8 +17,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import alarmclock.app.com.alarmclock.R;
-import alarmclock.app.com.alarmclock.activity.MainActivity;
-import alarmclock.app.com.alarmclock.activity.NewsAndWeatherActivity;
+import alarmclock.app.com.alarmclock.activity.WeatherActivity;
 import alarmclock.app.com.alarmclock.model.Weather;
 import alarmclock.app.com.alarmclock.model.WeatherViewHolder;
 import alarmclock.app.com.alarmclock.util.UnitConvertor;
@@ -124,14 +122,14 @@ public class WeatherRecyclerAdapter  extends RecyclerView.Adapter<WeatherViewHol
         customViewHolder.itemIcon.setText(weatherItem.getIcon());
         if (sp.getString("speedUnit", "m/s").equals("bft")) {
             customViewHolder.itemyWind.setText(context.getString(R.string.wind) + ": " +
-                    UnitConvertor.getBeaufortName((int) wind) + " " + NewsAndWeatherActivity.getWindDirectionString(sp, context, weatherItem));
+                    UnitConvertor.getBeaufortName((int) wind) + " " + WeatherActivity.getWindDirectionString(sp, context, weatherItem));
         } else {
             customViewHolder.itemyWind.setText(context.getString(R.string.wind) + ": " + new DecimalFormat("0.0").format(wind) + " " +
-                    NewsAndWeatherActivity.localize(sp, context, "speedUnit", "m/s")
-                    + " " + NewsAndWeatherActivity.getWindDirectionString(sp, context, weatherItem));
+                    WeatherActivity.localize(sp, context, "speedUnit", "m/s")
+                    + " " + WeatherActivity.getWindDirectionString(sp, context, weatherItem));
         }
         customViewHolder.itemPressure.setText(context.getString(R.string.pressure) + ": " + new DecimalFormat("0.0").format(pressure) + " " +
-                NewsAndWeatherActivity.localize(sp, context, "pressureUnit", "hPa"));
+                WeatherActivity.localize(sp, context, "pressureUnit", "hPa"));
         customViewHolder.itemHumidity.setText(context.getString(R.string.humidity) + ": " + weatherItem.getHumidity() + " %");
     }
 

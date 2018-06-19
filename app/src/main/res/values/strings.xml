@@ -86,7 +86,7 @@
     <string name="text_method_normal">Normal</string>
     <string name="text_method_shake">Shake</string>
     <string name="text_choose_one">Choose one</string>
-    <string name="text_news_and_weather_actionbar">Weather</string>
+    <string name="text_weather_actionbar">Weather</string>
     <string name="text_title_scree_news_and_weather">Weather</string>
 
 
@@ -243,6 +243,8 @@
     <string name="search_title">Search for city</string>
     <string name="msg_city_input_incorrect">City entered invalid!</string>
     <string name="msg_downloading_data">Downloading your data ...</string>
+    <string name="text_news_actionbar">News</string>
+    <string name="text_button_refresh">Refresh</string>
     <!-- Units -->
     <string-array name="unit_names">
         <item>°C</item>

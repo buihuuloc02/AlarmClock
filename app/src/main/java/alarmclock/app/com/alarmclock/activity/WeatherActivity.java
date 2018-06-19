@@ -21,6 +21,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebResourceError;
@@ -71,7 +73,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 6/12/2018.
  */
 
-public class NewsAndWeatherActivity extends BaseActivity {
+public class WeatherActivity extends BaseActivity {
     private RequestQueue requestQueue;
     private SharedPreferences prefs;
     private MenuItem refreshItem;
@@ -105,7 +107,7 @@ public class NewsAndWeatherActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("SwA", "onCreate");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_news_and_weather);
+        setContentView(R.layout.activity_weather);
         setTitle(R.string.text_title_scree_news_and_weather);
         ButterKnife.bind(this);
         ActionBar actionBar = getSupportActionBar();
@@ -149,7 +151,7 @@ public class NewsAndWeatherActivity extends BaseActivity {
 
         cityDefault = sharePreferenceHelper.getString(SharePreferenceHelper.Key.DEFAULT_CITY, Constant.DEFAULT_CITY);
         tvNameCity.setText(cityDefault);
-        //loadWebView();
+        appView.setVisibility(View.GONE);
     }
 
     private void loadWebView() {
@@ -161,7 +163,7 @@ public class NewsAndWeatherActivity extends BaseActivity {
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 if (BuildConfig.DEBUG) {
-                    Toast.makeText(NewsAndWeatherActivity.this, description, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WeatherActivity.this, description, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -262,6 +264,12 @@ public class NewsAndWeatherActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.memu_screen_weather, menu);
+        return true;
+    }
 
     @Override
     protected void onDestroy() {
@@ -273,8 +281,23 @@ public class NewsAndWeatherActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        new getWeatherAsyncTask().execute();
-        new getWeatherLongTeamAsyncTask().execute();
+        loadData();
+    }
+
+    private void loadData() {
+        if (isNetworkEnabled()) {
+            appView.setVisibility(View.VISIBLE);
+            new getWeatherAsyncTask().execute();
+            new getWeatherLongTeamAsyncTask().execute();
+        } else {
+            showDialog(WeatherActivity.this, getResources().getString(R.string.text_no_internet),
+                    false, getResources().getString(R.string.text_button_ok), "", new CallBackDismiss() {
+                        @Override
+                        public void callBackDismiss() {
+                        }
+                    });
+            appView.setVisibility(View.GONE);
+        }
     }
 
     private float convertToC(String unit, float val) {
@@ -289,6 +312,9 @@ public class NewsAndWeatherActivity extends BaseActivity {
         switch (id) {
             case android.R.id.home:
                 onBackPressed();
+                return true;
+            case R.id.actionRefresh:
+                loadData();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -333,7 +359,7 @@ public class NewsAndWeatherActivity extends BaseActivity {
             URL url = null;
             String response = "";
             try {
-                url = provideURL(NewsAndWeatherActivity.this, coords, cityInputSearch, false);
+                url = provideURL(WeatherActivity.this, coords, cityInputSearch, false);
             } catch (UnsupportedEncodingException e) {
                 result = -1;
             } catch (MalformedURLException e) {
@@ -388,8 +414,8 @@ public class NewsAndWeatherActivity extends BaseActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progressDialog = new ProgressDialog(NewsAndWeatherActivity.this);
-            progressDialog.setMessage(NewsAndWeatherActivity.this.getResources().getString(R.string.msg_downloading_data));
+            progressDialog = new ProgressDialog(WeatherActivity.this);
+            progressDialog.setMessage(WeatherActivity.this.getResources().getString(R.string.msg_downloading_data));
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
         }
@@ -418,7 +444,7 @@ public class NewsAndWeatherActivity extends BaseActivity {
             URL url = null;
             String response = "";
             try {
-                url = provideURL(NewsAndWeatherActivity.this, coords, cityInputSearch, true);
+                url = provideURL(WeatherActivity.this, coords, cityInputSearch, true);
             } catch (UnsupportedEncodingException e) {
                 result = -1;
             } catch (MalformedURLException e) {
@@ -469,7 +495,7 @@ public class NewsAndWeatherActivity extends BaseActivity {
         @Override
         protected void onPostExecute(Integer aVoid) {
             super.onPostExecute(aVoid);
-            weatherRecyclerAdapter = new WeatherRecyclerAdapter(NewsAndWeatherActivity.this, longTermWeather);
+            weatherRecyclerAdapter = new WeatherRecyclerAdapter(WeatherActivity.this, longTermWeather);
             recyclerView.setAdapter(weatherRecyclerAdapter);
         }
     }

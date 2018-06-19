@@ -21,8 +21,12 @@
                 android:title="@string/text_about_actionbar"
                 app:showAsAction="collapseActionView|withText" />
             <item
-                android:id="@+id/actionNewsAndWeather"
-                android:title="@string/text_news_and_weather_actionbar"
+                android:id="@+id/actionWeather"
+                android:title="@string/text_weather_actionbar"
+                app:showAsAction="collapseActionView|withText" />
+            <item
+                android:id="@+id/actionNews"
+                android:title="@string/text_news_actionbar"
                 app:showAsAction="collapseActionView|withText" />
         </menu>
     </item>
