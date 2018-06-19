@@ -386,6 +386,11 @@ public class MainActivity extends BaseActivity implements RecyclerItemTouchHelpe
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 return true;
+            case R.id.actionNews:
+                intent = new Intent(MainActivity.this, NewsActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

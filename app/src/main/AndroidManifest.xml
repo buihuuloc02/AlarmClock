@@ -50,6 +50,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity
+            android:name=".activity.DetailNewsActivity"
+            android:theme="@style/AppFullScreenTheme"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
             android:name=".activity.SettingActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden">
@@ -64,19 +69,16 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
         <activity
+            android:name=".activity.NewsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+        <activity
             android:name=".activity.AlarmClockActivity"
             android:autoRemoveFromRecents="true"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppFullScreenTheme"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
-        <activity
-            android:name=".activity.WeatherPreferenceActivit"
-            android:parentActivityName="com.survivingwithandroid.weather.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
-        </activity>
 
         <service
             android:name=".util.MyFirebaseInstanceIDService"

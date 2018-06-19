@@ -244,6 +244,7 @@
     <string name="msg_downloading_data">あなたのデータをダウンロードしています...</string>
     <string name="text_news_actionbar">ニュース</string>
     <string name="text_button_refresh">Refresh</string>
+    <string name="text_title_news">ニュース</string>
     <!-- Units -->
     <string-array name="unit_names">
         <item>°C</item>

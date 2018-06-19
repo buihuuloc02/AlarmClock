@@ -18,4 +18,11 @@ public interface Constant {
     public static final int PURCHASED = 1;
     public static final int DO_NOT_PURCHASE = 0;
     public static final int TIME_CHECK_NOTIFICATION = 60000 * 5; // 5 MINUTE
+
+    static final String KEY_AUTHOR = "author";
+    static final String KEY_TITLE = "title";
+    static final String KEY_DESCRIPTION = "description";
+    static final String KEY_URL = "url";
+    static final String KEY_URLTOIMAGE = "urlToImage";
+    static final String KEY_PUBLISHEDAT = "publishedAt";
 }
