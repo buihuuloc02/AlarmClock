@@ -41,6 +41,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static alarmclock.app.com.alarmclock.util.Constant.HOUR;
+import static alarmclock.app.com.alarmclock.util.Constant.MINUTE;
+
 /**
  * Created by Administrator on 5/9/2018.
  */
@@ -386,13 +389,19 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         keyguardLock.disableKeyguard();
     }
 
+    @Override
+    protected void onUserLeaveHint() {
+
+    }
 
     @Override
     protected void onPause() {
+        getSharePreferences().put(HOUR, 0);
+        getSharePreferences().put(MINUTE, 0);
         super.onPause();
         stopVibration();
-        stopSound();
-        partialWakeLock.acquire();
+       stopSound();
+
     }
 
 
