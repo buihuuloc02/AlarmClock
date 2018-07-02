@@ -79,21 +79,22 @@ public class CustomGridAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 photo.setSelected(!photo.isSelected());
-                onItemClick.OnClickCheckBox(photo, position);
+                onItemClick.OnClickItem(photo, position);
+
             }
         });
         holder.layoutMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 photo.setSelected(!photo.isSelected());
-                onItemClick.OnClickCheckBox(photo, position);
+                onItemClick.OnClickItem(photo, position);
             }
         });
-        holder.cbSelected.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.cbSelected.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                holder.cbSelected.setChecked(photo.isSelected());
-                notifyDataSetChanged();
+            public void onClick(View view) {
+                photo.setSelected(!photo.isSelected());
+                onItemClick.OnClickItem(photo, position);
             }
         });
         return convertView;

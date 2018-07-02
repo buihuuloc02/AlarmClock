@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.KeyguardManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.SensorListener;
@@ -155,10 +156,13 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
 
     class AsyncTaskLoadImage extends AsyncTask<String, Void, Bitmap> {
 
+        String pathImage = "";
+
         @Override
         protected Bitmap doInBackground(String... strings) {
 
             String path = strings[0];
+            pathImage = path;
             if (!TextUtils.isEmpty(path)) {
                 Handler mainHandler = new Handler(Looper.getMainLooper());
                 Runnable myRunnable = new Runnable() {
@@ -177,9 +181,21 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
             return theBitmap;
         }
 
+        @SuppressLint("ResourceType")
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+
+            options.inJustDecodeBounds = false;
+            options.inDither = false;
+            options.inPurgeable = true;
+            options.inInputShareable = true;
+            options.inPreferQualityOverSpeed = true;
+            if (!TextUtils.isEmpty(pathImage)) {
+                bitmap = BitmapFactory.decodeFile(pathImage, options);
+            }
             if (bitmap != null) {
                 layoutMain.setBackground(null);
                 layoutMain.setBackgroundColor(Color.TRANSPARENT);
@@ -189,13 +205,86 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
                 } else {
                     layoutMain.setBackgroundDrawable(bd);
                 }
+                // set text color tvNameAlarm
+                int w = tvNameAlarm.getWidth();
+                int h = tvNameAlarm.getHeight();
+                int x = (int) tvNameAlarm.getX() + w / 2;
+                int y = (int) tvNameAlarm.getY() + h / 2;
+                int pixel = bitmap.getPixel(x, y);
+                int redValue = Color.red(pixel);
+                int blueValue = Color.blue(pixel);
+                int greenValue = Color.green(pixel);
+                int RGB = android.graphics.Color.rgb(255 - redValue, 255 - greenValue, 255 - blueValue);
+                tvNameAlarm.setTextColor(RGB);
+                // set text color tvTime
+                w = tvTime.getWidth();
+                h = tvTime.getHeight();
+                x = (int) tvTime.getX() + w / 2;
+                y = (int) tvTime.getY() + h / 2;
+                pixel = bitmap.getPixel(x, y);
+                redValue = Color.red(pixel);
+                blueValue = Color.blue(pixel);
+                greenValue = Color.green(pixel);
+                RGB = android.graphics.Color.rgb(255 - redValue, 255 - greenValue, 255 - blueValue);
+                tvTime.setTextColor(RGB);
+
+                // set text color tvHelp
+                w = tvHelp.getWidth();
+                h = tvHelp.getHeight();
+                x = (int) tvHelp.getX() + w / 2;
+                y = (int) tvHelp.getY() + h / 2;
+                pixel = bitmap.getPixel(x, y);
+                redValue = Color.red(pixel);
+                blueValue = Color.blue(pixel);
+                greenValue = Color.green(pixel);
+                RGB = android.graphics.Color.rgb(255 - redValue, 255 - greenValue, 255 - blueValue);
+                tvHelp.setTextColor(RGB);
+
+                // set text color tvNumberShake
+                w = tvNumberShake.getWidth();
+                h = tvNumberShake.getHeight();
+                x = (int) tvNumberShake.getX() + w / 2;
+                y = (int) tvNumberShake.getY() + h / 2;
+                pixel = bitmap.getPixel(x, y);
+                redValue = Color.red(pixel);
+                blueValue = Color.blue(pixel);
+                greenValue = Color.green(pixel);
+                RGB = android.graphics.Color.rgb(255 - redValue, 255 - greenValue, 255 - blueValue);
+                tvNumberShake.setTextColor(RGB);
+
+                // set text color btnStop
+                w = btnStop.getWidth();
+                h = btnStop.getHeight();
+                x = (int) btnStop.getX() + w / 2;
+                y = (int) btnStop.getY() + h / 2;
+                pixel = bitmap.getPixel(x, y);
+                redValue = Color.red(pixel);
+                blueValue = Color.blue(pixel);
+                greenValue = Color.green(pixel);
+                RGB = android.graphics.Color.rgb(255 - redValue, 255 - greenValue, 255 - blueValue);
+                if (redValue >= 127 && blueValue >= 127 && greenValue >= 127) {
+                    btnStop.setBackgroundResource(R.drawable.shape_background_border);
+                    btnStop.setTextColor(getResources().getColorStateList(R.drawable.selector_button_text_black));
+
+                } else {
+                    btnStop.setBackgroundResource(R.drawable.shape_background_border_white);
+                    btnStop.setTextColor(getResources().getColorStateList(R.drawable.selector_button_text_white));
+                }
+                //
+            } else {
+                tvNameAlarm.setTextColor(Color.BLACK);
+                tvTime.setTextColor(Color.BLACK);
+                tvHelp.setTextColor(Color.BLACK);
+                tvNumberShake.setTextColor(Color.BLACK);
+                btnStop.setBackgroundResource(R.drawable.shape_background_border);
+                btnStop.setTextColor(getResources().getColorStateList(R.drawable.selector_button_text_black));
             }
         }
     }
 
     @SuppressLint("ResourceType")
     private void setTextColorForTextView() {
-        tvNameAlarm.setTextColor(Color.BLACK);
+        // tvNameAlarm.setTextColor(Color.BLACK);
         tvTime.setTextColor(Color.BLACK);
         tvHelp.setTextColor(Color.BLACK);
         tvNumberShake.setTextColor(Color.BLACK);
@@ -203,7 +292,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         btnStop.setTextColor(getResources().getColorStateList(R.drawable.selector_button_text_black));
         if (itemAlarm != null) {
             if (!TextUtils.isEmpty(itemAlarm.getPathImageWallPaper())) {
-                tvNameAlarm.setTextColor(Color.WHITE);
+                // tvNameAlarm.setTextColor(Color.WHITE);
                 tvTime.setTextColor(Color.WHITE);
                 tvHelp.setTextColor(Color.WHITE);
                 tvNumberShake.setTextColor(Color.WHITE);
@@ -215,21 +304,21 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
 
     private void setDisplayButtonStop() {
         if (itemAlarm != null) {
-            if(itemAlarm.getMethodStop() == 0) {
+            if (itemAlarm.getMethodStop() == 0) {
                 btnStop.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 btnStop.setVisibility(View.GONE);
             }
         }
     }
+
     private void setDisplayTextView() {
         if (itemAlarm != null) {
             String str = getString(R.string.text_click_stop);
-            if(itemAlarm.getMethodStop() == 1) {
+            if (itemAlarm.getMethodStop() == 1) {
                 str = getString(R.string.text_shake);
                 tvNumberShake.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 tvNumberShake.setVisibility(View.GONE);
                 str = getString(R.string.text_click_stop);
             }
@@ -400,7 +489,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         getSharePreferences().put(MINUTE, 0);
         super.onPause();
         stopVibration();
-       stopSound();
+        stopSound();
 
     }
 
@@ -428,7 +517,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
 
         mSpeekShake = 1000 + (mSpeekShake * 100);
 
-        if(itemAlarm != null && itemAlarm.getMethodStop() == 1) {
+        if (itemAlarm != null && itemAlarm.getMethodStop() == 1) {
             sensorMgr.registerListener(this,
                     SensorManager.SENSOR_ACCELEROMETER,
                     SensorManager.SENSOR_DELAY_NORMAL);
@@ -439,7 +528,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         playSound(this, getAlarmUri());
         if (itemAlarm != null && itemAlarm.getPathImageWallPaper() != null) {
             {
-                setTextColorForTextView();
+                //setTextColorForTextView();
                 new AsyncTaskLoadImage().execute(itemAlarm.getPathImageWallPaper());
             }
         }

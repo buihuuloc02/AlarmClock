@@ -239,7 +239,7 @@ public class NewsActivity extends BaseActivity {
         @Override
         protected void onPostExecute(String xml) {
 
-            if (xml.length() > 10) { // Just checking if not empty
+            if (xml != null && xml.length() > 10) { // Just checking if not empty
 
                 try {
                     JSONObject jsonResponse = new JSONObject(xml);

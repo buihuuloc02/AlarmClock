@@ -244,6 +244,23 @@ public class GetListImageActivity extends BaseActivity implements CustomGridAdap
 
     @Override
     public void OnClickItem(Photo photo, int position) {
+        if (photos != null) {
+            for (int i = 0; i < photos.size(); i++) {
+                Photo pt = photos.get(i);
+                if (i != position) {
+                    pt.setSelected(false);
+                }
+            }
+            photos.get(position).setSelected(photo.isSelected());
+            if (photo.isSelected()) {
+                pathImageSelected = photo.getPhotoUri();
+                nameImageSelected = photo.getAlbumName();
+            } else {
+                pathImageSelected = "";
+                nameImageSelected = "";
+            }
+        }
+        customGridAdapter.notifyDataSetChanged();
     }
 
     @Override

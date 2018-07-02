@@ -511,10 +511,10 @@ public class AddAlarmActivity extends BaseActivity {
 
     private void setDisplayLayoutVolume(UriCustom uriCustomSelected) {
         if (uriCustomSelected != null) {
-            if (uriCustomSelected.getUri() == null) {
-                layoutVolume.setVisibility(View.GONE);
-            } else {
+            if (uriCustomSelected.getUri() != null && !TextUtils.isEmpty(uriCustomSelected.getUri().getPath())) {
                 layoutVolume.setVisibility(View.VISIBLE);
+            } else {
+                layoutVolume.setVisibility(View.GONE);
             }
         }
     }
@@ -926,7 +926,7 @@ public class AddAlarmActivity extends BaseActivity {
         imgDeleteTone.setVisibility(View.GONE);
         if (uriCustom != null) {
             etAlarmTone.setText(uriCustom.getName());
-            if (uriCustom.getUri() != null) {
+            if (uriCustom.getUri() != null && !TextUtils.isEmpty(uriCustom.getUri().getPath())) {
                 imgDeleteTone.setVisibility(View.VISIBLE);
             }
         }
