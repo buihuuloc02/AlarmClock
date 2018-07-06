@@ -221,7 +221,7 @@ public class AddAlarmActivity extends BaseActivity {
                             }
                         });
                 // Changing message text color
-                snackbar.setActionTextColor(Color.RED);
+                snackbar.setActionTextColor(Color.WHITE);
                 snackbar.show();
                 break;
             case R.id.imgDeleteTone:
@@ -242,7 +242,7 @@ public class AddAlarmActivity extends BaseActivity {
                             }
                         });
                 // Changing message text color
-                snackbar.setActionTextColor(Color.RED);
+                snackbar.setActionTextColor(Color.WHITE);
                 snackbar.show();
                 break;
             case R.id.imgDeleteSMS:
@@ -257,7 +257,7 @@ public class AddAlarmActivity extends BaseActivity {
                             }
                         });
                 // Changing message text color
-                snackbar.setActionTextColor(Color.RED);
+                snackbar.setActionTextColor(Color.WHITE);
                 snackbar.show();
                 break;
         }
@@ -340,7 +340,7 @@ public class AddAlarmActivity extends BaseActivity {
         });
 
 
-        layoutImageWallPaper.setOnClickListener(new View.OnClickListener() {
+        layoutWallPaper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isPlayingSound) {
