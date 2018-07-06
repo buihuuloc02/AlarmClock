@@ -245,6 +245,10 @@
     <string name="text_news_actionbar">ニュース</string>
     <string name="text_button_refresh">Refresh</string>
     <string name="text_title_news">ニュース</string>
+    <string name="text_retype">再入力</string>
+    <string name="text_button_check">チェック</string>
+    <string name="text_input_incorreect">間違って再入力！</string>
+    <string name="text_method_retype">再入力</string>
     <!-- Units -->
     <string-array name="unit_names">
         <item>°C</item>

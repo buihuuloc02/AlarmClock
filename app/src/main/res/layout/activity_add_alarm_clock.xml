@@ -14,7 +14,7 @@
         android:weightSum="1.5">
 
         <FrameLayout
-            android:id="@+id/layoutWallPaper"
+            android:id="@+id/layoutImageWallPaper"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
@@ -135,9 +135,9 @@
                 android:id="@+id/layoutMthoadStop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_10"
                 android:layout_marginLeft="@dimen/margin_10"
                 android:layout_marginRight="@dimen/margin_10"
-                android:layout_marginTop="@dimen/margin_10"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
@@ -163,70 +163,73 @@
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="@dimen/margin_10" />
-
 
         </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_10"
-            android:text="@string/text_tone"
-
-            android:textSize="@dimen/text_size_14_sp"
-            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/layoutAlarmTone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_10"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
+            android:layout_marginBottom="@dimen/margin_10"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/etAlarmTone"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.9"
-                android:hint="@string/text_none"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColor="@color/color_hyberlink"
-                android:textColorHint="@color/color_hyberlink"
-                android:textSize="@dimen/text_size_14_sp" />
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:text="@string/text_tone"
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=">>"
-                android:textColor="@color/color_hyberlink"
                 android:textSize="@dimen/text_size_14_sp"
                 android:textStyle="bold" />
-            <ImageView
-                android:id="@+id/imgDeleteTone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_20"
-                android:background="@drawable/ic_delete_black"
-                android:visibility="gone" />
-        </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+
+                <TextView
+                    android:id="@+id/etAlarmTone"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.9"
+                    android:hint="@string/text_none"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/color_hyberlink"
+                    android:textColorHint="@color/color_hyberlink"
+                    android:textSize="@dimen/text_size_14_sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=">>"
+                    android:textColor="@color/color_hyberlink"
+                    android:textSize="@dimen/text_size_14_sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imgDeleteTone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_20"
+                    android:background="@drawable/ic_delete_black"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layoutVolume"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_10"
             android:layout_marginLeft="@dimen/margin_10"
             android:layout_marginRight="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_20"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:weightSum="1">
@@ -254,75 +257,83 @@
                 android:background="@drawable/ic_play" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="@dimen/margin_10" />
 
         <LinearLayout
+            android:id="@+id/layoutWallPaper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_10"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:orientation="vertical">
 
-            <TextView
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="@dimen/margin_10" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_10"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-                android:text="@string/text_alarm_wall_paper"
-                android:textSize="@dimen/text_size_14_sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
+                    android:text="@string/text_alarm_wall_paper"
+                    android:textSize="@dimen/text_size_14_sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:layout_marginLeft="@dimen/margin_10"
+                android:layout_marginRight="@dimen/margin_10"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+
+                <TextView
+                    android:id="@+id/etAlarmWallPaper"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.9"
+                    android:hint="@string/text_none"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/color_hyberlink"
+                    android:textColorHint="@color/color_hyberlink"
+                    android:textSize="@dimen/text_size_14_sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=">>"
+                    android:textColor="@color/color_hyberlink"
+                    android:textSize="@dimen/text_size_14_sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/imgDeleteWallPaper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_20"
+                    android:background="@drawable/ic_delete_black"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="@dimen/margin_10" />
         </LinearLayout>
 
-
-        <LinearLayout
-            android:id="@+id/layoutImageWallPaper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_10"
-            android:layout_marginLeft="@dimen/margin_10"
-            android:layout_marginRight="@dimen/margin_10"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-
-            <TextView
-                android:id="@+id/etAlarmWallPaper"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.9"
-                android:hint="@string/text_none"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColor="@color/color_hyberlink"
-                android:textColorHint="@color/color_hyberlink"
-                android:textSize="@dimen/text_size_14_sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=">>"
-                android:textColor="@color/color_hyberlink"
-                android:textSize="@dimen/text_size_14_sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/imgDeleteWallPaper"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_20"
-                android:background="@drawable/ic_delete_black"
-                android:visibility="gone" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_margin="@dimen/margin_10" />
 
         <TextView
             android:layout_width="wrap_content"

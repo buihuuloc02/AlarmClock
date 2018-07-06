@@ -26,12 +26,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
 import java.io.IOException;
+import java.util.Random;
 
 import alarmclock.app.com.alarmclock.R;
 import alarmclock.app.com.alarmclock.model.ItemAlarm;
@@ -77,11 +81,28 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
     @BindView(R.id.imgClock2)
     View imgClock2;
 
+    @BindView(R.id.layoutTextViewHelp)
+    View layoutTextViewHelp;
+
+    @BindView(R.id.layoutAlarmRetype)
+    View layoutAlarmRetype;
+
     @BindView(R.id.layoutMain)
     View layoutMain;
 
     @BindView(R.id.imageWallPaper)
     ImageView imageWallPaper;
+    @BindView(R.id.tvRandomText)
+    TextView tvRandomText;
+
+    @BindView(R.id.editResultRetype)
+    EditText editResultRetype;
+
+    @BindView(R.id.btnCheckResult)
+    Button btnChecResult;
+
+    @BindView(R.id.imgRefreshTextRandom)
+    ImageView imgRefreshTextRandom;
 
     private int id;
     private DatabaseHelper dbHelper;
@@ -89,7 +110,8 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
     private int countShake = 0;
     private int mNumberShake = 1;
     private int mSpeekShake = SHAKE_THRESHOLD;
-
+    private String strResultRandom = "";
+    private int numberRandom = 6;
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -105,7 +127,7 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
     private Bitmap theBitmap = null;
     private UserSetting mUserSetting;
 
-    @OnClick({R.id.btnStop})
+    @OnClick({R.id.btnStop, R.id.imgRefreshTextRandom, R.id.btnCheckResult})
     public void OnButtonClick(View v) {
         int id = v.getId();
         switch (id) {
@@ -114,6 +136,23 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
                 stopVibration();
                 stopSound();
                 skillApp();
+                break;
+            case R.id.imgRefreshTextRandom:
+                tvRandomText.setText("");
+                strResultRandom = randomText(numberRandom);
+                tvRandomText.setText(strResultRandom);
+                break;
+            case R.id.btnCheckResult:
+                String s = editResultRetype.getText().toString();
+                boolean result = compareTextRandom(s);
+                if (!result) {
+                    Toast.makeText(this, getResources().getString(R.string.text_input_incorreect), Toast.LENGTH_SHORT).show();
+                } else {
+                    finish();
+                    stopVibration();
+                    stopSound();
+                    skillApp();
+                }
                 break;
         }
     }
@@ -134,23 +173,31 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
                         WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
                         WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                         WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        id = getIntent().getIntExtra("id", 0);
+        dbHelper = new DatabaseHelper(this);
+        itemAlarm = dbHelper.getAlarmById(id);
+
+//        if(itemAlarm != null){
+//            if(itemAlarm.getMethodStop() == 2){
+//                setTheme(R.style.Theme_UserDialog);
+//            }
+//        }
         setContentView(R.layout.activity_alarm);
 
         ButterKnife.bind(this);
         createWakeLocks();
 
         String s = getIntent().getStringExtra("TIME");
-        id = getIntent().getIntExtra("id", 0);
-        dbHelper = new DatabaseHelper(this);
-        itemAlarm = dbHelper.getAlarmById(id);
         tvTime.setText(s);
 
         mUserSetting = (UserSetting) getSharePreferences().getObject(SharePreferenceHelper.Key.KEY_USER_SETTING, UserSetting.class);
 
         sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
         btnStop.setTextColor(getResources().getColorStateList(R.drawable.selector_button_text_black));
-        setDisplayButtonStop();
         setDisplayTextView();
+        setDisplayLayoutAlarm();
+        strResultRandom = randomText(numberRandom);
+        tvRandomText.setText(strResultRandom);
     }
 
 
@@ -302,12 +349,18 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         }
     }
 
-    private void setDisplayButtonStop() {
+    private void setDisplayLayoutAlarm() {
         if (itemAlarm != null) {
+            layoutTextViewHelp.setVisibility(View.VISIBLE);
+            btnStop.setVisibility(View.GONE);
+            layoutAlarmRetype.setVisibility(View.GONE);
             if (itemAlarm.getMethodStop() == 0) {
                 btnStop.setVisibility(View.VISIBLE);
-            } else {
+            } else if (itemAlarm.getMethodStop() == 1) {
                 btnStop.setVisibility(View.GONE);
+            } else if (itemAlarm.getMethodStop() == 2) {
+                layoutTextViewHelp.setVisibility(View.GONE);
+                layoutAlarmRetype.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -383,6 +436,41 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
         }
     }
 
+    /**
+     * compare text random
+     *
+     * @param s: String
+     * @return: true/false
+     */
+    private boolean compareTextRandom(String s) {
+
+        String strRandom = tvRandomText.getText().toString();
+        if (s.equals(strRandom)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Random text with lenght
+     *
+     * @param numberRandom: int
+     * @return: String
+     */
+    private String randomText(int numberRandom) {
+        String result = "";
+        Random generator = new Random();
+        StringBuilder randomStringBuilder = new StringBuilder();
+        int randomLength = generator.nextInt(numberRandom);
+        char tempChar;
+        for (int i = 0; i < numberRandom; i++) {
+            tempChar = (char) (generator.nextInt(96) + 32);
+            randomStringBuilder.append(tempChar);
+        }
+        result = randomStringBuilder.toString();
+        return result;
+    }
+
     private void stopSound() {
         Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 
@@ -455,6 +543,9 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
      * Method: skill app
      */
     private void skillApp() {
+        if (handler != null) {
+            handler.removeCallbacks(runnable);
+        }
         moveTaskToBack(true);
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(1);
@@ -531,6 +622,8 @@ public class AlarmClockActivity extends BaseActivity implements SensorListener {
                 //setTextColorForTextView();
                 new AsyncTaskLoadImage().execute(itemAlarm.getPathImageWallPaper());
             }
+        } else {
+            imageWallPaper.setBackgroundColor(Color.WHITE);
         }
     }
 

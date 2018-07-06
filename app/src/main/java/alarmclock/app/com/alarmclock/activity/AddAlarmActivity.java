@@ -108,7 +108,6 @@ public class AddAlarmActivity extends BaseActivity {
 
     @BindView(R.id.layoutImageWallPaper)
     View layoutImageWallPaper;
-
     @BindView(R.id.layoutAlarmTone)
     View layoutAlarmTone;
 
@@ -533,6 +532,12 @@ public class AddAlarmActivity extends BaseActivity {
         methodShake.setName(getString(R.string.text_method_shake));
         nameMethods.add(getString(R.string.text_method_shake));
         listMethods.add(methodShake);
+
+        MethodStop methodRetype = new MethodStop();
+        methodRetype.setIndex(2);
+        methodRetype.setName(getString(R.string.text_method_retype));
+        nameMethods.add(getString(R.string.text_method_retype));
+        listMethods.add(methodRetype);
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nameMethods);
 
@@ -549,6 +554,7 @@ public class AddAlarmActivity extends BaseActivity {
                     setPlayOrStopSound();
                 }
                 stopSound();
+                setDisplayLayoutAlarm();
             }
 
             @Override
@@ -951,6 +957,17 @@ public class AddAlarmActivity extends BaseActivity {
                 imgDeleteSMS.setVisibility(View.VISIBLE);
             }
             etSendSMS.setText(display);
+        }
+    }
+
+    private void setDisplayLayoutAlarm() {
+        setDisplayLayoutVolume(uriCustomSelected);
+        if (mIndexMethodStopSelected != 2) {
+            layoutAlarmTone.setVisibility(View.VISIBLE);
+            layoutWallPaper.setVisibility(View.VISIBLE);
+        } else {
+            layoutAlarmTone.setVisibility(View.GONE);
+            layoutWallPaper.setVisibility(View.GONE);
         }
     }
 

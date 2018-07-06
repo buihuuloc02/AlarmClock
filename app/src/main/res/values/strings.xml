@@ -246,6 +246,10 @@
     <string name="text_news_actionbar">News</string>
     <string name="text_button_refresh">Refresh</string>
     <string name="text_title_news">News</string>
+    <string name="text_retype">Retype</string>
+    <string name="text_button_check">Check</string>
+    <string name="text_input_incorreect">Retype incorrect!</string>
+    <string name="text_method_retype">Retype</string>
     <!-- Units -->
     <string-array name="unit_names">
         <item>°C</item>
